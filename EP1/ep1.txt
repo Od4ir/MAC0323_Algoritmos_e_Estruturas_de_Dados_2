@@ -1,0 +1,21 @@
+Sáida: (Para cada instante)
+
+>> Uma lista com quais aviões estão esperando para pousar ou decolar;
+>> O tempo médio de espera de pouso;
+>> O tempo médio de espera para decolagem;
+>> A quantidade média de combustível dos aviões que estão esperando para pousar;
+>> A quantidade média de combustível disponível nos aviões que já pousaram;
+>> A quantidade de aviões pousando/decolando em condições de emergência;
+
+>>> Situação de cada pista;
+
+
+Entrada:
+
+>> T - Unidades de tempo da simulação;
+>> K - Número máximo de aviões que chegam no aeroporto por unidade de tempo;
+>> pp - Probabilidade de ser um pouso;
+>> pd - Probabilidade de ser uma decolagem (1 - pp);
+>> pe - Probabilidade de ser de emergência;
+>> C - Tempo máximo de combustível de um avião que deseja pousar;
+>> V - Tempo máximo de voo de uma decolagem;
