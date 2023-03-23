@@ -1,3 +1,6 @@
+// https://www.inf.pucrs.br/~pinho/PRGSWB/OO/oocpp.html 
+// Usar o link acima;
+
 #include <iostream>
 using namespace std;
 
@@ -52,8 +55,12 @@ int main()
 
   //MinhaConta.saldo = 10; // ERRO!!!
 
+  cout << "Ok 1\n";
+
   MinhaConta.inicializa("Fulano", 10.25);
   OutraConta->inicializa("Beltrano", 220.00);
+
+    cout << "Ok 2\n";
 
   MinhaConta.deposita(12.75);
   MinhaConta.consulta();
