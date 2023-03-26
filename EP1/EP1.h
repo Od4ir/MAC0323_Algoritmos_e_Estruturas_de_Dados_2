@@ -2,17 +2,24 @@
 using namespace std;
 
 class Avioes {
-    char id[5];               // ID identificando o avião 12ABC;
     int time_combustivel;     // Tempo de combustível (Pouso);
     int time_decolagem;       // Tempo de decolagem;
     int time_voo;             // Tempo da viagem/voo;
-    int type;                 // Tipo do voo (Emergência ou Normal)
-    int id_pista;             // id da pista em que está o avião;
+    int type;                 // Tipo do voo (Emergência ou Normal) - 0 (normal) 1(emergência)
+    int id_pista;             // id da pista em que está o avião - n (número da pista) ou -1 (no ar)
     public:
+        char id[5];               // ID identificando o avião 12ABC;
+        Avioes * ant;
+        Avioes * prox;
         // Criação do avião;
-        void cria_aviao(char *id_code, int comb, int dec, int voo, int tipo);  
+        Avioes * insere_aviao(Avioes *lista, char *id_code, int comb, int dec, int voo, int tipo);  
         // Passagem do tempo;
         void pass_time();  
+        // Retorna o avião que está em 1º na fila;
+        Avioes * primeiro_fila(Avioes *lista);
+        // Remove um avião, dado seu id;
+        // Avioes remove_aviao(char *id_aviao);
+
 };            
 
 class Pista {
@@ -26,4 +33,5 @@ class Pista {
         void pouso_ou_decolagem(int tempo, char *id_airplane);
         void info_pista();
 };
+
 
