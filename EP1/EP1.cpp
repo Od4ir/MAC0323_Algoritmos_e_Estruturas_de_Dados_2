@@ -2,27 +2,35 @@
 #include <cstdlib> 
 
 Avioes * Avioes::insere_aviao(Avioes *lista, char *id_code, int comb, int dec, int voo, int tipo) {
-    cout << "ok 1\n";
     if(lista == nullptr) {
-        cout << "OK\n";
         lista = (Avioes *) malloc(sizeof(Avioes));
-        time_combustivel = comb;
-        time_decolagem = dec;
-        time_voo = voo;
-        type = tipo;
-        id_pista = -1;
+        lista->time_combustivel = comb;
+        lista->time_decolagem = dec;
+        lista->time_voo = voo;
+        lista->type = tipo;
+        lista->id_pista = -1;
         for(int i = 0; i < 5; i++) {
-            id[i] = id_code[i];
+            lista->id[i] = id_code[i];
         }
         lista->ant == nullptr;
         lista->prox == nullptr;
         return lista;
     }
     else if(comb > lista->time_combustivel) {
-        return(insere_aviao(lista->prox, id_code, comb, dec, voo, tipo));
+        lista->prox = lista->insere_aviao(lista->prox, id_code, comb, dec, voo, tipo);
     }
     else {
-        return(insere_aviao(lista->ant, id_code, comb, dec, voo, tipo));
+        lista->ant = lista->insere_aviao(lista->prox, id_code, comb, dec, voo, tipo);
+    }
+    return lista;
+}
+
+Avioes * Avioes::minimo(Avioes *lista) {
+    if(lista == nullptr || lista->ant == nullptr) {
+        return lista;
+    }
+    else {
+        return minimo(lista->ant);
     }
 }
 
@@ -32,12 +40,6 @@ void Avioes::pass_time() {
         type = 1;  // Torna-se um voo de emergência;
 }
 
-Avioes * primeiro_fila(Avioes *lista) {
-    if(lista == nullptr || lista->ant == nullptr) {
-        return lista;
-    }
-    return primeiro_fila(lista->ant);
-}
 
 void Pista::cria_pista(int id_number) { // Criação da pista;
     id = id_number;
@@ -73,6 +75,7 @@ void Pista::info_pista() { // Imprimir as informações da pista;
 int main() {
     Pista pistas[3];
     Avioes *lista;
+    lista = nullptr;
     char id[5];
     int comb, dec, voo, tipo;
     //pistas[0].cria_pista(1);
@@ -87,9 +90,9 @@ int main() {
         cin >> dec;
         cin >> voo;
         cin >> tipo;
-        lista->insere_aviao(lista, id, comb, dec, voo, tipo);
+        lista = lista->insere_aviao(lista, id, comb, dec, voo, tipo);
     }
-    lista = primeiro_fila(lista);
+    lista = lista->minimo(lista);
     printf("%s\n", lista->id);
 
     return 0;

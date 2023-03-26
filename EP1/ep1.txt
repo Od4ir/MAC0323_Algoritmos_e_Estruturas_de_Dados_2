@@ -20,6 +20,8 @@ Entrada:
 >> C - Tempo máximo de combustível de um avião que deseja pousar;
 >> V - Tempo máximo de voo de uma decolagem;
 
+LINKS:
+    https://www.out4mind.com/listas-ligadas-simples-em-c-parte-i/#:~:text=As%20listas%20ligadas%20s%C3%A3o%20estruturas,duplamente%20ligadas%20e%20listas%20circulares.
 
 Funções: 
 

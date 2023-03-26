@@ -1,6 +1,17 @@
 #include <iostream>
 using namespace std;
 
+/* typedef struct Avioes {
+    int time_combustivel;     // Tempo de combustível (Pouso);
+    int time_decolagem;       // Tempo de decolagem;
+    int time_voo;             // Tempo da viagem/voo;
+    int type;                 // Tipo do voo (Emergência ou Normal) - 0 (normal) 1(emergência)
+    int id_pista;             // id da pista em que está o avião - n (número da pista) ou -1 (no ar)
+    char id_aviao[5];
+    struct Avioes * ant;
+    struct Avioes * prox;
+} lista_avioes; */
+
 class Avioes {
     int time_combustivel;     // Tempo de combustível (Pouso);
     int time_decolagem;       // Tempo de decolagem;
@@ -13,14 +24,14 @@ class Avioes {
         Avioes * prox;
         // Criação do avião;
         Avioes * insere_aviao(Avioes *lista, char *id_code, int comb, int dec, int voo, int tipo);  
+        Avioes * minimo(Avioes *lista);
         // Passagem do tempo;
         void pass_time();  
         // Retorna o avião que está em 1º na fila;
-        Avioes * primeiro_fila(Avioes *lista);
         // Remove um avião, dado seu id;
         // Avioes remove_aviao(char *id_aviao);
 
-};            
+};           
 
 class Pista {
     int id;                   // 1, 2 ou 3;
