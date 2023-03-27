@@ -77,7 +77,7 @@ int main() {
     Avioes *lista;
     lista = nullptr;
     char id[5];
-    int comb, dec, voo, tipo;
+    int comb, dec, voo, tipo; // Teste
     //pistas[0].cria_pista(1);
     //pistas[1].cria_pista(2);
     //pistas[2].cria_pista(3);
