@@ -24,11 +24,12 @@ class Avioes {
         Avioes * prox;
         // Criação do avião;
         Avioes * insere_aviao(Avioes *lista, char *id_code, int comb, int dec, int voo, int tipo);  
+        // Retorna o avião que está em 1º na fila;
         Avioes * minimo(Avioes *lista);
+        // Remove um avião, dado seu id;
+        Avioes * remove(Avioes *lista);
         // Passagem do tempo;
         void pass_time();  
-        // Retorna o avião que está em 1º na fila;
-        // Remove um avião, dado seu id;
         // Avioes remove_aviao(char *id_aviao);
 
 };           
