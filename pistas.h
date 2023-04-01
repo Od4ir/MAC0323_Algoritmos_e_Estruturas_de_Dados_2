@@ -3,21 +3,31 @@ using namespace std;
 
 class Avioes {
     public:
-        char id;
-        int time_voo;
+        char id_voo;
         int time_comb;
+        int time_voo;
         int type;
-        Avioes * prox;
-        Avioes * ant;
-        void cria_aviao(Avioes aviao, char id, int time_voo, int time_comb, int type);
+        char id;
+
+        Avioes(char id_aviao, char info_voo, int comb, int voo, int tipo);
+};
+
+class Fila {
+    public:
+        Avioes aviao;
+        int total_time;
+        Fila * prox;
+        Fila * ant;
+
+        void insere_na_fila(Fila * fila, Avioes aviao);
 };
 
 class Pistas {
-    private:
-        int id_pista;
     public:
-        int tempo_de_interdicao;
-        Avioes * lista;
-        Pistas insere_aviao(Avioes * lista, Avioes aviao);
-        void copia_aviao(Pistas pista, Avioes aviao);
+        int id_pista;
+        int quantidade;
+        int time_interditada;
+        Fila * fila;
+        int status;
+        Pistas(int id, int quant, int time, int stat);
 };
