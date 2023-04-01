@@ -27,15 +27,17 @@ Avioes::Avioes(char id_aviao, char info_voo, int comb, int voo, int tipo) {
     }
 }
 
-void Fila::insere_na_fila(Fila * fila, Avioes aviao) {
+Fila * Fila::insere_na_fila(Fila * fila, Avioes aviao) {
     if(fila == nullptr) {
         fila = (Fila *) malloc(sizeof(Fila));
         fila->aviao = aviao;
         fila->ant = nullptr;
         fila->prox = nullptr;
+        return fila;
     }
     else  {
-        insere_na_fila(fila->prox, aviao);
+        fila->prox = insere_na_fila(fila->prox, aviao);
+        return fila;
     }
 }
 
@@ -43,39 +45,38 @@ Pistas::Pistas(int id, int quant, int time, int stat) {
     id_pista = id;
     quantidade = quant;
     time_interditada = time;
-    fila = (Fila *) malloc(sizeof(Fila));
+    fila = nullptr;
     status = stat;
 }
 
 int main() { 
     Pistas p1(1, 0, 0, 0), p2(2, 0, 0, 0), p3(3, 0, 0, 0);
+    Fila * fila = nullptr;
     
-    for(int i = 0; i < 10; i++) {
+    for(int i = 0; i < 20; i++) {
         Avioes aux((char)(i + 65), (char)(i + 97), i + 10, 0, 0);
+
         if(i % 3 == 1) {
-            p1.fila->insere_na_fila(p1.fila, aux);
+            p1.fila = p1.fila->insere_na_fila(p1.fila, aux);
         }
         else if(i % 3 == 2) {
-            p2.fila->insere_na_fila(p2.fila, aux);
+            p2.fila = p2.fila->insere_na_fila(p2.fila, aux);
         }
         else {
-            p3.fila->insere_na_fila(p3.fila, aux);
-        }
+            p3.fila = p3.fila->insere_na_fila(p3.fila, aux);
+        } 
     }
 
     Pistas aux = p1;
-    for(int i = 0; i < 3; i++) {
-        cout << "Aviões na Pista " << i + 1 << ":\n";
+    
+    for(int i = 0; i < 3; i++) { 
+        cout << "Na Pista " << i + 1 << ": \n"; 
         for(Fila *f = aux.fila; f != nullptr; f = f->prox) {
-            cout << "Avião: " << f->aviao.id << endl;
-            cout << "Combustível: " << f->aviao.time_comb << endl;
-            cout << "Tipo " << f->aviao.type << endl;
+            cout << "Avião : " << f->aviao.id << endl;
         }
-        cout << endl;
         if(i == 0) aux = p2;
         if(i == 1) aux = p3;
     }
-
 
     return 0;
 }

@@ -41,47 +41,6 @@ AVIÕES:
         time_combustivel--;
     }
 
-Entrada p/ Teste
-aaaaa
-100
-1
-1
-1
-bbbbb
-98
-1
-1
-1
-ccccc
-97
-1
-1
-1
-ddddd
-102
-1
-1
-1
-eeeee
-60
-1
-1
-1
-fffff
-200
-1
-1
-1
-ggggg
-96
-1
-1
-1
-hhhhh
-61
-1
-1
-1
 
 
 PISTAS: 

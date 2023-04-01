@@ -18,8 +18,7 @@ class Fila {
         int total_time;
         Fila * prox;
         Fila * ant;
-
-        void insere_na_fila(Fila * fila, Avioes aviao);
+        Fila * insere_na_fila(Fila * fila, Avioes aviao);
 };
 
 class Pistas {
