@@ -3,13 +3,16 @@ using namespace std;
 
 class Avioes {
     public:
-        char id_voo;
+        char id[5];
+        char id_voo[3];
         int time_comb;
         int time_voo;
         int type;
-        char id;
 
-        Avioes(char id_aviao, char info_voo, int comb, int voo, int tipo);
+        // Função que cria um Avião:
+        Avioes(char * id_aviao, char * info_voo, int comb, int voo, int tipo);
+        // Função que gera um avião aleatório: 
+        Avioes gera_aviao(int C, int V, int pp, int pe); 
 };
 
 class Fila {

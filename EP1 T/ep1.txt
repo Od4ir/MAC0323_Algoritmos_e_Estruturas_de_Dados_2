@@ -41,8 +41,6 @@ AVIÕES:
         time_combustivel--;
     }
 
-
-
 PISTAS: 
     void Pista::cria_pista(int id_number) { // Criação da pista;
         id = id_number;
@@ -74,3 +72,6 @@ PISTAS:
             cout << "Durante: " << timer << endl;
         }
     } 
+
+CASOS:
+    
