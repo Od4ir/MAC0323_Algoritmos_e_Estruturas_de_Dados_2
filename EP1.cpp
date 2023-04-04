@@ -5,9 +5,7 @@ using namespace std;
 
 // Função para fabricar aviões: 
 // Sobre o tipo: ]
-//      - 0 e 1 (Pouso normal e pouso especial);
-//      - 2 e 3 (Decolagem normal e decolagem especial);
-
+//      - 0 e 1 (Normal e Especial)
 Avioes::Avioes(char * id_aviao, char * info_voo, int comb, int voo, int tipo) {
     for(int i = 0; i < 5; i++) {
         id[i] = id_aviao[i];
