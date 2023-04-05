@@ -18,9 +18,13 @@ class Avioes {
 class Fila {
     public:
         Avioes aviao;
+        int pos;
         Fila * prox;
         Fila * ant;
-        Fila * insere_na_fila(Fila * fila, Avioes aviao);
+        Fila * insere_na_fila(Fila * fila, Avioes aviao, int pos, Fila * ant);
+        Fila * insere_na_fila_posicao(Fila * fila, Avioes aviao, int pos);
+        void remove_o_primeiro(Fila * fila, Avioes aviao);
+        Avioes primeiro_fila(Fila * fila);
 };
 
 class Pistas {
@@ -30,5 +34,6 @@ class Pistas {
         int time_interditada;
         Fila * fila;
         int status;
-        Pistas(int id, int quant, int time, int stat);
+        Pistas(int id, int quant, int time, int stat);    // Criação de Pistas;
+        Avioes primeiro_pista(Pistas pista);              // Retorna o primeiro avião da pista;
 };

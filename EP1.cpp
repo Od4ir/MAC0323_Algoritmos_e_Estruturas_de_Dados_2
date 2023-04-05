@@ -62,21 +62,36 @@ Avioes Avioes::gera_aviao(int C, int V, int pp, int pe) {
     return aviao_novo;
 }
 
-Fila * Fila::insere_na_fila(Fila * fila, Avioes aviao) {
+// Insere um avião novo na fila (No final dela);
+Fila * Fila::insere_na_fila(Fila * fila, Avioes aviao, int pos, Fila * ant) {
     if(fila == nullptr) {
         fila = (Fila *) malloc(sizeof(Fila));
+        fila->ant = (Fila *) malloc(sizeof(Fila));
+        fila->ant = ant;
         fila->aviao = aviao;
-        fila->ant = nullptr;
+        fila->pos = pos;
         fila->prox = nullptr;
-
         return fila;
     }
     else  {
-        fila->prox = insere_na_fila(fila->prox, aviao);
+        ant = fila;
+        fila->prox = insere_na_fila(fila->prox, aviao, pos, ant);
         return fila;
     }
 }
 
+// Devolve o primeiro avião da fila;
+Avioes Fila::primeiro_fila(Fila * fila) {
+    Fila *f;
+    for(f = fila; f != nullptr; f = f->ant) {
+        if(f->ant == nullptr) {
+            return f->aviao;
+        }
+    }
+    return f->aviao;
+}
+
+// Cria uma pista;
 Pistas::Pistas(int id, int quant, int time, int stat) {
     id_pista = id;
     quantidade = quant;
@@ -85,6 +100,9 @@ Pistas::Pistas(int id, int quant, int time, int stat) {
     status = stat;
 }
 
+Avioes Pistas::primeiro_pista(Pistas pista) {
+    return pista.fila[0].aviao;
+}
 int main() { 
     int T, K, quant_avioes;
     int C, V, pp, pe;
@@ -113,18 +131,15 @@ int main() {
         for(int j = 0; j < quant_avioes; j++) {
             Avioes aux = aux.gera_aviao(C, V, pp, pe);
              if(i % 3 == 1) {
-                p1.fila = p1.fila->insere_na_fila(p1.fila, aux);
-                p1.quantidade++;
+                p1.fila = p1.fila->insere_na_fila(p1.fila, aux, ++p1.quantidade, p1.fila);
                 p1.time_interditada+= 3;
             }
             else if(i % 3 == 2) {
-                p2.fila = p2.fila->insere_na_fila(p2.fila, aux);
-                p2.quantidade++;
+                p2.fila = p2.fila->insere_na_fila(p2.fila, aux, ++p2.quantidade, p2.fila);
                 p2.time_interditada+= 3;
             }
             else {
-                p3.fila = p3.fila->insere_na_fila(p3.fila, aux);
-                p3.quantidade++;
+                p3.fila = p3.fila->insere_na_fila(p3.fila, aux, ++p3.quantidade, p3.fila);
                 p3.time_interditada+= 3;
             } 
 
@@ -140,11 +155,17 @@ int main() {
         cout << "Há " << aux.quantidade << " aviões!\n";
         cout << "Interdição: " << aux.time_interditada << "!\n";
         for(Fila *f = aux.fila; f != nullptr; f = f->prox) {
-            cout << "Avião : " << f->aviao.id << endl;
+            cout << "Avião " << f->pos << ": " << f->aviao.id << endl;
         }
         if(i == 0) aux = p2;
         if(i == 1) aux = p3;
     } 
+
+    Avioes auxx = p2.fila->primeiro_fila(p2.fila);
+
+    cout << auxx.id << endl;
+
+    cout << p1.fila[0].aviao.id << endl;
 
     return 0;
 }
