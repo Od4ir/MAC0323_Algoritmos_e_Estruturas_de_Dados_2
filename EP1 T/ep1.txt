@@ -239,7 +239,7 @@ SIMULAÇÃO:  ( Devolva 0 se não der, Devolva POS(Posição que deu) se der)
 
     Se for Normal {
         Começa na última posição da fila - POS (Quantidade de Aviões na fila);
-        N = POS;
+        N = POS + 1;
         // Buscar uma posição aceitável;
         achei = 0;
         While (!achei && N != 0) {

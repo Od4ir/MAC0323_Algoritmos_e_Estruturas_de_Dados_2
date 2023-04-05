@@ -18,11 +18,12 @@ Avioes::Avioes(char * id_aviao, char * info_voo, int comb, int voo, int tipo) {
     time_voo = voo;
 }
 
-// int C - Indica a quantidade máxima de Combustível;
-// int V - Indica a quantidade máxima de Tempo de Voo;
-// int pp - Um valor de 0 a 100 que indica a probabilidade de ser um pouso;
-//     pd - É igual a 100 - pd;
-// int pe - Um valor de 0 a 100 que indica a probabilidade de ser uma emergência;
+// Função para gerar aviões aleatoriamente dado os parâmetros de entrada;
+    // int C - Indica a quantidade máxima de Combustível;
+    // int V - Indica a quantidade máxima de Tempo de Voo;
+    // int pp - Um valor de 0 a 100 que indica a probabilidade de ser um pouso;
+    //     pd - É igual a 100 - pd;
+    // int pe - Um valor de 0 a 100 que indica a probabilidade de ser uma emergência;
 Avioes Avioes::gera_aviao(int C, int V, int pp, int pe) {
     char id_aviao[5], id_voo[3];
     int comb, voo, tipo, type;
@@ -80,6 +81,53 @@ Fila * Fila::insere_na_fila(Fila * fila, Avioes aviao, int pos, Fila * ant) {
     }
 }
 
+// Insere um avião novo na posição informada;
+Fila * Fila::insere_na_fila_posicao(Fila * fila, Avioes aviao, int pos) {
+    Fila * f = fila;
+
+    // Caso da fila vazia:
+    if(fila == nullptr) {
+        fila = (Fila *) malloc(sizeof(Fila));
+        fila->ant = (Fila *) malloc(sizeof(Fila));
+        fila->ant = ant;
+        fila->aviao = aviao;
+        fila->pos = pos;
+        fila->prox = nullptr;
+        return fila;
+    }
+
+    Fila * aux = (Fila *) malloc(sizeof(Fila));
+    for(f = fila; f->pos != pos && f->prox != nullptr; f = f->prox);
+
+    if(pos == 1) {               // Caso em que é adicionado na primeira posição;
+        aux->ant = nullptr;
+        aux->prox = fila;
+        f->ant = aux;
+        fila = fila->ant;
+    }
+    else if(f->prox == nullptr) {      // Caso em que é adicionado na última posição;
+        aux->ant = f;
+        //f = (Fila *) malloc(sizeof(Fila));
+        f->prox = aux;
+        aux->prox = nullptr;
+        f = aux->prox;
+    }
+    else {                       // Caso em que é adicionado entre 2 aviões;
+        aux->ant = f->ant;
+        aux->prox = f;
+        f->ant->prox = aux;
+        f->ant = aux;
+    }
+    aux->aviao = aviao;
+    aux->pos = pos;
+
+    while(f != nullptr) {
+        f->pos++;
+        f = f->prox;
+    }
+    return fila;
+}
+
 // Devolve o primeiro avião da fila;
 Avioes Fila::primeiro_fila(Fila * fila) {
     Fila *f;
@@ -100,9 +148,11 @@ Pistas::Pistas(int id, int quant, int time, int stat) {
     status = stat;
 }
 
+// Devolve o primeiro avião da fila;
 Avioes Pistas::primeiro_pista(Pistas pista) {
     return pista.fila[0].aviao;
 }
+
 int main() { 
     int T, K, quant_avioes;
     int C, V, pp, pe;
@@ -161,11 +211,14 @@ int main() {
         if(i == 1) aux = p3;
     } 
 
-    Avioes auxx = p2.fila->primeiro_fila(p2.fila);
+    Avioes k = k.gera_aviao(C, V, pp, pe);
+    cout << k.id << endl;
 
-    cout << auxx.id << endl;
+    p3.fila = p3.fila->insere_na_fila_posicao(p3.fila, k, 12);
 
-    cout << p1.fila[0].aviao.id << endl;
+    for(Fila *f = p3.fila; f != nullptr; f = f->prox) {
+        cout << "Avião " << f->pos << ": " << f->aviao.id << endl;
+    }
 
     return 0;
 }
