@@ -18,7 +18,6 @@ class Avioes {
 class Fila {
     public:
         Avioes aviao;
-        int total_time;
         Fila * prox;
         Fila * ant;
         Fila * insere_na_fila(Fila * fila, Avioes aviao);

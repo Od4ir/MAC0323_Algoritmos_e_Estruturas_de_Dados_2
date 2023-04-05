@@ -41,6 +41,18 @@ AVIÕES:
         time_combustivel--;
     }
 
+    Imprimindo Aviões:
+        for(int j = 0; j < quant_avioes; j++) {
+            Avioes aux = aux.gera_aviao(C, V, pp, pe);
+            printf("Avião %d: ", i + j);
+            cout << " >> id: " << aux.id << endl;
+            cout << " >> id_voo: " << aux.id_voo << endl;
+            cout << " >> comb: " << aux.time_comb << endl;
+            cout << " >> voo: " << aux.time_voo << endl;
+            cout << " >> type: " << aux.type << endl;
+        }
+        cout << endl;
+
 PISTAS: 
     void Pista::cria_pista(int id_number) { // Criação da pista;
         id = id_number;
@@ -74,4 +86,142 @@ PISTAS:
     } 
 
 CASOS:
+
+ESTRATÉGIA { 
+
+    Verifica qual o tipo de avião - Especial ou Normal;
+    Geração de Aviões {
+        Se for Especial {
+            Coloca numa subfila especial;
+            Ordenada por comb / voo;
+        }
+        Se for Normal {
+            Coloca numa subfila normal;
+            Ordenada por comb / voo;
+        }
+    }
+    For avião in subfila especial {
+        coloquei = 0;
+        Se for de Decolagem {
+            Olha em todas pistas - Ordena elas por quantidade de aviões;
+            Deixa a P3 em primeiro lugar;
+            While(Não testar todas as pistas && !coloquei) { 
+                Se tiver vazia {
+                    Coloca em primeiro lugar;
+                    Quantidade da Pista++;
+                    Tempo de interdição++
+                    coloquei = 1;
+                }
+                Se não tiver {
+                    Simula colocar em primeiro; ***
+                    Se der certo {
+                        Coloca em primeiro lugar;
+                        Quantidade da Pista++;
+                        Tempo de interdição++
+                        coloquei = 1;
+                    }
+                    Se não der certo {
+                        Vai para a próxima pista;
+                    }
+                }
+            }
+            Se (!coloquei) {
+                Manda para outro aeroporto;
+            }
+        }
+        Se for Pouso {
+            Olha na Pista 1 e 2 (Ordena por quantidade de aviões) 
+            Deixa a 3 como última a testar;
+            Começa pela P3. Depois para a com maior quantidade;
+            While (Não testar as duas) {
+                Se tiver vazia {
+                    Coloca em primeiro lugar;
+                    Quantidade da Pista++;
+                    Tempo de interdição++
+                }
+                Se não tiver {
+                    Simula colocar em primeiro; ***
+                    Se der certo {
+                        Coloca em primeiro lugar; ***
+                        Quantidade da Pista++;
+                        Tempo de interdição++
+                        coloquei = 1;
+                    }
+                    Se não der certo {
+                        Vai para a próxima pista;
+                    }
+                }
+            }
+            Se (!coloquei) {
+                Manda para outro aeroporto;
+            }
+        }
+    }
+    For avião em subfila normal {
+        Se for de Decolagem {
+            Olha em todas pistas - Ordena elas por quantidade de aviões;
+            Deixa a P3 em primeiro lugar;
+            Começa pela P3;
+            While(Não testar todas as pistas && !coloquei) { 
+                Se tiver vazia {
+                    Coloca em primeiro lugar;
+                    Quantidade da Pista++;
+                    Tempo de interdição++
+                    coloquei = 1;
+                }
+                Se não tiver {
+                    POS = Posição final da fila;
+                    While ( POS != Primeira && !coloquei) {
+                        Simula colocar em POS;
+                        Se der certo {
+                            Coloca em POS;
+                            Quantidade da Pista++;
+                            Tempo de interdição++
+                            coloquei = 1;
+                        }
+                        Se não der certo {
+                            Vai para a proxima POS;
+                        }
+                    }
+                }
+                Vai para a próxima pista;
+            }
+            Se (!coloquei) {
+                Manda para outro aeroporto;
+            }
+        }
+        Se for Pouso {
+            Olha em todas pistas - Ordena elas por quantidade de aviões;
+            Deixa a P3 por último;
+            Começa pela com maior quantidade; 
+            While(Não testar todas as pistas && !coloquei) { 
+                Se tiver vazia {
+                    Coloca em primeiro lugar;
+                    Quantidade da Pista++;
+                    Tempo de interdição++
+                    coloquei = 1;
+                }
+                Se não tiver {
+                    POS = Posição final da fila;
+                    While ( POS != Primeira && !coloquei) {
+                        Simula colocar em POS; ***
+                        Se der certo {
+                            Coloca em POS;
+                            Quantidade da Pista++;
+                            Tempo de interdição++
+                            coloquei = 1;
+                        }
+                        Se não der certo {
+                            Vai para a proxima POS;
+                        }
+                    }
+                }
+                Vai para a próxima pista;
+            }
+            Se (!coloquei) {
+                Manda para outro aeroporto;
+            }
+        }
+    }
+}
     

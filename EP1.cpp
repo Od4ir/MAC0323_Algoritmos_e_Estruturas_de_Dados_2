@@ -68,6 +68,7 @@ Fila * Fila::insere_na_fila(Fila * fila, Avioes aviao) {
         fila->aviao = aviao;
         fila->ant = nullptr;
         fila->prox = nullptr;
+
         return fila;
     }
     else  {
@@ -100,6 +101,10 @@ int main() {
     cin >> pp;
     cin >> pe;
 
+    Pistas p1(1, 0, 0, 0), p2(2, 0, 0, 0), p3(3, 0, 0, 0);
+    Fila * fila = nullptr;
+
+
     for(int i = 0; i < T; i++) {
         quant_avioes = rand()%K;
         cout << "INSTANTE ATUAL: " << i + 1 << endl << endl;
@@ -107,43 +112,39 @@ int main() {
 
         for(int j = 0; j < quant_avioes; j++) {
             Avioes aux = aux.gera_aviao(C, V, pp, pe);
-            printf("Avião %d: ", i + j);
-            cout << " >> id: " << aux.id << endl;
-            cout << " >> id_voo: " << aux.id_voo << endl;
-            cout << " >> comb: " << aux.time_comb << endl;
-            cout << " >> voo: " << aux.time_voo << endl;
-            cout << " >> type: " << aux.type << endl;
+             if(i % 3 == 1) {
+                p1.fila = p1.fila->insere_na_fila(p1.fila, aux);
+                p1.quantidade++;
+                p1.time_interditada+= 3;
+            }
+            else if(i % 3 == 2) {
+                p2.fila = p2.fila->insere_na_fila(p2.fila, aux);
+                p2.quantidade++;
+                p2.time_interditada+= 3;
+            }
+            else {
+                p3.fila = p3.fila->insere_na_fila(p3.fila, aux);
+                p3.quantidade++;
+                p3.time_interditada+= 3;
+            } 
+
         }
         cout << endl;
     }
 
-    /*Pistas p1(1, 0, 0, 0), p2(2, 0, 0, 0), p3(3, 0, 0, 0);
-    Fila * fila = nullptr;
-    
-    for(int i = 0; i < 20; i++) {
-        Avioes aux((char)(i + 65), (char)(i + 97), i + 10, 0, 0);
-
-        if(i % 3 == 1) {
-            p1.fila = p1.fila->insere_na_fila(p1.fila, aux);
-        }
-        else if(i % 3 == 2) {
-            p2.fila = p2.fila->insere_na_fila(p2.fila, aux);
-        }
-        else {
-            p3.fila = p3.fila->insere_na_fila(p3.fila, aux);
-        } 
-    }
 
     Pistas aux = p1;
     
     for(int i = 0; i < 3; i++) { 
         cout << "Na Pista " << i + 1 << ": \n"; 
+        cout << "Há " << aux.quantidade << " aviões!\n";
+        cout << "Interdição: " << aux.time_interditada << "!\n";
         for(Fila *f = aux.fila; f != nullptr; f = f->prox) {
             cout << "Avião : " << f->aviao.id << endl;
         }
         if(i == 0) aux = p2;
         if(i == 1) aux = p3;
-    } */
+    } 
 
     return 0;
 }
