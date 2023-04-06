@@ -99,18 +99,24 @@ Fila * Fila::insere_na_fila_posicao(Fila * fila, Avioes aviao, int pos) {
     Fila * aux = (Fila *) malloc(sizeof(Fila));
     for(f = fila; f->pos != pos && f->prox != nullptr; f = f->prox);
 
-    if(pos == 1) {               // Caso em que é adicionado na primeira posição;
+    if(pos == 1) {                    // Caso em que é adicionado na primeira posição;
         aux->ant = nullptr;
         aux->prox = fila;
         f->ant = aux;
         fila = fila->ant;
     }
-    else if(f->prox == nullptr) {      // Caso em que é adicionado na última posição;
-        aux->ant = f;
-        //f = (Fila *) malloc(sizeof(Fila));
-        f->prox = aux;
-        aux->prox = nullptr;
-        f = aux->prox;
+    else if(f->prox == nullptr) {      // Caso em que é adicionado na última posição OU antes da última;
+        if(f->pos == pos) {
+            aux->ant = f->ant;
+            aux->prox = f;
+            f->ant->prox = aux;
+            f->ant = aux;
+        }
+        else {
+            aux->ant = f;
+            f->prox = aux;
+            f = aux->prox;
+        }
     }
     else {                       // Caso em que é adicionado entre 2 aviões;
         aux->ant = f->ant;
@@ -214,7 +220,7 @@ int main() {
     Avioes k = k.gera_aviao(C, V, pp, pe);
     cout << k.id << endl;
 
-    p3.fila = p3.fila->insere_na_fila_posicao(p3.fila, k, 12);
+    p3.fila = p3.fila->insere_na_fila_posicao(p3.fila, k, 8);
 
     for(Fila *f = p3.fila; f != nullptr; f = f->prox) {
         cout << "Avião " << f->pos << ": " << f->aviao.id << endl;
