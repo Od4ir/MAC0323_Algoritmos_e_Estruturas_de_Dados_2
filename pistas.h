@@ -25,6 +25,9 @@ class Fila {
         Fila * insere_na_fila_posicao(Fila * fila, Avioes aviao, int pos);
         Avioes primeiro_fila(Fila * fila);
         Avioes aviao_na_pos(Fila * fila, int pos);
+        int simulacao(Pistas pista, Avioes A, int t);
+        int testando_com_pos(Pistas pista, int pos);
+        int busca_pos_aceitavel()
 };
 
 class Pistas {

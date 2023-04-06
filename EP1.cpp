@@ -222,7 +222,7 @@ void Historico::in_order(Historico * hist) {
 }
 
 int main() { 
-    int T, K, quant_avioes, verifica;
+    int T, K, quant_avioes, verifica, colocado, teste;
     int C, V, pp, pe;
     Historico * hist = nullptr;
     cout << "Tempo de Execução da Simulação: \n >>>  ";
@@ -252,6 +252,31 @@ int main() {
 
             hist = hist->insere_na_arvore(hist, aux, &verifica);
             if(verifica) {
+                // ESTRATÉGIA PARA INSERÇÃO //
+
+                if(aux.type == 1) {  // Se for ESPECIAL;
+                    colocado = 0;
+                    if(aux.time_comb == 0) {  // Se for de Decolagem;
+                        Pistas aux_pista = p3;
+                        teste = 0;
+                        while(teste < 3 && !colocado) {
+                            if(aux_pista.quantidade == 0) {
+                                aux_pista.fila = aux_pista.fila->insere_na_fila_posicao(aux_pista.fila, aux, ++aux_pista.quantidade);
+                                aux_pista.time_interditada += 3;
+                                colocado = 1;
+                            }
+                            else {
+                                
+                            }
+                        }
+
+                    }
+                }
+
+
+
+
+
                 if(i % 3 == 1) {
                 p1.fila = p1.fila->insere_na_fila(p1.fila, aux, ++p1.quantidade, p1.fila);
                 p1.time_interditada+= 3;
