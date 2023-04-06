@@ -24,6 +24,7 @@ class Fila {
         Fila * insere_na_fila(Fila * fila, Avioes aviao, int pos, Fila * ant);
         Fila * insere_na_fila_posicao(Fila * fila, Avioes aviao, int pos);
         Avioes primeiro_fila(Fila * fila);
+        Avioes aviao_na_pos(Fila * fila, int pos);
 };
 
 class Pistas {
@@ -44,4 +45,5 @@ class Historico {
         Historico * dir;
         Historico * esq;
         Historico * insere_na_arvore(Historico * hist, Avioes A, int * v);
+        void in_order(Historico * hist);
 };

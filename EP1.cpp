@@ -150,9 +150,6 @@ Fila * Pistas::remove_o_primeiro(Pistas pista) {
     for(Fila * k = f; k != nullptr; k = k->prox) {
         k->pos--;
     }
-    pista.quantidade = pista.quantidade - 1;
-    cout << pista.quantidade << endl;
-    cout << "Diminuiu!\n";
     return f;
 }
 
@@ -164,6 +161,12 @@ Avioes Fila::primeiro_fila(Fila * fila) {
             return f->aviao;
         }
     }
+    return f->aviao;
+}
+
+Avioes Fila::aviao_na_pos(Fila * fila, int pos) {
+    Fila * f;
+    for(f = fila; f != nullptr && f->pos != pos; f = f->prox);
     return f->aviao;
 }
 
@@ -181,33 +184,47 @@ Avioes Pistas::primeiro_pista(Pistas pista) {
     return pista.fila[0].aviao;
 }
 
+// Histórico de aviões já registrados;
 Historico * Historico::insere_na_arvore(Historico * hist, Avioes A, int * v) {
     if(hist == nullptr) {
         hist = (Historico *) malloc(sizeof(Historico));
-        hist->aviao = aviao;
+        hist->aviao = A;
         hist->dir = nullptr;
         hist->esq = nullptr;
         *v = 1;
+        return hist;
     }
-    int aux = strcmp(hist->aviao.id, aviao.id);
+    int aux = strcmp(hist->aviao.id, A.id);
+    cout << hist->aviao.id << endl;
+    cout << A.id << endl;
+    cout << "AUX = " << aux << endl;
     if(aux == 0) {
         *v = 0;  // Já foi;
-        return hist;
     }
-    if(aux == -1) {
+    else if(aux < 0) {
+        *v = 1;
         hist->dir = insere_na_arvore(hist->dir, A, v);
-        return hist;
     }
     else {
+        *v = 1;
         hist->esq = insere_na_arvore(hist->esq, A, v);
-        return hist;
+    }
+    return hist;
+}
+
+// Imprimindo lista de aviões já registrados em ordem alfabética;
+void Historico::in_order(Historico * hist) {
+    if(hist != nullptr) {
+        in_order(hist->esq);
+        cout << hist->aviao.id << endl;
+        in_order(hist->dir);
     }
 }
 
-
 int main() { 
-    int T, K, quant_avioes;
+    int T, K, quant_avioes, verifica;
     int C, V, pp, pe;
+    Historico * hist = nullptr;
     cout << "Tempo de Execução da Simulação: \n >>>  ";
     cin >> T;  
     cout << endl;
@@ -233,29 +250,24 @@ int main() {
         for(int j = 0; j < quant_avioes; j++) {
             Avioes aux = aux.gera_aviao(C, V, pp, pe);
 
-            // Checar se não é repetido;
-
-
-
-
-
-             if(i % 3 == 1) {
+            hist = hist->insere_na_arvore(hist, aux, &verifica);
+            if(verifica) {
+                if(i % 3 == 1) {
                 p1.fila = p1.fila->insere_na_fila(p1.fila, aux, ++p1.quantidade, p1.fila);
                 p1.time_interditada+= 3;
+                }
+                else if(i % 3 == 2) {
+                    p2.fila = p2.fila->insere_na_fila(p2.fila, aux, ++p2.quantidade, p2.fila);
+                    p2.time_interditada+= 3;
+                }
+                else {
+                    p3.fila = p3.fila->insere_na_fila(p3.fila, aux, ++p3.quantidade, p3.fila);
+                    p3.time_interditada+= 3;
+                } 
             }
-            else if(i % 3 == 2) {
-                p2.fila = p2.fila->insere_na_fila(p2.fila, aux, ++p2.quantidade, p2.fila);
-                p2.time_interditada+= 3;
-            }
-            else {
-                p3.fila = p3.fila->insere_na_fila(p3.fila, aux, ++p3.quantidade, p3.fila);
-                p3.time_interditada+= 3;
-            } 
-
         }
         cout << endl;
     }
-
 
     Pistas aux = p1;
     
@@ -270,28 +282,6 @@ int main() {
         if(i == 1) aux = p3;
     } 
 
-    p3.fila = p3.remove_o_primeiro(p3);
-    p3.fila = p3.remove_o_primeiro(p3);
-    p3.fila = p3.remove_o_primeiro(p3);
-    p3.fila = p3.remove_o_primeiro(p3);
-    p3.fila = p3.remove_o_primeiro(p3);
-    p3.fila = p3.remove_o_primeiro(p3);
-    p3.fila = p3.remove_o_primeiro(p3);
-    p3.fila = p3.remove_o_primeiro(p3);
-    p3.fila = p3.remove_o_primeiro(p3);
-    p3.fila = p3.remove_o_primeiro(p3);
-    p3.fila = p3.remove_o_primeiro(p3);
-    p3.fila = p3.remove_o_primeiro(p3);
-
-    if(p3.quantidade == 0) {
-        cout << "Pista 3 Vazia!\n";
-    }
-    else { 
-        cout << "Pista 3 ainda tem " << p3.quantidade << " aviões!\n";
-        for(Fila *f = p3.fila; f != nullptr; f = f->prox) {
-            cout << "Avião " << f->pos << ": " << f->aviao.id << endl;
-        }
-    }
 
     return 0;
 }
