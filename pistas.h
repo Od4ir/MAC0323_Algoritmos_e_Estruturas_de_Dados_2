@@ -23,7 +23,6 @@ class Fila {
         Fila * ant;
         Fila * insere_na_fila(Fila * fila, Avioes aviao, int pos, Fila * ant);
         Fila * insere_na_fila_posicao(Fila * fila, Avioes aviao, int pos);
-        void remove_o_primeiro(Fila * fila, Avioes aviao);
         Avioes primeiro_fila(Fila * fila);
 };
 
@@ -36,4 +35,13 @@ class Pistas {
         int status;
         Pistas(int id, int quant, int time, int stat);    // Criação de Pistas;
         Avioes primeiro_pista(Pistas pista);              // Retorna o primeiro avião da pista;
+        Fila * remove_o_primeiro(Pistas pista);
+};
+
+class Historico {
+    public:
+        Avioes aviao;
+        Historico * dir;
+        Historico * esq;
+        Historico * insere_na_arvore(Historico * hist, Avioes A, int * v);
 };

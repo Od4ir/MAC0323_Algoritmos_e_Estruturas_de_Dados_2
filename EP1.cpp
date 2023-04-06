@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <cstring>
 #include "pistas.h"
 using namespace std;
 
@@ -105,20 +106,20 @@ Fila * Fila::insere_na_fila_posicao(Fila * fila, Avioes aviao, int pos) {
         f->ant = aux;
         fila = fila->ant;
     }
-    else if(f->prox == nullptr) {      // Caso em que é adicionado na última posição OU antes da última;
-        if(f->pos == pos) {
+    else if(f->prox == nullptr) {      
+        if(f->pos == pos) {           // Caso em que é adicionado antes da penúltima;
             aux->ant = f->ant;
             aux->prox = f;
             f->ant->prox = aux;
             f->ant = aux;
         }
-        else {
+        else {                        // Caso em que é adicionado ao final da fila;
             aux->ant = f;
             f->prox = aux;
             f = aux->prox;
         }
     }
-    else {                       // Caso em que é adicionado entre 2 aviões;
+    else {                             // Caso em que é adicionado entre 2 aviões;
         aux->ant = f->ant;
         aux->prox = f;
         f->ant->prox = aux;
@@ -132,6 +133,27 @@ Fila * Fila::insere_na_fila_posicao(Fila * fila, Avioes aviao, int pos) {
         f = f->prox;
     }
     return fila;
+}
+
+// Remove o primeiro avião da fila;
+Fila * Pistas::remove_o_primeiro(Pistas pista) {
+    if(pista.fila == nullptr) {
+        pista.quantidade = 0;
+        return pista.fila;
+    }
+    Fila * f = pista.fila->prox;
+    if(f != nullptr) { 
+        f->ant = nullptr;
+    }
+    free(pista.fila);
+
+    for(Fila * k = f; k != nullptr; k = k->prox) {
+        k->pos--;
+    }
+    pista.quantidade = pista.quantidade - 1;
+    cout << pista.quantidade << endl;
+    cout << "Diminuiu!\n";
+    return f;
 }
 
 // Devolve o primeiro avião da fila;
@@ -158,6 +180,30 @@ Pistas::Pistas(int id, int quant, int time, int stat) {
 Avioes Pistas::primeiro_pista(Pistas pista) {
     return pista.fila[0].aviao;
 }
+
+Historico * Historico::insere_na_arvore(Historico * hist, Avioes A, int * v) {
+    if(hist == nullptr) {
+        hist = (Historico *) malloc(sizeof(Historico));
+        hist->aviao = aviao;
+        hist->dir = nullptr;
+        hist->esq = nullptr;
+        *v = 1;
+    }
+    int aux = strcmp(hist->aviao.id, aviao.id);
+    if(aux == 0) {
+        *v = 0;  // Já foi;
+        return hist;
+    }
+    if(aux == -1) {
+        hist->dir = insere_na_arvore(hist->dir, A, v);
+        return hist;
+    }
+    else {
+        hist->esq = insere_na_arvore(hist->esq, A, v);
+        return hist;
+    }
+}
+
 
 int main() { 
     int T, K, quant_avioes;
@@ -186,6 +232,13 @@ int main() {
 
         for(int j = 0; j < quant_avioes; j++) {
             Avioes aux = aux.gera_aviao(C, V, pp, pe);
+
+            // Checar se não é repetido;
+
+
+
+
+
              if(i % 3 == 1) {
                 p1.fila = p1.fila->insere_na_fila(p1.fila, aux, ++p1.quantidade, p1.fila);
                 p1.time_interditada+= 3;
@@ -217,13 +270,27 @@ int main() {
         if(i == 1) aux = p3;
     } 
 
-    Avioes k = k.gera_aviao(C, V, pp, pe);
-    cout << k.id << endl;
+    p3.fila = p3.remove_o_primeiro(p3);
+    p3.fila = p3.remove_o_primeiro(p3);
+    p3.fila = p3.remove_o_primeiro(p3);
+    p3.fila = p3.remove_o_primeiro(p3);
+    p3.fila = p3.remove_o_primeiro(p3);
+    p3.fila = p3.remove_o_primeiro(p3);
+    p3.fila = p3.remove_o_primeiro(p3);
+    p3.fila = p3.remove_o_primeiro(p3);
+    p3.fila = p3.remove_o_primeiro(p3);
+    p3.fila = p3.remove_o_primeiro(p3);
+    p3.fila = p3.remove_o_primeiro(p3);
+    p3.fila = p3.remove_o_primeiro(p3);
 
-    p3.fila = p3.fila->insere_na_fila_posicao(p3.fila, k, 8);
-
-    for(Fila *f = p3.fila; f != nullptr; f = f->prox) {
-        cout << "Avião " << f->pos << ": " << f->aviao.id << endl;
+    if(p3.quantidade == 0) {
+        cout << "Pista 3 Vazia!\n";
+    }
+    else { 
+        cout << "Pista 3 ainda tem " << p3.quantidade << " aviões!\n";
+        for(Fila *f = p3.fila; f != nullptr; f = f->prox) {
+            cout << "Avião " << f->pos << ": " << f->aviao.id << endl;
+        }
     }
 
     return 0;
