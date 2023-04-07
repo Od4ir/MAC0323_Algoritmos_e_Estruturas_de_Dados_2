@@ -1,6 +1,11 @@
 #include <iostream>
 using namespace std;
 
+class Avioes;
+class Fila;
+class Pistas;
+class Historico;
+
 class Avioes {
     public:
         char id[5];
@@ -8,11 +13,12 @@ class Avioes {
         int time_comb;
         int time_voo;
         int type;
+        int inst;
 
         // Função que cria um Avião:
-        Avioes(char * id_aviao, char * info_voo, int comb, int voo, int tipo);
+        Avioes(char * id_aviao, char * info_voo, int comb, int voo, int tipo, int t);
         // Função que gera um avião aleatório: 
-        Avioes gera_aviao(int C, int V, int pp, int pe); 
+        Avioes gera_aviao(int C, int V, int pp, int pe, int t); 
 };
 
 class Fila {
@@ -26,8 +32,7 @@ class Fila {
         Avioes primeiro_fila(Fila * fila);
         Avioes aviao_na_pos(Fila * fila, int pos);
         int simulacao(Pistas pista, Avioes A, int t);
-        int testando_com_pos(Pistas pista, int pos);
-        int busca_pos_aceitavel()
+        int testando_com_pos(Avioes A, int pos, int t);
 };
 
 class Pistas {

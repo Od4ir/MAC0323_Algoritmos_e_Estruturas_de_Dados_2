@@ -276,7 +276,7 @@ SIMULAÇÃO:  ( Devolva 0 se não der, Devolva POS(Posição que deu) se der)
             return 0;
         }
 
-    BUSCA POSIÇÃO ACEITAVEL:
+    BUSCA POSIÇÃO ACEITAVEL (Devolve N - Posição aceitável)
         Recebe a fila;
         Recebe o avião - A;
         Recebe a quantidade de aviões na fila - N;

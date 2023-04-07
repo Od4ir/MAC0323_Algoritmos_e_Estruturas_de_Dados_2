@@ -7,7 +7,7 @@ using namespace std;
 // Função para fabricar aviões: 
 // Sobre o tipo: ]
 //      - 0 e 1 (Normal e Especial)
-Avioes::Avioes(char * id_aviao, char * info_voo, int comb, int voo, int tipo) {
+Avioes::Avioes(char * id_aviao, char * info_voo, int comb, int voo, int tipo, int t) {
     for(int i = 0; i < 5; i++) {
         id[i] = id_aviao[i];
     } 
@@ -17,6 +17,7 @@ Avioes::Avioes(char * id_aviao, char * info_voo, int comb, int voo, int tipo) {
     type = tipo;
     time_comb = comb;
     time_voo = voo;
+    inst = t;
 }
 
 // Função para gerar aviões aleatoriamente dado os parâmetros de entrada;
@@ -25,7 +26,7 @@ Avioes::Avioes(char * id_aviao, char * info_voo, int comb, int voo, int tipo) {
     // int pp - Um valor de 0 a 100 que indica a probabilidade de ser um pouso;
     //     pd - É igual a 100 - pd;
     // int pe - Um valor de 0 a 100 que indica a probabilidade de ser uma emergência;
-Avioes Avioes::gera_aviao(int C, int V, int pp, int pe) {
+Avioes Avioes::gera_aviao(int C, int V, int pp, int pe, int t) {
     char id_aviao[5], id_voo[3];
     int comb, voo, tipo, type;
 
@@ -60,7 +61,7 @@ Avioes Avioes::gera_aviao(int C, int V, int pp, int pe) {
         type = 0;
     }
 
-    Avioes aviao_novo(id_aviao, id_voo, comb, voo, type);
+    Avioes aviao_novo(id_aviao, id_voo, comb, voo, type, t);
     return aviao_novo;
 }
 
@@ -164,10 +165,71 @@ Avioes Fila::primeiro_fila(Fila * fila) {
     return f->aviao;
 }
 
+// Devolve o avião que está na posição pos;
 Avioes Fila::aviao_na_pos(Fila * fila, int pos) {
     Fila * f;
     for(f = fila; f != nullptr && f->pos != pos; f = f->prox);
     return f->aviao;
+}
+
+
+int Fila::simulacao(Pistas pista, Avioes A, int t) {
+    int pos, teste;
+    pos = pista.quantidade;
+    if(A.type == 1) {
+        while(pos >= 0) {
+            Avioes B = pista.fila->aviao_na_pos(pista.fila, pos);
+            teste = pista.fila->testando_com_pos(B, pos + 1, t);
+            if(teste == 1) {
+                pos--;
+            }
+            else {
+                return 0;
+            }
+        }
+        return 1;
+    }
+    else {
+        int N = pos + 1;
+        int achei = 0;
+        while(!achei && N != 0) {
+            teste = pista.fila->testando_com_pos(A, N, t);
+            if(teste == 1) {
+                achei = 1;
+            }
+            else {
+                N--;
+            }
+        }
+        // Ao sair do Loop teremos a posição máxima do avião;
+        // Precisamos verificar se tudo bem colocar o avião ali;
+        int aux = N;
+        while(aux <= pista.quantidade) {
+            Avioes B = pista.fila->aviao_na_pos(pista.fila, aux);
+            teste = pista.fila->testando_com_pos(B, aux + 1, t);
+            if(teste != 1) { 
+                return 0;
+            }
+            aux++;
+        }
+        return N;
+    }
+}
+
+// 
+int Fila::testando_com_pos(Avioes A, int pos, int t) {
+    if(A.type == 1) {
+        return 0;
+    }
+    int aguenta = (A.time_comb + A.time_voo) - (t - A.inst) - (pos - 1)*3;
+    if(t % 3 > 0) {
+        aguenta = aguenta - (3 - t%3);
+    }
+
+    if(aguenta >= 0) {
+        return 1;
+    }
+    return 0;
 }
 
 // Cria uma pista;
@@ -248,13 +310,12 @@ int main() {
         printf("%d Aviões entraram em contato!\n", quant_avioes);
 
         for(int j = 0; j < quant_avioes; j++) {
-            Avioes aux = aux.gera_aviao(C, V, pp, pe);
+            Avioes aux = aux.gera_aviao(C, V, pp, pe, i);
 
             hist = hist->insere_na_arvore(hist, aux, &verifica);
             if(verifica) {
                 // ESTRATÉGIA PARA INSERÇÃO //
-
-                if(aux.type == 1) {  // Se for ESPECIAL;
+                /*if(aux.type == 1) {  // Se for ESPECIAL;
                     colocado = 0;
                     if(aux.time_comb == 0) {  // Se for de Decolagem;
                         Pistas aux_pista = p3;
@@ -271,15 +332,10 @@ int main() {
                         }
 
                     }
-                }
-
-
-
-
-
+                } */
                 if(i % 3 == 1) {
-                p1.fila = p1.fila->insere_na_fila(p1.fila, aux, ++p1.quantidade, p1.fila);
-                p1.time_interditada+= 3;
+                    p1.fila = p1.fila->insere_na_fila(p1.fila, aux, ++p1.quantidade, p1.fila);
+                    p1.time_interditada+= 3;
                 }
                 else if(i % 3 == 2) {
                     p2.fila = p2.fila->insere_na_fila(p2.fila, aux, ++p2.quantidade, p2.fila);
@@ -307,6 +363,13 @@ int main() {
         if(i == 1) aux = p3;
     } 
 
+    char idd[5], idv[3];
+    cin >> idd;
+    cin >> idv;
+    int combust;
+    cin >> combust;
+    cin >> 
 
+    Avioes auxx()
     return 0;
 }
