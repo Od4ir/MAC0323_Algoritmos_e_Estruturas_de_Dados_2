@@ -19,6 +19,7 @@ class Avioes {
         Avioes(char * id_aviao, char * info_voo, int comb, int voo, int tipo, int t);
         // Função que gera um avião aleatório: 
         Avioes gera_aviao(int C, int V, int pp, int pe, int t); 
+        int testando_com_pos(int pos, int t, int time_interditada);
 };
 
 class Fila {
@@ -28,11 +29,10 @@ class Fila {
         Fila * prox;
         Fila * ant;
         Fila * insere_na_fila(Fila * fila, Avioes aviao, int pos, Fila * ant);
-        Fila * insere_na_fila_posicao(Fila * fila, Avioes aviao, int pos);
+        Fila * insere_na_fila_posicao(Fila * fila, Avioes aviao, int pos, Fila * ant);
         Avioes primeiro_fila(Fila * fila);
         Avioes aviao_na_pos(Fila * fila, int pos);
         int simulacao(Pistas pista, Avioes A, int t);
-        int testando_com_pos(Avioes A, int pos, int t);
 };
 
 class Pistas {
@@ -45,6 +45,7 @@ class Pistas {
         Pistas(int id, int quant, int time, int stat);    // Criação de Pistas;
         Avioes primeiro_pista(Pistas pista);              // Retorna o primeiro avião da pista;
         Fila * remove_o_primeiro(Pistas pista);
+        void aumenta_quantidade(int t);
 };
 
 class Historico {

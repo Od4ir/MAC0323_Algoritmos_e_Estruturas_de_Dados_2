@@ -1,0 +1,34 @@
+Estratégia Nova
+
+Ordena as pistas por menor quantidade de aviões;
+
+Se normal {
+    while(!testar todas as pistas && !colocado) { 
+        Começa no último lugar da fila - POS;
+        while(POS > 0 && !colocado) { 
+            Se der certo {
+                Precisa verificar, caso POS < quantidade de aviões, se pode empurrar os outros;
+                colocado = 1;
+            }
+            Se não {
+                próxima posição;
+            }
+        }
+        if(!colocado) {
+            proxima pista;
+        }
+    }
+    Caso não tenha colocado - Bota na fila de espera;
+}
+Se Especial {
+    while(!testar todas as pistas && !colocado) { 
+        Começa no primeiro lugar da fila - POS;
+        Verifica se os outros podem ser empurrados para trás;
+        Se sim {
+            colocado = 1;
+        }
+        Se não {
+            próxima pista;
+        }
+    }
+}

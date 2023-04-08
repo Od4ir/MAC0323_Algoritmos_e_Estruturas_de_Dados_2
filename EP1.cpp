@@ -84,17 +84,18 @@ Fila * Fila::insere_na_fila(Fila * fila, Avioes aviao, int pos, Fila * ant) {
 }
 
 // Insere um avião novo na posição informada;
-Fila * Fila::insere_na_fila_posicao(Fila * fila, Avioes aviao, int pos) {
+Fila * Fila::insere_na_fila_posicao(Fila * fila, Avioes aviao, int pos, Fila * ant) {
     Fila * f = fila;
 
     // Caso da fila vazia:
     if(fila == nullptr) {
-        fila = (Fila *) malloc(sizeof(Fila));
+        /*fila = (Fila *) malloc(sizeof(Fila));
         fila->ant = (Fila *) malloc(sizeof(Fila));
         fila->ant = ant;
         fila->aviao = aviao;
         fila->pos = pos;
-        fila->prox = nullptr;
+        fila->prox = nullptr; */
+        fila = fila->insere_na_fila(fila, aviao, pos, nullptr);
         return fila;
     }
 
@@ -154,6 +155,24 @@ Fila * Pistas::remove_o_primeiro(Pistas pista) {
     return f;
 }
 
+int maior_fila(Pistas P1, Pistas P2) {
+    if(P1.quantidade > P2.quantidade) {
+        return P1.id_pista;
+    }
+    else {
+        return P2.id_pista;
+    }
+}
+
+Pistas id_pista(int id, Pistas p1, Pistas p2, Pistas p3) {
+    if(id == p1.id_pista) {
+        return p1;
+    }
+    if(id == p2.id_pista) {
+        return p2;
+    }
+    return p3;
+}
 // Devolve o primeiro avião da fila;
 Avioes Fila::primeiro_fila(Fila * fila) {
     Fila *f;
@@ -169,17 +188,19 @@ Avioes Fila::primeiro_fila(Fila * fila) {
 Avioes Fila::aviao_na_pos(Fila * fila, int pos) {
     Fila * f;
     for(f = fila; f != nullptr && f->pos != pos; f = f->prox);
+
     return f->aviao;
 }
 
-
+// Simula colocar o avião na fila e devolve 0 de der errado ou N (posição que deu certo) de ser certo;
 int Fila::simulacao(Pistas pista, Avioes A, int t) {
     int pos, teste;
     pos = pista.quantidade;
     if(A.type == 1) {
-        while(pos >= 0) {
+        while(pos > 0) {
+            cout << pos << endl;
             Avioes B = pista.fila->aviao_na_pos(pista.fila, pos);
-            teste = pista.fila->testando_com_pos(B, pos + 1, t);
+            teste = B.testando_com_pos(pos + 1, t, pista.time_interditada);
             if(teste == 1) {
                 pos--;
             }
@@ -193,7 +214,7 @@ int Fila::simulacao(Pistas pista, Avioes A, int t) {
         int N = pos + 1;
         int achei = 0;
         while(!achei && N != 0) {
-            teste = pista.fila->testando_com_pos(A, N, t);
+            teste = A.testando_com_pos(N, t, pista.time_interditada);
             if(teste == 1) {
                 achei = 1;
             }
@@ -206,7 +227,7 @@ int Fila::simulacao(Pistas pista, Avioes A, int t) {
         int aux = N;
         while(aux <= pista.quantidade) {
             Avioes B = pista.fila->aviao_na_pos(pista.fila, aux);
-            teste = pista.fila->testando_com_pos(B, aux + 1, t);
+            teste = B.testando_com_pos(aux + 1, t, pista.time_interditada);
             if(teste != 1) { 
                 return 0;
             }
@@ -214,17 +235,16 @@ int Fila::simulacao(Pistas pista, Avioes A, int t) {
         }
         return N;
     }
-}
+} 
 
-// 
-int Fila::testando_com_pos(Avioes A, int pos, int t) {
-    if(A.type == 1) {
+//  Testa colocar o avião na posição dada considerando o instante atual, o instante em que o avião foi colocado e durante quanto tempo a pista ficará interditada;
+int Avioes::testando_com_pos(int pos, int t, int time_interditada) {
+    if(type == 1) {
         return 0;
     }
-    int aguenta = (A.time_comb + A.time_voo) - (t - A.inst) - (pos - 1)*3;
-    if(t % 3 > 0) {
-        aguenta = aguenta - (3 - t%3);
-    }
+    int aguenta = (time_comb + time_voo) - (t - inst) - (pos - 1)*3 - time_interditada;
+
+    cout << "Aguenta: " << aguenta << endl;
 
     if(aguenta >= 0) {
         return 1;
@@ -257,9 +277,6 @@ Historico * Historico::insere_na_arvore(Historico * hist, Avioes A, int * v) {
         return hist;
     }
     int aux = strcmp(hist->aviao.id, A.id);
-    cout << hist->aviao.id << endl;
-    cout << A.id << endl;
-    cout << "AUX = " << aux << endl;
     if(aux == 0) {
         *v = 0;  // Já foi;
     }
@@ -302,6 +319,7 @@ int main() {
 
     Pistas p1(1, 0, 0, 0), p2(2, 0, 0, 0), p3(3, 0, 0, 0);
     Fila * fila = nullptr;
+    int ordem[3];
 
 
     for(int i = 0; i < T; i++) {
@@ -309,42 +327,171 @@ int main() {
         cout << "INSTANTE ATUAL: " << i + 1 << endl << endl;
         printf("%d Aviões entraram em contato!\n", quant_avioes);
 
-        for(int j = 0; j < quant_avioes; j++) {
+        int j = 0;
+        while(j < quant_avioes) { 
             Avioes aux = aux.gera_aviao(C, V, pp, pe, i);
 
             hist = hist->insere_na_arvore(hist, aux, &verifica);
             if(verifica) {
+
+                cout << "Inserindo Avião: " << aux.id << endl;
+                cout << "    Type " << aux.type << endl;
+                cout << "    Time_comb " << aux.time_comb << endl;
+
                 // ESTRATÉGIA PARA INSERÇÃO //
-                /*if(aux.type == 1) {  // Se for ESPECIAL;
-                    colocado = 0;
-                    if(aux.time_comb == 0) {  // Se for de Decolagem;
-                        Pistas aux_pista = p3;
-                        teste = 0;
-                        while(teste < 3 && !colocado) {
-                            if(aux_pista.quantidade == 0) {
-                                aux_pista.fila = aux_pista.fila->insere_na_fila_posicao(aux_pista.fila, aux, ++aux_pista.quantidade);
-                                aux_pista.time_interditada += 3;
+                int positions;
+                if(aux.type == 1) {  // Se for ESPECIAL;
+                    colocado = 0;            
+                    teste = 0;
+                    if(aux.time_comb == 0) {
+                        ordem[0] = 3;
+                        ordem[1] = maior_fila(p1, p2);
+                        if(ordem[1] == 1) {
+                            ordem[2] = 2;
+                        }
+                        else {
+                            ordem[2] = 1;
+                        }
+                    }
+                    else {
+                        ordem[0] = maior_fila(p1, p2);
+                        if(ordem[1] == 1) {
+                            ordem[1] = 2;
+                        }
+                        else {
+                            ordem[1] = 1;
+                        }
+                        ordem[2] = 3;
+                    }
+                    while(teste < 3 && !colocado) {
+                        Pistas aux_pista = id_pista(ordem[teste], p1, p2, p3);
+                        if(aux_pista.quantidade == 0) {  //  Se a pista estiver vazia;
+                            aux_pista.fila = aux_pista.fila->insere_na_fila_posicao(aux_pista.fila, aux, 1, nullptr);
+                            aux_pista.time_interditada = 0;
+                            colocado = 1;
+                            cout << "Foi colocado na " << aux_pista.id_pista << endl;
+                        }
+                        else {
+                            positions = aux_pista.fila->simulacao(aux_pista, aux, i);
+                            if(positions == 1) {
+                                aux_pista.fila = aux_pista.fila->insere_na_fila_posicao(aux_pista.fila, aux, positions, nullptr);
+                                aux_pista.quantidade++;
                                 colocado = 1;
                             }
+                        }
+                        if(colocado == 1) {
+                            if(ordem[teste] == p1.id_pista) {
+                                p1.quantidade++;
+                            }
+                            else if(ordem[teste] == p2.id_pista) {
+                                p2.quantidade++;
+                            }
                             else {
-                                
+                                p3.quantidade++;
                             }
                         }
-
                     }
-                } */
-                if(i % 3 == 1) {
-                    p1.fila = p1.fila->insere_na_fila(p1.fila, aux, ++p1.quantidade, p1.fila);
-                    p1.time_interditada+= 3;
-                }
-                else if(i % 3 == 2) {
-                    p2.fila = p2.fila->insere_na_fila(p2.fila, aux, ++p2.quantidade, p2.fila);
-                    p2.time_interditada+= 3;
-                }
-                else {
-                    p3.fila = p3.fila->insere_na_fila(p3.fila, aux, ++p3.quantidade, p3.fila);
-                    p3.time_interditada+= 3;
+                    if(!colocado) {
+                        cout << "Avião " << aux.id << " mandado para outro aeroporto!\n";
+                    }
                 } 
+                else {               // Se for NORMAL;
+                    colocado = 0;            
+                    teste = 0;
+                    if(aux.time_comb == 0) {
+                        ordem[0] = 3;
+                        ordem[1] = maior_fila(p1, p2);
+                        if(ordem[1] == 1) {
+                            ordem[2] = 2;
+                        }
+                        else {
+                            ordem[2] = 1;
+                        }
+                    }
+                    else {
+                        ordem[0] = maior_fila(p1, p2);
+                        if(ordem[1] == 1) {
+                            ordem[1] = 2;
+                        }
+                        else {
+                            ordem[1] = 1;
+                        }
+                        ordem[2] = 3;
+                    }
+                    while(teste < 3 && !colocado) {
+                        Pistas aux_pista = id_pista(ordem[teste], p1, p2, p3);
+                        if(aux_pista.quantidade == 0) {  //  Se a pista estiver vazia;
+                            aux_pista.fila = aux_pista.fila->insere_na_fila_posicao(aux_pista.fila, aux, 1, nullptr);
+                            aux_pista.time_interditada = 0;
+                            colocado = 1;
+                            cout << "Foi colocado na " << aux_pista.id_pista << endl;
+                        }
+                        else {
+                            positions = aux_pista.fila->simulacao(aux_pista, aux, i);
+                            if(positions > 0) {
+                                aux_pista.fila = aux_pista.fila->insere_na_fila_posicao(aux_pista.fila, aux, positions, nullptr);
+                                aux_pista.quantidade++;
+                                colocado = 1;
+                                cout << "Foi colocado na " << aux_pista.id_pista << endl;
+                            }
+                        }
+                        if(colocado == 1) {
+                            if(ordem[teste] == p1.id_pista) {
+                                p1.quantidade++;
+                            }
+                            else if(ordem[teste] == p2.id_pista) {
+                                p2.quantidade++;
+                            }
+                            else {
+                                p3.quantidade++;
+                            }
+                        }
+                    }
+                    if(!colocado) {
+                        cout << "Avião " << aux.id << " mandado para outro aeroporto!\n";
+                    }
+                } 
+
+                cout << endl << endl;
+            
+
+                Pistas auxp = p1;
+                for(int i = 0; i < 3; i++) { 
+                    cout << "Na Pista " << i + 1 << ": \n"; 
+                    cout << "Há " << auxp.quantidade << " aviões!\n";
+                    cout << "Interdição: " << auxp.time_interditada << "!\n";
+                    if(i == 0) auxp = p2;
+                    if(i == 1) auxp = p3;
+                } 
+
+                cout << endl << endl;
+
+                for(Fila *f = p2.fila; f != nullptr; f = f->prox) {
+                    cout << "Avião " << f->pos << ": " << f->aviao.id << endl;
+                }
+
+
+                if(p1.quantidade != 0 && p1.time_interditada == 0) {
+                    p1.time_interditada == 3;
+                }
+                if(p2.quantidade != 0 && p2.time_interditada == 0) {
+                    p2.time_interditada == 3;
+                }
+                if(p3.quantidade != 0 && p3.time_interditada == 0) {
+                    p3.time_interditada == 3;
+                }
+
+                if(p1.time_interditada != 0) {
+                    p1.time_interditada--;   
+                }
+                if(p2.time_interditada != 0) {
+                    p2.time_interditada--;   
+                }
+                if(p3.time_interditada != 0) {
+                    p3.time_interditada--;   
+                }
+                cout << endl;
+                j++;
             }
         }
         cout << endl;
@@ -363,13 +510,30 @@ int main() {
         if(i == 1) aux = p3;
     } 
 
+    /*
+
     char idd[5], idv[3];
+    cout << "ID AVIAO: ";
     cin >> idd;
+    cout << "ID VOO: ";
     cin >> idv;
+    cout << "COMB: ";
     int combust;
     cin >> combust;
-    cin >> 
+    cout << "TIME: ";
+    int t; 
+    cin >> t;
+    int inst; cout << "INST: ";
+    cin >> inst;
 
-    Avioes auxx()
+    Avioes av(idd, idv, combust, 0, 0, inst);
+    int pos;
+    cin >> pos;
+    int teste = av.testando_com_pos(pos, t, 1);
+    
+    cout << "Pode? " << teste << endl;
+    */
+
+
     return 0;
 }
