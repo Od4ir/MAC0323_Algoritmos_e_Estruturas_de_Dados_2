@@ -13,6 +13,7 @@ Pista::Pista(int id_pista, int quant, int time, Fila * f) {
     fila = f;
 }
 
+// >>> Insere um avião no fim da fila da Pista;
 void Pista::insere_no_fim(Avioes A) {
     Fila * f;
     if(fila == nullptr) {
@@ -26,15 +27,58 @@ void Pista::insere_no_fim(Avioes A) {
         f->prox->aviao = A;
         f->prox->ant = f;
     }
+    quantidade++;
 }
 
-// >>> Inseri um avião no começo da fila dada;
+// >>> Insere um avião na posiçao x da fila da Pista; 
+Fila * insere_em_pos(Fila * fila, int pos, Avioes A, int quantidade) {
+    Fila * f;
+    if(pos > quantidade) {
+        if(fila == nullptr) {
+            fila = (Fila *) malloc(sizeof(Fila));
+            fila->aviao = A;
+            fila->ant = nullptr;
+            fila->prox = nullptr;
+        }
+        else { 
+            for(f = fila; f->prox != nullptr; f = f->prox);
+            f->prox = (Fila *) malloc(sizeof(Fila));
+            f->prox->aviao = A;
+            f->prox->ant = f;
+        }
+    }
+    else if(pos == 1) {
+        Fila * novo_elemento = (Fila *) malloc(sizeof(Fila));
+        novo_elemento->aviao = A;
+        novo_elemento->ant = nullptr;
+        novo_elemento->prox = fila;
+        fila = novo_elemento;
+    } 
+    else {
+        cout << quantidade << endl;
+        cout << conta_posicoes(fila) << endl;
+        cout << "Posição " << quantidade - conta_posicoes(fila) + 1 << endl;
+        if(quantidade - conta_posicoes(fila) + 1 == pos) {
+            Fila * novo_elemento = (Fila *) malloc(sizeof(Fila));
+            novo_elemento->aviao = A;
+            novo_elemento->prox = fila;
+            novo_elemento->ant = fila->ant;
+            fila->ant = novo_elemento;
+            return novo_elemento;
+        }
+        fila->prox = insere_em_pos(fila->prox, pos, A, quantidade);
+    }
+    return fila;
+} 
+
+// >>> Insere um avião no começo da fila da Pista;
 void Pista::insere_no_comeco(Avioes A) {
     Fila * novo_elemento = (Fila *) malloc(sizeof(Fila));
     novo_elemento->aviao = A;
     novo_elemento->ant = nullptr;
     novo_elemento->prox = fila;
     fila = novo_elemento;
+    quantidade++;
 }
 
 // FUNÇÕES CLASS AVIOES: ------------------------------------------------
@@ -230,19 +274,46 @@ int main() {
 
                 if(i == 0) {
                     cout << aviao_aux.id << endl;
-                    p3.insere_no_comeco(aviao_aux);
+                    p3.fila = insere_em_pos(p3.fila, 1, aviao_aux, p3.quantidade);
+                    cout << "Há " << ++p3.quantidade << " na p3\n";
+                } 
+                else if(i % 3 == 0) {
+                    cout << aviao_aux.id << endl;
+                    p3.fila = insere_em_pos(p3.fila, p3.quantidade + 1, aviao_aux, p3.quantidade);
+                    cout << "Há " << ++p3.quantidade << " na p3\n"; 
                 }
+                if(i % 8 == 0 && i != 0) {
+                    cout << "COMECEI AQUIIIII\n\n";
+                    cout << p3.quantidade << endl;
+                    cout << conta_posicoes(p3.fila) << endl;
 
-                if(i % 3 == 0) { 
-                    p3.insere_no_fim(aviao_aux);
-                    cout << "Inseriu no final: " << aviao_aux.id << endl;
+                    for(Fila * p = p3.fila; p != nullptr; p = p->prox) {
+                        cout << p->aviao.id << endl;
+                    }
+
+                    p3.fila = insere_em_pos(p3.fila, p3.quantidade, aviao_aux, p3.quantidade);
+                    cout << "Há here " << ++p3.quantidade << " na p3\n"; 
+                } 
+
+                /*if(i == 0) {
+                    cout << aviao_aux.id << endl;
+                    p3.insere_em_pos(aviao_aux, 1);
+                    cout << "Há " << p3.quantidade << " na p3\n";
                 }
-                /*for(FilaP * p = pistas; p != nullptr; p = p->prox) {
+                else if(i % 3 == 0) { 
+                    p3.insere_em_pos(aviao_aux, p3.quantidade + 1);
+                    cout << "Inseriu no final: " << aviao_aux.id << endl;
+                    cout << "Há " << p3.quantidade << " na p3\n";
+                }
+                else if(i % 8 == 0 && p3.quantidade <= 7 ) {
+                    p3.insere_em_pos(aviao_aux, 2);
+                }
+                for(FilaP * p = pistas; p != nullptr; p = p->prox) {
                     cout << p->pista.id << endl;
                 }
-                cout << endl; */
+                cout << endl; 
 
-                pistas = nullptr;
+                pistas = nullptr; */
                 av++;
             }
         }

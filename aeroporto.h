@@ -4,6 +4,7 @@ class FilaP;
 class Avioes;
 class Historico;
 
+
 class Pista {
     public:
         int id;
@@ -12,6 +13,7 @@ class Pista {
         Fila * fila;
         Pista(int id_pista, int quant, int time, Fila * f); 
         void insere_no_fim(Avioes A);
+        void insere_em_pos(Avioes A, int pos);
         void insere_no_comeco(Avioes A);
 };
 
@@ -47,3 +49,6 @@ class Historico {
         Historico * dir;
         Historico * esq;
 };
+
+int conta_posicoes(Fila * fila);
+Fila * insere_em_pos(Fila * fila, int pos, Avioes A, int quantidade);
