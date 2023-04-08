@@ -6,6 +6,7 @@ Se normal {
     while(!testar todas as pistas && !colocado) { 
         Começa no último lugar da fila - POS;
         while(POS > 0 && !colocado) { 
+            Ve se dá para colocar em POS;
             Se der certo {
                 Precisa verificar, caso POS < quantidade de aviões, se pode empurrar os outros;
                 colocado = 1;

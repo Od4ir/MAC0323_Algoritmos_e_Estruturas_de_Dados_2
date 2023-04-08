@@ -30,47 +30,6 @@ void Pista::insere_no_fim(Avioes A) {
     quantidade++;
 }
 
-// >>> Insere um avião na posiçao x da fila da Pista; 
-Fila * insere_em_pos(Fila * fila, int pos, Avioes A, int quantidade) {
-    Fila * f;
-    if(pos > quantidade) {
-        if(fila == nullptr) {
-            fila = (Fila *) malloc(sizeof(Fila));
-            fila->aviao = A;
-            fila->ant = nullptr;
-            fila->prox = nullptr;
-        }
-        else { 
-            for(f = fila; f->prox != nullptr; f = f->prox);
-            f->prox = (Fila *) malloc(sizeof(Fila));
-            f->prox->aviao = A;
-            f->prox->ant = f;
-        }
-    }
-    else if(pos == 1) {
-        Fila * novo_elemento = (Fila *) malloc(sizeof(Fila));
-        novo_elemento->aviao = A;
-        novo_elemento->ant = nullptr;
-        novo_elemento->prox = fila;
-        fila = novo_elemento;
-    } 
-    else {
-        cout << quantidade << endl;
-        cout << conta_posicoes(fila) << endl;
-        cout << "Posição " << quantidade - conta_posicoes(fila) + 1 << endl;
-        if(quantidade - conta_posicoes(fila) + 1 == pos) {
-            Fila * novo_elemento = (Fila *) malloc(sizeof(Fila));
-            novo_elemento->aviao = A;
-            novo_elemento->prox = fila;
-            novo_elemento->ant = fila->ant;
-            fila->ant = novo_elemento;
-            return novo_elemento;
-        }
-        fila->prox = insere_em_pos(fila->prox, pos, A, quantidade);
-    }
-    return fila;
-} 
-
 // >>> Insere um avião no começo da fila da Pista;
 void Pista::insere_no_comeco(Avioes A) {
     Fila * novo_elemento = (Fila *) malloc(sizeof(Fila));
@@ -79,6 +38,14 @@ void Pista::insere_no_comeco(Avioes A) {
     novo_elemento->prox = fila;
     fila = novo_elemento;
     quantidade++;
+}
+
+// >>> Remove o primeiro elemento da fila da Pista;
+void Pista::remove_primeiro() {
+    Fila * aux = fila->prox;
+    free(fila);
+    fila = aux;
+    quantidade--;
 }
 
 // FUNÇÕES CLASS AVIOES: ------------------------------------------------
@@ -94,6 +61,21 @@ Avioes::Avioes(char * id_aviao, char * info_voo, int comb, int voo, int tipo, in
     time_comb = comb;
     time_voo = voo;
     inst = t;
+}
+
+// Verifica se o avião pode ser colocado na posição 'pos':
+int Avioes::simula_na_pos(int pos, int t, int time_interditada){
+    if(type == 1) {
+        return 0;
+    }
+    int aguenta = (time_comb + time_voo) - (t - inst) - (pos - 1)*3 - time_interditada;
+
+    cout << "Aguenta: " << aguenta << endl;
+
+    if(aguenta >= 0) {
+        return 1;
+    }
+    return 0;
 }
 
 // FUNÇÕES GERAIS: ------------------------------------------------------
@@ -145,6 +127,47 @@ Avioes gera_aviao(int C, int V, int pp, int pe, int t) {
     Avioes aviao_novo(id_aviao, id_voo, comb, voo, type, t);
     return aviao_novo;
 }
+
+// >>> Insere um avião na posiçao x da fila da Pista; 
+Fila * insere_em_pos(Fila * fila, int pos, Avioes A, int quantidade) {
+    Fila * f;
+    if(pos > quantidade) {
+        if(fila == nullptr) {
+            fila = (Fila *) malloc(sizeof(Fila));
+            fila->aviao = A;
+            fila->ant = nullptr;
+            fila->prox = nullptr;
+        }
+        else { 
+            for(f = fila; f->prox != nullptr; f = f->prox);
+            f->prox = (Fila *) malloc(sizeof(Fila));
+            f->prox->aviao = A;
+            f->prox->ant = f;
+        }
+    }
+    else if(pos == 1) {
+        Fila * novo_elemento = (Fila *) malloc(sizeof(Fila));
+        novo_elemento->aviao = A;
+        novo_elemento->ant = nullptr;
+        novo_elemento->prox = fila;
+        fila = novo_elemento;
+    } 
+    else {
+        cout << quantidade << endl;
+        cout << conta_posicoes(fila) << endl;
+        cout << "Posição " << quantidade - conta_posicoes(fila) + 1 << endl;
+        if(quantidade - conta_posicoes(fila) + 1 == pos) {
+            Fila * novo_elemento = (Fila *) malloc(sizeof(Fila));
+            novo_elemento->aviao = A;
+            novo_elemento->prox = fila;
+            novo_elemento->ant = fila->ant;
+            fila->ant = novo_elemento;
+            return novo_elemento;
+        }
+        fila->prox = insere_em_pos(fila->prox, pos, A, quantidade);
+    }
+    return fila;
+} 
 
 // >>> Insere uma pista px na fila de pistas;
 FilaP * insere(FilaP * fila, Pista px) {
@@ -210,21 +233,54 @@ Historico * insere_em_hist(Historico * hist, Avioes A, int * v) {
     return hist;
 }
 
+// Dada uma posição, confere se o avião daquela posição pode ser empurrado para a próxima;
+int simula_empurrar(Pista pista, int pos, int t, int time_interditada) {
+    Fila * f;
+    for(f = pista.fila; pista.quantidade - conta_posicoes(f) + 1 != pos && f != nullptr; f = f->prox);
+    if(f != nullptr) { 
+        // Quando sair do loop, estará na pos;
+        cout << "Posição: " << pista.quantidade - conta_posicoes(f) + 1 << endl;
+        cout << f->aviao.id << endl;
+        cout << "Comb " << f->aviao.time_comb + f->aviao.time_voo << endl;
+        cout << "Inst " << f->aviao.inst << endl;
+        int teste = f->aviao.simula_na_pos(pos + 1, t, time_interditada);
+        return teste;
+    }
+    return -1;
+}
+
 // >>> Devolve 0 se não der para colocar na pista;
 // >>> Devolve POS em que é possível inserir na pista;
-/* int simula_colocar_na_pista(Pista pista, Avioes aviao) {
+int simula_colocar_na_pista(Pista pista, Avioes aviao, int t) {
+    int teste;
     if(aviao.type == 0) {
-        int pos = conta_posicoes(pista.fila);
-        while(pos != 0) {
-
+        int pos = pista.quantidade + 1;
+        int achei = 0;
+        while(pos != 0 && !achei) { 
+            cout << "Testando com " << pos << endl;
+            teste = aviao.simula_na_pos(pos, t, pista.tempo_interditada);
+            if(teste == 1 && !achei) {
+                achei = 1;
+            }
+            else { 
+                pos--;
+            }
         }
-
-
+        int aux = pos; 
+        while(aux <= pista.quantidade) { 
+            teste = simula_empurrar(pista, aux, t, pista.tempo_interditada);
+            if(teste < 1) {
+                return 0;
+            }
+            aux++;
+        }
+        return pos;
     }
     if(aviao.type == 1) {
-
+        
     }
-} */
+    return 0;
+}  
 
 
 int main() { 
@@ -318,6 +374,19 @@ int main() {
             }
         }
     }
+    Avioes aux = gera_aviao(C, V, pp, pe, 10);
+    cout << aux.id << endl;
+
+    aux.type = 0;
+    aux.time_comb = 46; aux.time_voo = 0;
+    cout << "Tempo " << aux.time_comb + aux.time_voo << endl;
+    int teste = simula_colocar_na_pista(p3, aux, 10);
+    cout << "Posição " << teste << endl;
+
+    if(teste != 0) { 
+        p3.fila = insere_em_pos(p3.fila, teste, aux, p3.quantidade);
+    }
+
     for(Fila * p = p3.fila; p != nullptr; p = p->prox) {
         cout << p->aviao.id << endl;
     }
