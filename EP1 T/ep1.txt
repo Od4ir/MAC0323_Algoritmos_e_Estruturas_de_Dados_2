@@ -289,4 +289,38 @@ SIMULAÇÃO:  ( Devolva 0 se não der, Devolva POS(Posição que deu) se der)
 
 
 
-    
+int media_comb_pouso_esperando, media_comb_pouso_pousados, media_tempo_espera_pouso, media_espera_decolagem, quantidade_emergencias;
+
+mcpe - Média de combustível restante daqueles que estão na fila;
+mcpp - Média de combustível dos aviões pousados no instante em que pousaram;
+
+mtep - Ao pousar um avião, verifica o DeltaT de tempo passado e soma;
+med - Ao decolar um avião, verifica o DeltaT de tempo passado e soma;
+
+
+// >>> Insere um avião no fim da fila da Pista;
+/* void Pista::insere_no_fim(Avioes A) {
+    Fila * f;
+    if(fila == nullptr) {
+        fila = (Fila *) malloc(sizeof(Fila));
+        fila->aviao = A;
+        fila->ant = nullptr;
+    }
+    else { 
+        for(f = fila; f->prox != nullptr; f = f->prox);
+        f->prox = (Fila *) malloc(sizeof(Fila));
+        f->prox->aviao = A;
+        f->prox->ant = f;
+    }
+    quantidade++;
+} 
+
+// >>> Insere um avião no começo da fila da Pista;
+void Pista::insere_no_comeco(Avioes A) {
+    Fila * novo_elemento = (Fila *) malloc(sizeof(Fila));
+    novo_elemento->aviao = A;
+    novo_elemento->ant = nullptr;
+    novo_elemento->prox = fila;
+    fila = novo_elemento;
+    quantidade++;
+} */

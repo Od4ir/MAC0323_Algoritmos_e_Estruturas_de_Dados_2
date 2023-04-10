@@ -14,9 +14,8 @@ class Pista {
         int tempo_interditada;
         Fila * fila;
         Pista(int id_pista, int quant, int time, Fila * f); 
-        void insere_no_fim(Avioes A);
-        void insere_no_comeco(Avioes A);
         void remove_primeiro();
+        void pousa_decola_primeiro_aviao(int * mcpp, int * mtep, int * med, int * quant_dec, int * quant_pou, int * q_emerg, int t);
 };
 
 class Avioes {
@@ -36,8 +35,7 @@ class Fila {
         Avioes aviao;
         Fila * prox;
         Fila * ant;
-        //Fila * insere_no_comeco(Fila * inicio, Avioes aviao);
-        
+        //Fila * insere_no_comeco(Fila * inicio, Avioes aviao); 
 };
 
 class FilaP {

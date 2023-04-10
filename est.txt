@@ -84,3 +84,49 @@ Se Especial {
                 cout << endl; 
 
                 pistas = nullptr; */
+
+
+
+
+Se o comb - DeltaT - tempo_interditada == 0 {
+    While(!testar todas as pistas) {
+        POS = 1;
+        chao = 1;
+        while(POS != quantidade da pista && !deu_certo) {
+            teste = simula_na_pos(Aviao atual);
+            Se der certo { 
+                aviao = aviao.prox;
+                pos++
+            }
+            Se não {
+                Procura algúem entre pos e chao que possa ser colocado em pos + 1;
+                Salva esse algúem em aux;
+                if(chao == pos) {
+                    proxima pista;
+                }
+                Se achar {
+                    chao = aux;
+                    // Trocar?
+                }
+                Se não {
+                    proxima pista;
+                    errado = 1;
+                }
+                if(trocar && !errado) {
+                    troca e coloca;
+                    deu certo = 1;
+                }
+            }
+            errado = 0;
+        }
+        if(deu certo) {
+            coloca na pos 1;
+        }
+        else {
+            manda para outro aeroporto;
+        }
+    }
+
+
+
+}
