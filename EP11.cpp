@@ -117,6 +117,22 @@ Fila * insere2(Fila * f, Avioes A) {
     return f;
 }
 
+Fila * remove2(Fila * f) {
+    if(f ==  nullptr) {
+        return nullptr;
+    }
+    if(f->prox == nullptr) {
+        free(f);
+        return nullptr;
+    }
+    Fila * aux = f->prox;
+    if(f->prox != nullptr) {
+        aux->ant = nullptr;
+    }
+    free(f);
+    return aux;
+}
+
 Avioes primeiro_fila_emerg(Fila * f) {
     if(f->ant == nullptr) {
         return f->aviao;
@@ -388,6 +404,7 @@ int main() {
     for(int i = 0; i <= T; i++) {
         quant_avioes = rand()%K;
 
+        cout << "---------------------------------------------------------------\n";
         cout << ">>> INSTANTE ATUAL: " << i << endl;
         printf(">> %d Aviões entraram em contato!\n", quant_avioes);
 
@@ -405,12 +422,9 @@ int main() {
                 while(pistas != nullptr && !colocado) {
                     int posicao = simula_colocar_na_pista(pistas->pista, aviao_aux, i);
                     if(posicao == 0) {
-                        //cout << "Na pista " << pistas->pista.id << " não deu\n";
                         FilaP * aux = pistas->prox;
                         free(pistas);
                         pistas = aux;
-                        //if(aux != nullptr) 
-                            //cout << "   Próxima >>> " << pistas->pista.id << endl;
                     }
                     else {
                         if(pistas->pista.id == 1) {
@@ -508,15 +522,18 @@ int main() {
             p3.tempo_interditada--;   
         }
 
-        /*int quant_emergencias = 0;
+        int quant_emergencias = 0;
         cout << "!!! EMERGENCIAS !!!" << endl;
         for(Fila * x = emergencias; x != nullptr; x = x->prox) {
-            if(x->aviao.time_comb + x->aviao.time_voo <= 2) {
+            if(x->aviao.time_comb + x->aviao.time_voo - (i - x->aviao.inst) <= 2 || x->aviao.type == 1) {
                 quant_emergencias++;
                 FilaP * aux = nullptr;
+                cout << "Avião " << x->aviao.id << " | Comb/Voo: " << x->aviao.time_comb + x->aviao.time_voo << " | " << x->aviao.inst << endl;
+                cout << pistas->pista.id << endl;
                 for(FilaP * y = pistas; y != nullptr; y = y->prox) {
                     int empurrar = simula_empurrar(y->pista, 1, i, y->pista.tempo_interditada);
-                    if(empurrar) {
+                    cout << "Empurrar " << y->pista.id << " deu " << empurrar << endl;
+                    if(empurrar && x->aviao.time_comb >= ) {
                         if(y->pista.id == 1) 
                             aux = insere(aux, p1);
                         else if(y->pista.id == 2) 
@@ -527,33 +544,62 @@ int main() {
                 int tirei = 0;
                 while(aux != nullptr && !tirei) {
                     int pos_atu = 1;
-                    while(pos_atu <= aux->pista.quantidade) {
+                    while(pos_atu <= aux->pista.quantidade && !tirei) {
                         int teste = simula_empurrar(aux->pista, pos_atu, i, aux->pista.tempo_interditada);
+                        cout << "Teste: " << teste << " com pista " << aux->pista.id <<  endl;
                         if(teste == 1) {
                             pos_atu++;
+                            if(pos_atu > aux->pista.quantidade) {
+                                if(aux->pista.id == 1) {
+                                    p1.fila = insere_em_pos(p1.fila, 1, x->aviao, p1.quantidade);
+                                    p1.quantidade++;
+                                }
+                                else if(aux->pista.id == 2) {
+                                    p2.fila = insere_em_pos(p2.fila, 1, x->aviao, p2.quantidade);
+                                    p2.quantidade++;
+                                }
+                                else {
+                                    p3.fila = insere_em_pos(p3.fila, 1, x->aviao, p3.quantidade);
+                                    p3.quantidade++;
+                                }
+                                tirei = 1;
+                                emergencias = remove2(emergencias);
+                                cout << "Coloquei na pista " << aux->pista.id << endl;
+                            }
                         }
                         else {
                             if(aux->pista.id == 1) {
-
+                                p1.fila = insere_em_pos(p1.fila, 1, x->aviao, p1.quantidade);
+                                p1.quantidade++;
+                                emergencias = insere2(emergencias, p1.remove_na_pos(pos_atu));
                             }
                             else if(aux->pista.id == 2) {
-
+                                p2.fila = insere_em_pos(p2.fila, 1, x->aviao, p2.quantidade);
+                                p2.quantidade++;
+                                emergencias = insere2(emergencias, p2.remove_na_pos(pos_atu));
                             }
                             else {
-
+                                p3.fila = insere_em_pos(p3.fila, 1, x->aviao, p3.quantidade);
+                                p3.quantidade++;
+                                emergencias = insere2(emergencias, p3.remove_na_pos(pos_atu));
                             }
-                            // Remove Avião da pista e bota ele na de emergência;
-                        
+                            emergencias = remove2(emergencias);
+                            cout << "Coloquei na pista " << aux->pista.id << endl;
+                            tirei = 1;
                         }
                     }
-
+                    aux = aux->prox;
+                }
+                if(tirei != 1 && x->aviao.time_voo == 0) {
+                    cout << "Mandando Avião " << x->aviao.id << " para outro aeroporto!" << endl;
+                    emergencias = remove2(emergencias);
+                }
+                else {
+                    "Ok, coloquei!\n";
                 }
             }
-        }*/
-
-
+        }
         cout << endl;
-
         pistas = nullptr;
 
         char s;
