@@ -21,6 +21,18 @@ void Pista::remove_primeiro() {
     quantidade--;
 }
 
+Avioes Pista::remove_na_pos(int pos) {
+    Fila * f;
+    for(f = fila; f->prox != nullptr && quantidade - conta_posicoes(f) + 1 != pos; f = f->prox);
+
+    f->ant->prox = f->prox;
+    if(f->prox != nullptr) {
+        f->prox->ant = f->ant;
+    }
+    f->ant = f->prox = nullptr;
+    return f->aviao;
+}
+
 // >>> Pousa ou decola o primeiro avião da fila e imprime as informações do mesmo;
 void Pista::pousa_decola_primeiro_aviao(int * mcpp, int * mtep, int * med, int * quant_dec, int * quant_pou, int * q_emerg, int t) {
     int aux = 0, aux1 = 0;
@@ -101,14 +113,6 @@ Fila * insere2(Fila * f, Avioes A) {
         f->aviao = A;
         return f;
     }
-    Fila * aux;
-    if(f->aviao.time_comb + f->aviao.time_voo > A.time_comb + A.time_voo)  {
-        f->ant = insere2(f->ant, A);
-        aux = f;
-        f = f->ant;
-        f->prox = aux;
-        return f;
-    }
     f->prox = insere2(f->prox, A);
     return f;
 }
@@ -133,7 +137,9 @@ void calcula_media_mcpe(FilaP * p, int t, int * mcpe) {
         }
         p = p->prox;
     }
-    *mcpe = (auxp / quanti_pouso);
+    if(quanti_pouso != 0) 
+        *mcpe = (auxp / quanti_pouso);
+    else *mcpe = 0;
 }
 
 // >>> Conta quantos objetos estão na fila;
@@ -426,6 +432,8 @@ int main() {
                     cout << "!!! ATENÇÃO !!! - Avião " << aviao_aux.id << " não foi colocado!" << endl;
                     cout << "Combustível/Voo: " << aviao_aux.time_comb + aviao_aux.time_voo << endl;
                     cout << "Era do tipo " << aviao_aux.type << endl << endl;
+                    cout << "Inserindo na fila de emergência" << endl;
+                    emergencias = insere2(emergencias, aviao_aux);
                 }
                 av++;
             }
@@ -433,6 +441,13 @@ int main() {
         }
 
         cout << endl <<  " ---------- STATUS DAS PISTAS ---------- "  << endl << endl;
+
+        if(p1.quantidade == 10) { 
+            cout << "Removendo Avião 4 da Pista 1: " << endl;
+            Avioes xyz = p1.remove_na_pos(10);
+            cout << xyz.id << " removido!" << endl;
+            p1.quantidade--;
+        }
 
         Pista aux = p1;
         for(int j = 0; j < 3; j++) { 
@@ -493,15 +508,53 @@ int main() {
             p3.tempo_interditada--;   
         }
 
+        /*int quant_emergencias = 0;
         cout << "!!! EMERGENCIAS !!!" << endl;
         for(Fila * x = emergencias; x != nullptr; x = x->prox) {
-            cout << " >>> Avião " << x->aviao.id << " >>> Comb/Voo: " << x->aviao.time_comb - (i - x->aviao.inst) << endl;
-        }
+            if(x->aviao.time_comb + x->aviao.time_voo <= 2) {
+                quant_emergencias++;
+                FilaP * aux = nullptr;
+                for(FilaP * y = pistas; y != nullptr; y = y->prox) {
+                    int empurrar = simula_empurrar(y->pista, 1, i, y->pista.tempo_interditada);
+                    if(empurrar) {
+                        if(y->pista.id == 1) 
+                            aux = insere(aux, p1);
+                        else if(y->pista.id == 2) 
+                            aux = insere(aux, p2);
+                        else aux = insere(aux, p3);
+                    }
+                }
+                int tirei = 0;
+                while(aux != nullptr && !tirei) {
+                    int pos_atu = 1;
+                    while(pos_atu <= aux->pista.quantidade) {
+                        int teste = simula_empurrar(aux->pista, pos_atu, i, aux->pista.tempo_interditada);
+                        if(teste == 1) {
+                            pos_atu++;
+                        }
+                        else {
+                            if(aux->pista.id == 1) {
+
+                            }
+                            else if(aux->pista.id == 2) {
+
+                            }
+                            else {
+
+                            }
+                            // Remove Avião da pista e bota ele na de emergência;
+                        
+                        }
+                    }
+
+                }
+            }
+        }*/
+
+
         cout << endl;
 
-
         pistas = nullptr;
-
 
         char s;
         scanf("%c", &s);

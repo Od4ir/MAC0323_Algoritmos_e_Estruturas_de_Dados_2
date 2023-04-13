@@ -16,6 +16,7 @@ class Pista {
         Pista(int id_pista, int quant, int time, Fila * f); 
         void remove_primeiro();
         void pousa_decola_primeiro_aviao(int * mcpp, int * mtep, int * med, int * quant_dec, int * quant_pou, int * q_emerg, int t);
+        Avioes remove_na_pos(int pos);
 };
 
 class Avioes {
