@@ -117,20 +117,18 @@ Fila * insere2(Fila * f, Avioes A) {
     return f;
 }
 
-Fila * remove2(Fila * f) {
+Fila * remove2(Fila * f, Avioes A) {
     if(f ==  nullptr) {
         return nullptr;
     }
-    if(f->prox == nullptr) {
+    Fila * aux;
+    if(strcmp(f->aviao.id, A.id) == 0) {
+        aux = f;
         free(f);
-        return nullptr;
+        return aux->prox;
     }
-    Fila * aux = f->prox;
-    if(f->prox != nullptr) {
-        aux->ant = nullptr;
-    }
-    free(f);
-    return aux;
+    f->prox = remove2(f->prox, A);
+    return f;
 }
 
 Avioes primeiro_fila_emerg(Fila * f) {
@@ -396,7 +394,7 @@ int main() {
     Pista p1(1, 0, 0, nullptr), p2(2, 0, 0, nullptr), p3(3, 0, 0, nullptr);
     FilaP * pistas = nullptr;
     Fila * emergencias = nullptr;
-    int mcpp = 0, mtep = 0, med = 0, quant_dec = 0, quant_pou = 0, q_emerg = 0;
+    int mcpp = 0, mtep = 0, med = 0, quant_dec = 0, quant_pou = 0, q_emerg = 0, atrasados = 0;
 
     //p1.pousa_decola_primeiro_aviao(&mcpp, &mtep, &med, &quant_dec, &quant_pou, &q_emerg, t);
     //int media_comb_pouso_esperando, media_comb_pouso_pousados, media_tempo_espera_pouso, media_espera_decolagem, quantidade_emergencias;
@@ -456,13 +454,6 @@ int main() {
 
         cout << endl <<  " ---------- STATUS DAS PISTAS ---------- "  << endl << endl;
 
-        if(p1.quantidade == 10) { 
-            cout << "Removendo Avião 4 da Pista 1: " << endl;
-            Avioes xyz = p1.remove_na_pos(10);
-            cout << xyz.id << " removido!" << endl;
-            p1.quantidade--;
-        }
-
         Pista aux = p1;
         for(int j = 0; j < 3; j++) { 
             cout << " ----- PISTA " << j + 1 << ": ----- \n"; 
@@ -486,15 +477,23 @@ int main() {
         // Pousar aviões e mandar aviões para decolagem;
         if(p1.quantidade != 0 && p1.tempo_interditada == 0 ) {
             p1.tempo_interditada = 3;
+            if(p1.fila->aviao.time_voo <= 0) {
+                atrasados++;
+            }
             p1.pousa_decola_primeiro_aviao(&mcpp, &mtep, &med, &quant_dec, &quant_pou, &q_emerg, i);
-
         }
         if(p2.quantidade != 0 && p2.tempo_interditada == 0 ) {
             p2.tempo_interditada = 3;
+            if(p2.fila->aviao.time_voo <= 0) {
+                atrasados++;
+            }
             p2.pousa_decola_primeiro_aviao(&mcpp, &mtep, &med, &quant_dec, &quant_pou, &q_emerg, i);
         }
         if(p3.quantidade != 0 && p3.tempo_interditada == 0 ) {
             p3.tempo_interditada = 3;
+            if(p3.fila->aviao.time_voo <= 0) {
+                atrasados++;
+            }
             p3.pousa_decola_primeiro_aviao(&mcpp, &mtep, &med, &quant_dec, &quant_pou, &q_emerg, i);
         }
         cout << "Aviões Pousados: " << quant_pou << endl;
@@ -533,12 +532,16 @@ int main() {
                 for(FilaP * y = pistas; y != nullptr; y = y->prox) {
                     int empurrar = simula_empurrar(y->pista, 1, i, y->pista.tempo_interditada);
                     cout << "Empurrar " << y->pista.id << " deu " << empurrar << endl;
-                    if(empurrar && x->aviao.time_comb >= ) {
+                    if(empurrar && (x->aviao.time_comb - (i - x->aviao.inst) - y->pista.tempo_interditada >= 0)) {
+                        cout << "Aguenta!" << endl;
                         if(y->pista.id == 1) 
                             aux = insere(aux, p1);
                         else if(y->pista.id == 2) 
                             aux = insere(aux, p2);
                         else aux = insere(aux, p3);
+                    }
+                    else {
+                        quant_emergencias++;
                     }
                 }
                 int tirei = 0;
@@ -563,7 +566,7 @@ int main() {
                                     p3.quantidade++;
                                 }
                                 tirei = 1;
-                                emergencias = remove2(emergencias);
+                                emergencias = remove2(emergencias, x->aviao);
                                 cout << "Coloquei na pista " << aux->pista.id << endl;
                             }
                         }
@@ -583,16 +586,24 @@ int main() {
                                 p3.quantidade++;
                                 emergencias = insere2(emergencias, p3.remove_na_pos(pos_atu));
                             }
-                            emergencias = remove2(emergencias);
+                            emergencias = remove2(emergencias, x->aviao);
                             cout << "Coloquei na pista " << aux->pista.id << endl;
                             tirei = 1;
                         }
                     }
                     aux = aux->prox;
                 }
+                cout << "Quantidade de Emergências: " << quant_emergencias << endl;
+                quant_emergencias = 0;
                 if(tirei != 1 && x->aviao.time_voo == 0) {
-                    cout << "Mandando Avião " << x->aviao.id << " para outro aeroporto!" << endl;
-                    emergencias = remove2(emergencias);
+                    if(x->aviao.time_comb - (i - x->aviao.inst) <= 0) {
+                        cout << "Avião " << x->aviao.id << " caiu!" << endl;
+                        cout << " Combustível inicial: " << x->aviao.time_comb << endl;
+                    }
+                    else { 
+                        cout << "Mandando Avião " << x->aviao.id << " para outro aeroporto!" << endl;
+                    }
+                    emergencias = remove2(emergencias, x->aviao);
                 }
                 else {
                     "Ok, coloquei!\n";
