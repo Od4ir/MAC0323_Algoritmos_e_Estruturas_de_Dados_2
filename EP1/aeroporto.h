@@ -35,7 +35,6 @@ class Fila {
     public:
         Avioes aviao;
         Fila * prox;
-        //Fila * insere_no_comeco(Fila * inicio, Avioes aviao); 
 };
 
 class FilaP {
