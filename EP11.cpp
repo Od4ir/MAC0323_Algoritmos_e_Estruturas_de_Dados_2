@@ -22,6 +22,7 @@ void Pista::remove_primeiro() {
 }
 
 Avioes Pista::remove_na_pos(int pos) {
+    --quantidade;
     Fila * f, *anterior, * inicio;
     if(pos == 1) {
         Fila * auxf = fila->prox;
@@ -32,8 +33,10 @@ Avioes Pista::remove_na_pos(int pos) {
     }
 
     anterior = fila;
-    for(f = fila; f->prox != nullptr && quantidade - conta_posicoes(f) + 1 != pos; f = f->prox) 
-        anterior = f;
+    for(f = fila; f->prox != nullptr && quantidade - conta_posicoes(f) + 1 != pos; f = f->prox) {
+            anterior = f;
+            //cout << quantidade - conta_posicoes(f) + 1 << " Avião: " << f->aviao.id << endl;
+    }
     
     if(quantidade - conta_posicoes(f) + 1 == pos) {
         anterior->prox = f->prox;
@@ -72,7 +75,6 @@ void Pista::pousa_decola_primeiro_aviao(int * mcpp, int * mtep, int * med, int *
         //cout << " Quantidade >>> " << *quant_pou;
     }
     cout << endl;
-    --quantidade;
     remove_na_pos(1);
 }
 
@@ -117,18 +119,21 @@ Fila * insere2(Fila * f, Avioes A) {
         return f;
     }
     f->prox = insere2(f->prox, A);
+    //cout << "INSERINDO AVIÃO NOVO: " << A.id << endl;
     return f;
 }
 
 // Remove um avião A da fila f;
 Fila * remove2(Fila * f, Avioes A) {
     Fila * aux, * anterior, * inicio;
+
     if(f ==  nullptr) {
         return nullptr;
     }
     if(strcmp(f->aviao.id, A.id) == 0) {
         aux = f->prox;
         free(f);
+        cout << "Removi!\n";
         return aux;
     }
 
@@ -140,7 +145,7 @@ Fila * remove2(Fila * f, Avioes A) {
     }
 
     if(strcmp(aux->aviao.id, A.id) == 0) {
-        cout << "Achei " << A.id << endl;
+        //cout << "Achei " << A.id << endl;
         anterior->prox = aux->prox;
         free(aux);
     }
@@ -429,6 +434,9 @@ int main() {
     cout << "Porcentagem de aviões especiais >>>   ";
     cin >> pe;
 
+    char start;
+    scanf("%c", &start);
+
     cout << "\n\n/// ------------- INICIO DA SIMULAÇÃO -------------- /// " << endl << endl;
 
     // Filas e outras estruturas importantes: 
@@ -438,7 +446,7 @@ int main() {
     Fila * emergencias = nullptr;
 
     // Varíaveis auxiliares e varíaveis das estatísticas da simulação;
-    int mcpe, mcpp = 0, mtep = 0, med = 0, quant_dec = 0, quant_pou = 0, q_emerg = 0, atrasados = 0, quedas = 0, desvios = 0;
+    int mcpe, mcpp = 0, mtep = 0, med = 0, quant_dec = 0, quant_pou = 0, q_emerg = 0, atrasados = 0, quedas = 0, desvios = 0, total_av = 0;
     int quant_avioes, nao_foi, av, colocado;
 
     // Início Oficial da Simulação:
@@ -449,6 +457,7 @@ int main() {
         printf(" >>> %d Aviões entraram em contato!\n\n", quant_avioes);
 
         av = 0;
+        total_av = total_av + quant_avioes;
         while(av < quant_avioes) {
             // Gerando um avião aleatório:
             Avioes aviao_aux = gera_aviao(C, V, pp, pe, i);
@@ -463,9 +472,6 @@ int main() {
                 // Se o avião não for repetido, nao_foi tem o valor 1;
             }
             if(nao_foi) {
-                cout << p1.quantidade << endl;
-                cout << p2.quantidade << endl;
-                cout << p3.quantidade << endl;
                 pistas = insere_pista(pistas, aviao_aux, p1, p2, p3, pp);
                 colocado = 0;
 
@@ -477,17 +483,13 @@ int main() {
                         pistas = aux;
                     }
                     else {
-                        cout << "Posição: " << posicao << " na pista " << pistas->pista.id << endl;
                         if(pistas->pista.id == 1) {
-                            cout << "1 - " << aviao_aux.id << endl;
                             p1.fila = insere_em_pos(p1.fila, posicao, aviao_aux, p1.quantidade++);
                         }
                         else if(pistas->pista.id == 2) {
-                            cout << "2 - " << aviao_aux.id << endl;
                             p2.fila = insere_em_pos(p2.fila, posicao, aviao_aux, p2.quantidade++);  
                         }
                         else if(pistas->pista.id == 3) {
-                            cout << "3 - " << aviao_aux.id << endl;
                             p3.fila = insere_em_pos(p3.fila, posicao, aviao_aux, p3.quantidade++);
                         }
                         colocado = 1;
@@ -506,10 +508,6 @@ int main() {
 
         printf(" ------------------ STATUS DAS FILAS: ------------------- \n\n");
 
-        int c = 0;
-        if(p1.fila->prox == nullptr && p1.quantidade >= 2) {
-            cout << "Próximo deu errado" << endl;
-        }
 
         Pista aux = p1;
         for(int j = 0; j < 3; j++) { 
@@ -537,22 +535,31 @@ int main() {
         // Pousar aviões e mandar aviões para decolagem;
         if(p1.quantidade != 0 && p1.tempo_interditada == 0 ) {
             p1.tempo_interditada = 3;
-            if(p1.fila->aviao.time_voo < 0) {
+            if(p1.fila->aviao.time_voo -  (i - p1.fila->aviao.inst) < 0 && p1.fila->aviao.time_voo != 0) {
                 atrasados++;
+            }
+            else if(p1.fila->aviao.time_comb - (i - p1.fila->aviao.inst) < 0 && p1.fila->aviao.time_comb != 0) {
+                quedas++;
             }
             p1.pousa_decola_primeiro_aviao(&mcpp, &mtep, &med, &quant_dec, &quant_pou, i);
         }
         if(p2.quantidade != 0 && p2.tempo_interditada == 0 ) {
             p2.tempo_interditada = 3;
-            if(p2.fila->aviao.time_voo < 0) {
+            if(p2.fila->aviao.time_voo -  (i - p2.fila->aviao.inst) < 0  && p2.fila->aviao.time_voo != 0) {
                 atrasados++;
+            }
+            else if(p2.fila->aviao.time_comb - (i - p2.fila->aviao.inst) < 0 && p2.fila->aviao.time_comb != 0) {
+                quedas++;
             }
             p2.pousa_decola_primeiro_aviao(&mcpp, &mtep, &med, &quant_dec, &quant_pou, i);
         }
         if(p3.quantidade != 0 && p3.tempo_interditada == 0 ) {
             p3.tempo_interditada = 3;
-            if(p3.fila->aviao.time_voo < 0) {
+            if(p3.fila->aviao.time_voo -  (i - p3.fila->aviao.inst) < 0  && p3.fila->aviao.time_voo != 0) {
                 atrasados++;
+            }
+            else if(p3.fila->aviao.time_comb - (i - p3.fila->aviao.inst) < 0  && p3.fila->aviao.time_comb != 0) {
+                quedas++;
             }
             p3.pousa_decola_primeiro_aviao(&mcpp, &mtep, &med, &quant_dec, &quant_pou, i);
         }
@@ -601,19 +608,10 @@ int main() {
             cout << "Sem aviões na fila de emergência! UFA!" << endl << endl;
         }
         else { 
-            for(Fila * x = emergencias; x != nullptr && cont > 0; x = x->prox, cont--) {
-
-                cout << "Avião: " << x->aviao.id;
-                if(x->aviao.time_comb != 0) 
-                    cout << "  Comb Atual: " << x->aviao.time_comb - (i - x->aviao.inst);
-                else 
-                    cout << "  Voo Atual: " << x->aviao.time_voo - (i - x->aviao.inst);
-                cout << "  Instante: " << x->aviao.inst << " Tipo: ";
-                if(x->aviao.type == 1) cout << "Especial";
-                else cout << "Normal";
-                cout << endl;
-
-
+            Fila * x = emergencias, *anterior = nullptr;
+            while(x != nullptr && cont > 0) { 
+                tirei = 0;
+                //cout << "Avião atual: " << x->aviao.id << endl;
                 if(x->aviao.time_comb + x->aviao.time_voo - (i - x->aviao.inst) <= 2 || x->aviao.type == 1) {
                     quant_emergencias++;
                     FilaP * aux = nullptr;
@@ -641,10 +639,10 @@ int main() {
                         }
                         else {
                             int empurrar = simula_empurrar(y->pista, 1, i, y->pista.tempo_interditada);
-                            cout << "Empurrar " << y->pista.id << " deu " << empurrar << endl;
+                            //cout << "Empurrar " << y->pista.id << " deu " << empurrar << endl;
 
                             if(empurrar >= 1 && (x->aviao.time_comb - (i - x->aviao.inst) - y->pista.tempo_interditada >= 0 || x->aviao.time_voo != 0 )) {
-                                cout << "Aguenta!" << endl;
+                                //cout << "Aguenta!" << endl;
                                 tirei = 0;
                                 if(y->pista.id == 1) 
                                     aux = insere(aux, p1);
@@ -664,7 +662,7 @@ int main() {
 
                             teste = simula_empurrar(aux->pista, pos_atu, i, aux->pista.tempo_interditada);
 
-                            cout << "Teste: " << teste << " com pista " << aux->pista.id << "na pos: " << pos_atu << endl;
+                            //cout << "Teste: " << teste << " com pista " << aux->pista.id << "na pos: " << pos_atu << endl;
                             if(teste == 1) {
                                 pos_atu++;
                                 if(pos_atu > aux->pista.quantidade) {
@@ -715,7 +713,6 @@ int main() {
                     pistas = insere(pistas, p1);
                     pistas = insere(pistas, p2);
                     pistas = insere(pistas, p3);
-                    cout << "Quantidade de Emergências: " << quant_emergencias << endl;
                     quant_emergencias = 0;
                     if(tirei != 1 && x->aviao.time_voo == 0) {
                         if(x->aviao.time_comb - (i - x->aviao.inst) <= 0) {
@@ -728,17 +725,51 @@ int main() {
                             desvios++;
                         }
                         emergencias = remove2(emergencias, x->aviao);
+                        if(emergencias == nullptr) {
+                            x = nullptr;
+                        }
+                        else if(emergencias->prox !=  nullptr) {
+                                if(anterior != nullptr) {
+                                    x = anterior->prox;
+                                }
+                                else {
+                                    x = emergencias;
+                                } 
+                        }
+                        else {
+                            x = emergencias;
+                        }
                     }
                     else {
                         if(tirei == 1) {
-                            cout << "JA BOTEI\n";
-                            if(x == nullptr) {
-                                cout << "X é null" << endl;
+                            //cout << "JA BOTEI\n";
+                            if(emergencias == nullptr) {
+                                cout << "É null\n";
+                                x = nullptr;
+                            }
+                            else if(emergencias->prox !=  nullptr) {
+                                if(anterior != nullptr) {
+                                    x = anterior->prox;
+                                }
+                                else {
+                                    x = emergencias;
+                                } 
+                            }
+                            else {
+                                x = emergencias;
                             }
                         }
-                        else cout << "Ainda está na fila\n";
+                        else {
+                            cout << "Ainda está na fila\n";
+                            x = x->prox;
+                        }
                     }
                 }
+                else {
+                    anterior = x;
+                    x = x->prox;
+                }
+                cont--;
             }
         }
         printf("/// ------------ FIM INSTANTE ATUAL: %d ------------- /// \n\n\n", i);
@@ -750,6 +781,7 @@ int main() {
     }
     cout << "/// -------------- FIM DA SIMULAÇÃO ---------------- /// " << endl;
     cout << "Estatísticas finais: " << endl;
+    cout << " >> Aviões que entraram em contato:...................... " << total_av << endl;
     cout << " >> Média de Combustível dos Aviões Esperando:........... " << mcpe << endl;
     cout << " >> Média de Combustível Restante nos Aviões Pousados:... " << mcpp << endl;
     cout << " >> Média Tempo de Espera para Decolagem................. " << med << endl;
