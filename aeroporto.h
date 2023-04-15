@@ -15,7 +15,7 @@ class Pista {
         Fila * fila;
         Pista(int id_pista, int quant, int time, Fila * f); 
         void remove_primeiro();
-        void pousa_decola_primeiro_aviao(int * mcpp, int * mtep, int * med, int * quant_dec, int * quant_pou, int * q_emerg, int t);
+        void pousa_decola_primeiro_aviao(int * mcpp, int * mtep, int * med, int * quant_dec, int * quant_pou, int t);
         Avioes remove_na_pos(int pos);
 };
 
@@ -35,7 +35,6 @@ class Fila {
     public:
         Avioes aviao;
         Fila * prox;
-        Fila * ant;
         //Fila * insere_no_comeco(Fila * inicio, Avioes aviao); 
 };
 
