@@ -292,7 +292,7 @@ SIMULAÇÃO:  ( Devolva 0 se não der, Devolva POS(Posição que deu) se der)
 int media_comb_pouso_esperando, media_comb_pouso_pousados, media_tempo_espera_pouso, media_espera_decolagem, quantidade_emergencias;
 
 mcpe - Média de combustível restante daqueles que estão na fila;
-mcpp - Média de combustível dos aviões pousados no instante em que pousaram;
+mcrp - Média de combustível dos aviões pousados no instante em que pousaram;
 
 mtep - Ao pousar um avião, verifica o DeltaT de tempo passado e soma;
 med - Ao decolar um avião, verifica o DeltaT de tempo passado e soma;
