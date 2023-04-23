@@ -4,8 +4,14 @@ class FilaP;
 class Avioes;
 class Historico;
 
-int conta_posicoes(Fila * fila);
+Fila * insere2(Fila * f, Avioes A);
 Fila * insere_em_pos(Fila * fila, int pos, Avioes A, int quantidade);
+Fila * remove2(Fila * f, Avioes A);
+void calcula_media_mcpe(FilaP * p, int t, int * mcpe);
+int conta_posicoes(Fila * fila);
+Avioes gera_aviao(int C, int V, int pp, int pe, int t);
+Fila * insere_em_pos(Fila * fila, int pos, Avioes A, int quantidade);
+FilaP * insere(FilaP * fila, Pista px);
 
 class Pista {
     public:
@@ -14,8 +20,7 @@ class Pista {
         int tempo_interditada;
         Fila * fila;
         Pista(int id_pista, int quant, int time, Fila * f); 
-        void remove_primeiro();
-        void pousa_decola_primeiro_aviao(int * mcpp, int * mtep, int * med, int * quant_dec, int * quant_pou, int t);
+        void pousa_decola_primeiro_aviao(int * mcrp, int * mtep, int * med, int * quant_dec, int * quant_pou, int t);
         Avioes remove_na_pos(int pos);
 };
 
