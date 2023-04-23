@@ -1,0 +1,76 @@
+
+No * raiz putRB (No * raiz, Key key, Item val) {
+    if(raiz == nullptr) {
+        // SE ESTIVER VAZIA, COLOCA DIRETAMENTE;
+        raiz = new No(key, val, vermelho, nullptr);
+        return raiz;
+    }
+    No * p = raiz;
+    bool achou = False;
+    // É UMA VERSÃO ITERATIVA;
+    while(!achou) {
+        if(p->key > key && p->esq == nullptr) {
+            // SE A CHAVE DA CÉLULA ATUAL FOR MAIOR, IREMOS MANDAR PARA A ESQUERDA SE A ESQUERDA ESTIVER VAZIA;
+            achou = True;
+        }
+        else if(p->key > key) {
+            // IREMOS DESCER PARA O PONTEIRO A ESQUERDA E FAZER A ITERAÇÃO NOVAMENTE;
+            // NOTE QUE NESSE CASO O PONTEIRO AO QUAL ESTAMOS DESCENDO NÃO É nullptr;
+            p = p->esq;
+        }
+        else if(p->key < key && p->dir == nullptr) {
+            achou = True;
+        }
+        else if(p->key < key) {
+            p = p->dir;
+        }
+        // CASO key == p->key:
+        else achou = True;
+    } 
+    if(p->key == key) {
+        p->val = val;
+        return raiz;
+    }
+    No * novo = new No(key, val, vermelho, p);
+    No * pai = p; // p É O PONTEIRO QUE SAIU DO LOOP E INDICA O PAI DO NOVO NÓ A SER INSERIDO. 
+    p = novo;
+
+    // OS NÓS POSSUEM PONTEIROS PARA SEUS PAIS;
+
+    while(True) {
+        if(pai->cor == preto) break;
+        if(pai->pai == nullptr) {
+            pai->cor = preto;
+            break;
+        }
+        No * avo = pai->pai;
+        No * tio = "Outro filho do avô";
+        if(tio != nullptr && tio->cor == vermelho) {
+            avo->cor = vermelho;
+            pai->cor = tio->cor = preto;
+            p = avo;
+            if(p->pai == nullptr) break;
+            pai = p->pai;
+        }
+        else {
+            // 4 CASOS: 
+            avo->dir = rodaDir(pai);
+            No * q =  rodaEsq(avo);
+            p->cor = preto;
+            avo->cor = vermelho;
+            break
+        }
+    }
+}
+
+
+No * rodaEsq (No * p) { 
+    if(p->dir != nullptr) {
+        No * q = p-dir;
+        No * aux = q->esq;
+        q->esq = p;
+        No * pai = p->pai;
+        p->pai = q;
+        if(aux)...
+    }
+}
