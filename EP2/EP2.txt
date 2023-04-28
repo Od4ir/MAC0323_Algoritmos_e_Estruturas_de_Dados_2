@@ -1,0 +1,22 @@
+Escrever para cada uma das estruturas:
+    - Vetor Dinâmico Ordenado;
+    - Árvore de Busca Binária;
+    - TREAPS;
+    - Árvores 2-3;
+    - Árvores Rubro-Negras;
+
+As seguintes funções:
+    - void add(Key key, Item val); -> Para inserir um elemento novo ou alterar o val desse elemento;
+    - Item value(Key key); -> Para, dado uma chave, retornar o item que está representado po essa chave;
+
+Os item's serão palavras e os valores serão:
+    - Número de ocorrências das palavras no texto;
+    - Número de letras na palavra;
+    - Número de vogais sem repetição na palavra;
+
+
+Após ler e organizar as palavras na estrutura implementada, será necessário imprimir:
+    - Quais as palavras mais frequentes; (F)
+    - Dada uma palavra, imprimir quantas vezes ela ocorre no texto; (O 'palavra')
+    - Quais as maiores palavras que não repetem letras; (SR)
+    - QUias as menores palavras com mais vogais sem retição (VD)
