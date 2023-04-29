@@ -1,16 +1,8 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
-#include <string>
 #include "item.h"
-#include <bits/stdc++.h>
 using namespace std;
-
-Item::Item(char * chave) {
-    strcpy(key, chave);
-    tam = strlen(chave);
-    vog = 2;
-}
 
 int montagem() {
     char * E;
@@ -48,80 +40,85 @@ int montagem() {
 void coloca_na_estrutura(int est) {
     cout << "Digite o número de palavras: ";
     int N; cin >> N; cout << endl;
-    int i;
-    FILE * f;
-    char * aux;
-    char * aux_linha, aux_word;
+    int cont = 0;
+    char aux_linha[10000];
+    char * word;
 
-    cin.getline (aux_linha, 10);
-    cout << aux_linha << endl;
-
-
-    if(est == 1) {
-        cout << "Hiiieee\n";
-
+    if(est == 1) {  
+        cout << "Vetor Dinâmico Ordenado escolhido!\n";
+        while(cont < N) {
+            cin.getline (aux_linha, 10000);
+            word = strtok(aux_linha, " .,?!");
+            while(word != nullptr && cont < N) {
+                cout << word << endl;
+                Item item(word);
+                // Insere item na estrutura;
+                word = strtok(nullptr, " .,?!");
+                cont++;
+            }
+        }
     }
     else if(est == 2) {
-        for(i = 0; i < N; i++) {
-            cout << "Ok\n";
-            //cin >> aux;
-            //Item item(aux);
-            // Calcula seus valores;
-            // Adiciona o elemento na estrutura;
+        cout << "Árvore de Busca Binária escolhida!\n";
+        while(cont < N) {
+            cin.getline (aux_linha, 10000);
+            word = strtok(aux_linha, " .,?!");
+            while(word != nullptr && cont < N) {
+                cout << word << endl;
+                Item item(word);
+                // Insere item na estrutura;
+                word = strtok(nullptr, " .,?!");
+                cont++;
+            }
         }
 
     }
     else if(est == 3) {
-        for(i = 0; i < N; i++) {
-            cin >> aux;
-            Item item(aux);
-            // Calcula seus valores;
-            // Adiciona o elemento na estrutura;
+        cout << "Treaps escolhida!\n";
+        while(cont < N) {
+            cin.getline (aux_linha, 10000);
+            word = strtok(aux_linha, " .,?!");
+            while(word != nullptr && cont < N) {
+                cout << word << endl;
+                Item item(word);
+                // Insere item na estrutura;
+                word = strtok(nullptr, " .,?!");
+                cont++;
+            }
         }
-
     }
     else if(est == 4) {
-        for(i = 0; i < N; i++) {
-            cin >> aux;
-            Item item(aux);
-            // Calcula seus valores;
-            // Adiciona o elemento na estrutura;
+        cout << "Árvores 2-3 escolhida!\n";
+        while(cont < N) {
+            cin.getline (aux_linha, 10000);
+            word = strtok(aux_linha, " .,?!");
+            while(word != nullptr && cont < N) {
+                cout << word << endl;
+                Item item(word);
+                // Insere item na estrutura;
+                word = strtok(nullptr, " .,?!");
+                cont++;
+            }
         }
 
     }
     else { 
-        for(i = 0; i < N; i++) {
-            cin >> aux;
-            Item item(aux);
-            // Calcula seus valores;
-            // Adiciona o elemento na estrutura;
+        cout << "Árvores Rubro-Negras\n";
+        while(cont < N) {
+            cin.getline (aux_linha, 10000);
+            word = strtok(aux_linha, " .,?!");
+            while(word != nullptr && cont < N) {
+                cout << word << endl;
+                Item item(word);
+                // Insere item na estrutura;
+                word = strtok(nullptr, " .,?!");
+                cont++;
+            }
         }
-
     }
 } 
 
-
-
 int main() {
-    //int escolha = montagem();
-    //oloca_na_estrutura(montagem());
-    cout << "Digite o número de palavras: "; 
-    int N; cin >> N;
-    int cont = 0;
-
-
-    char aux_linha[10000];
-    char * word;
-
-    while(cont < N) {
-        cin.getline (aux_linha, 10000);
-        word = strtok(aux_linha, " .,?!");
-        while(word != nullptr && cont < N) {
-            cout << ++cont << ": " << word << endl;
-            word = strtok(nullptr, " .,?!");
-        }
-    }
-
-    
+    coloca_na_estrutura(montagem());
     return 0;
 }
