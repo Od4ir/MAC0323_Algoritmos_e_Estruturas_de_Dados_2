@@ -5,8 +5,8 @@ using namespace std;
 
 class Item {
     public:
-        Item(string chave);
-        string key;
+        Item(char * chave);
+        char * key;
         int tam;
         int vog;
         int repet;
