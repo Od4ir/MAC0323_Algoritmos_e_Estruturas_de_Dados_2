@@ -50,10 +50,12 @@ void coloca_na_estrutura(int est) {
         while(cont < N) {
             cin.getline (aux_linha, 10000);
             word = strtok(aux_linha, " .,?!");
+            VO vet
             while(word != nullptr && cont < N) {
                 cout << word << endl;
                 Item item(word);
                 VO vetor_ordenado;
+                vetor_ordenado.add(item);
                 // Insere item na estrutura;
                 word = strtok(nullptr, " .,?!");
                 cont++;
