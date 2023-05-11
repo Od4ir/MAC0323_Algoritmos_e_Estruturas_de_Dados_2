@@ -12,6 +12,7 @@ class VO {
         // Adiciona um item ao vetor ordenado;
         void add(Item item);
         // Dada uma chave, retorna o índice do Item no vetor ou -1 se não estiver;
+        void copy(int i, int j);
         int busca(char * chave);
         VO();
 };

@@ -2,6 +2,7 @@
 #include "vo.h"
 #include <cstdlib>
 #include <cstring>
+#include <iostream> // Remover dps;
 
 VO::VO() {
     size = 2;
@@ -16,17 +17,25 @@ void VO::resize() {
     for(int i = 0; i < fim; i++) {
         novo[i] = vetor[i];
     }
-    fim++;
     free(vetor);
     vetor = novo;
 }
 /* FUnção strcmp(a, b):
     Devolve  0 - Se a == b;
-    Devolve -1 - Se a < b;
-    Devolve 1 - Se a > b;
+    Devolve <0 - Se a < b;
+    Devolve >0 - Se a > b;
 */
 
+void VO::copy(int i, int j) {
+    vetor[i].repet = vetor[j].repet;
+    vetor[i].tam = vetor[j].tam;
+    vetor[i].vog = vetor[j].vog;
+    strcpy(vetor[i].key, vetor[j].key);
+}
+
 void VO::add(Item item){
+    cout << "Colocando " << item.key << endl;
+    cout << fim << endl << endl;
     int start = 0, end = fim;
     int meio;
     bool colocado =  false;
@@ -40,20 +49,26 @@ void VO::add(Item item){
             colocado = true;
             
         }
-        else if(comp < 0) {
-            // Palavra atual é menor que a palavra do meio;
+        else if(comp > 0) {
+            // Palavra do item é menor que a palavra do meio;
             end = meio;
         }
         else {
+            // Palavra do item é maior do que a palavra do meio;
             start = meio + 1;
         }
     }
 
+    meio = start; 
+
+    cout << "Colocando na posição: " << meio << endl;
+
     if(!colocado) {
         if(fim + 1 == size) resize();
+        fim++;
 
-        for(int i = meio; i < fim; i++) { 
-            vetor[i + 1] = vetor[i];
+        for(int i = fim - 1; i > meio; i--) { 
+            copy(i + 1, i);
         }
         vetor[meio] = item;
     }
