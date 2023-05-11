@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <cstring>
 #include "item.h"
+#include "vo.h"
 using namespace std;
 
 int montagem() {
@@ -52,6 +53,7 @@ void coloca_na_estrutura(int est) {
             while(word != nullptr && cont < N) {
                 cout << word << endl;
                 Item item(word);
+                VO vetor_ordenado;
                 // Insere item na estrutura;
                 word = strtok(nullptr, " .,?!");
                 cont++;
