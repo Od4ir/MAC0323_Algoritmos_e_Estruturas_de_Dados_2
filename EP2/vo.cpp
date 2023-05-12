@@ -4,10 +4,10 @@
 #include <cstring>
 #include <iostream> // Remover dps;
 
-VO::VO() {
+VO::VO(int n) {
     size = 2;
-    fim = 0;
-    vetor = (Item *) malloc(sizeof(Item) * 2);
+    fim = -1;
+    vetor = (Item *) malloc(sizeof(Item) * (n + 1));
 }
 
 void VO::resize() {
@@ -33,10 +33,17 @@ void VO::copy(int i, int j) {
     strcpy(vetor[i].key, vetor[j].key);
 }
 
-void VO::add(Item item){
+void VO::add(Item item) {
+    cout << "Colocando " << item.key << endl;
+    fim++;
+    vetor[fim] = item;
+    cout << "Item colocado no vetor na posição: " << fim << endl;
+}
+
+/*void VO::add(Item item){
     cout << "Colocando " << item.key << endl;
     cout << fim << endl << endl;
-    int start = 0, end = fim;
+    int start = 0, end = fim + 1; 
     int meio;
     bool colocado =  false;
 
@@ -57,19 +64,21 @@ void VO::add(Item item){
             // Palavra do item é maior do que a palavra do meio;
             start = meio + 1;
         }
-    }
-
-    meio = start; 
+    } 
 
     cout << "Colocando na posição: " << meio << endl;
 
     if(!colocado) {
-        if(fim + 1 == size) resize();
         fim++;
-
-        for(int i = fim - 1; i > meio; i--) { 
+        for(int i = fim - 1; i >= meio; i--) { 
             copy(i + 1, i);
         }
         vetor[meio] = item;
+
+        for(int i = 0; i <= fim; i++) {
+            cout << i << ": " << vetor[i].key << endl;
+        }
+        cout << "Na posição " << meio << " está " << vetor[meio].key << endl;
     }
-}
+}*/
+

@@ -14,5 +14,5 @@ class VO {
         // Dada uma chave, retorna o índice do Item no vetor ou -1 se não estiver;
         void copy(int i, int j);
         int busca(char * chave);
-        VO();
+        VO(int n);
 };
