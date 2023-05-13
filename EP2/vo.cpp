@@ -35,9 +35,34 @@ void VO::copy(int i, int j) {
 
 void VO::add(Item item) {
     cout << "Colocando " << item.key << endl;
-    fim++;
-    vetor[fim] = item;
+    int start = 0, end = fim + 1, meio;
+    bool colocado;
+
+    while(start < end) {
+        meio = (start + end)/2;
+        cout << item.key << " é ";
+        int comp = strcmp(item.key, vetor[meio].key);
+        if(comp == 0) {
+            vetor[meio].repet++;
+            colocado = true;
+            
+        }
+        else if(comp > 0) {
+            cout << "menor que ";
+            // Palavra do item é menor que a palavra do meio;
+            end = meio;
+        }
+        else {
+            cout << "maior que ";
+            // Palavra do item é maior do que a palavra do meio;
+            start = meio + 1;
+        }
+        cout << vetor[meio].key << endl;
+    } 
+    cout << "Deveria ter ficado na posição " << meio << endl;
+    vetor[++fim] = item;
     cout << "Item colocado no vetor na posição: " << fim << endl;
+
 }
 
 /*void VO::add(Item item){
