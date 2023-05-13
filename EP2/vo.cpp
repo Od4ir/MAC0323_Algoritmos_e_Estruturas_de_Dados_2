@@ -10,29 +10,6 @@ VO::VO(int n) {
     vetor = (Item *) malloc(sizeof(Item) * (n + 2));
 }
 
-void VO::resize() {
-    Item * novo;
-    size = size * 2;
-    novo = (Item *) malloc(sizeof(Item) * size);
-    for(int i = 0; i < fim; i++) {
-        novo[i] = vetor[i];
-    }
-    free(vetor);
-    vetor = novo;
-}
-/* FUnção strcmp(a, b):
-    Devolve  0 - Se a == b;
-    Devolve <0 - Se a < b;
-    Devolve >0 - Se a > b;
-*/
-
-void VO::copy(int i, int j) {
-    vetor[i].repet = vetor[j].repet;
-    vetor[i].tam = vetor[j].tam;
-    vetor[i].vog = vetor[j].vog;
-    strcpy(vetor[i].key, vetor[j].key);
-}
-
 void VO::add(Item item) {
     int start = 0, end = fim + 1, meio;
     bool colocado;
@@ -64,5 +41,7 @@ void VO::add(Item item) {
     fim++;
     vetor[start] = item;
 }
+
+
 
 
