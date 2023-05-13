@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include <string>
 #include "item.h"
 #include "vo.h"
 using namespace std;
@@ -48,79 +49,81 @@ void coloca_na_estrutura(int est) {
     if(est == 1) {  
         cout << "Vetor Dinâmico Ordenado escolhido!\n";
         VO vetor_ordenado(N);
+
+        // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
             cin.getline (aux_linha, 10000);
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
-                //cout << word << endl;
                 Item item(word);
                 vetor_ordenado.add(item);
-                // Insere item na estrutura;
                 word = strtok(nullptr, " .,?!");
                 cont++;
             }
         }
-        for(int i = 0; i <= vetor_ordenado.fim; i++) {
-            cout <<  i << " " << vetor_ordenado.vetor[i].key << endl;
-        }
+        // --------------------------------------------
     }
     else if(est == 2) {
         cout << "Árvore de Busca Binária escolhida!\n";
+
+        // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
             cin.getline (aux_linha, 10000);
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
-                cout << word << endl;
                 Item item(word);
-                // Insere item na estrutura;
                 word = strtok(nullptr, " .,?!");
                 cont++;
             }
         }
+        // --------------------------------------------
 
     }
     else if(est == 3) {
         cout << "Treaps escolhida!\n";
+
+        // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
             cin.getline (aux_linha, 10000);
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
-                cout << word << endl;
                 Item item(word);
-                // Insere item na estrutura;
                 word = strtok(nullptr, " .,?!");
                 cont++;
             }
         }
+        // --------------------------------------------
     }
     else if(est == 4) {
         cout << "Árvores 2-3 escolhida!\n";
+
+        // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
             cin.getline (aux_linha, 10000);
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
-                cout << word << endl;
                 Item item(word);
-                // Insere item na estrutura;
                 word = strtok(nullptr, " .,?!");
                 cont++;
             }
         }
+        // --------------------------------------------
 
     }
     else { 
         cout << "Árvores Rubro-Negras\n";
+
+        // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
             cin.getline (aux_linha, 10000);
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
-                cout << word << endl;
                 Item item(word);
-                // Insere item na estrutura;
                 word = strtok(nullptr, " .,?!");
                 cont++;
             }
         }
+        // --------------------------------------------
     }
 } 
 

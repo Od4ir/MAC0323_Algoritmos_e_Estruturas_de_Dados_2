@@ -7,12 +7,16 @@ class VO {
         int size;
         int fim;
         Item * vetor;
-        // Duplica o tamanho do vetor e copia os elementos para esse novo vetor de tamanho duplicado;
-        void resize();
+
+        int n_comp_insercao;
+        int n_comp_busca;
+        int n_trocas;
+        // Cria um objeto do tipo  VO com 'vetor' de tamanho n;
+        VO(int n);
         // Adiciona um item ao vetor ordenado;
         void add(Item item);
         // Dada uma chave, retorna o índice do Item no vetor ou -1 se não estiver;
-        void copy(int i, int j);
         int busca(char * chave);
-        VO(int n);
+        // Imprime o vetor de 'Item's;
+        void printa();
 };
