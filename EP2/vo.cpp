@@ -7,7 +7,7 @@
 VO::VO(int n) {
     size = 2;
     fim = -1;
-    vetor = (Item *) malloc(sizeof(Item) * (n + 1));
+    vetor = (Item *) malloc(sizeof(Item) * (n + 2));
 }
 
 void VO::resize() {
@@ -47,9 +47,8 @@ void VO::add(Item item) {
             colocado = true;
             
         }
-        else if(comp > 0) {
+        else if(comp > 0) { // Palavra do item é maior que a palavra vetor[meio];
             cout << "maior que ";
-            // Palavra do item é menor que a palavra do meio;
             start = meio + 1;
         }
         else {
@@ -60,61 +59,26 @@ void VO::add(Item item) {
         cout << vetor[meio].key << endl;
 
     }
+    cout << "Start: " << start << endl;
+    cout << "Fim: " << fim << endl; 
 
     cout << "---------------\n";
 
-    if(start != fim) { 
+    if(start != fim + 1) { 
+        cout << "Hiieeeee\n";
         for(int i = fim; i >= start; i--) {
+            cout << i << endl;
+            cout << start << endl;
             cout << "Empurrando " << i << ": " << vetor[i].key << endl;
+            vetor[i + 1] = vetor[i];
         } 
     }
     fim++;
-    vetor[fim] = item;
+    vetor[start] = item;
     cout << "---------------\n";
     cout << "Deveria ter ficado na posição " << start << endl;
     cout << "Item colocado no vetor na posição: " << fim << endl;
 
 }
 
-/*void VO::add(Item item){
-    cout << "Colocando " << item.key << endl;
-    cout << fim << endl << endl;
-    int start = 0, end = fim + 1; 
-    int meio;
-    bool colocado =  false;
-
-    // Busca Binária para inserir o número na posição correta;
-    while(start < end && !colocado) {
-        meio = (start + end)/2;
-        int comp = strcmp(item.key, vetor[meio].key);
-        if(comp == 0) {
-            vetor[meio].repet++;
-            colocado = true;
-            
-        }
-        else if(comp > 0) {
-            // Palavra do item é menor que a palavra do meio;
-            end = meio;
-        }
-        else {
-            // Palavra do item é maior do que a palavra do meio;
-            start = meio + 1;
-        }
-    } 
-
-    cout << "Colocando na posição: " << meio << endl;
-
-    if(!colocado) {
-        fim++;
-        for(int i = fim - 1; i >= meio; i--) { 
-            copy(i + 1, i);
-        }
-        vetor[meio] = item;
-
-        for(int i = 0; i <= fim; i++) {
-            cout << i << ": " << vetor[i].key << endl;
-        }
-        cout << "Na posição " << meio << " está " << vetor[meio].key << endl;
-    }
-}*/
 
