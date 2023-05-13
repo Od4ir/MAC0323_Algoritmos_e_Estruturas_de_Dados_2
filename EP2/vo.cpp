@@ -48,19 +48,30 @@ void VO::add(Item item) {
             
         }
         else if(comp > 0) {
-            cout << "menor que ";
-            // Palavra do item é menor que a palavra do meio;
-            end = meio;
-        }
-        else {
             cout << "maior que ";
-            // Palavra do item é maior do que a palavra do meio;
+            // Palavra do item é menor que a palavra do meio;
             start = meio + 1;
         }
+        else {
+            cout << "menor que ";
+            // Palavra do item é maior do que a palavra do meio;
+            end = meio;
+        }
         cout << vetor[meio].key << endl;
-    } 
-    cout << "Deveria ter ficado na posição " << meio << endl;
-    vetor[++fim] = item;
+
+    }
+
+    cout << "---------------\n";
+
+    if(start != fim) { 
+        for(int i = fim; i >= start; i--) {
+            cout << "Empurrando " << i << ": " << vetor[i].key << endl;
+        } 
+    }
+    fim++;
+    vetor[fim] = item;
+    cout << "---------------\n";
+    cout << "Deveria ter ficado na posição " << start << endl;
     cout << "Item colocado no vetor na posição: " << fim << endl;
 
 }
