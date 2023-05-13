@@ -47,10 +47,10 @@ void coloca_na_estrutura(int est) {
 
     if(est == 1) {  
         cout << "Vetor Dinâmico Ordenado escolhido!\n";
+        VO vetor_ordenado(N);
         while(cont < N) {
             cin.getline (aux_linha, 10000);
             word = strtok(aux_linha, " .,?!");
-            VO vetor_ordenado(N);
             while(word != nullptr && cont < N) {
                 //cout << word << endl;
                 Item item(word);
@@ -59,10 +59,9 @@ void coloca_na_estrutura(int est) {
                 word = strtok(nullptr, " .,?!");
                 cont++;
             }
-
-            for(int i = 0; i <= vetor_ordenado.fim; i++) {
-                cout <<  i << " " << vetor_ordenado.vetor[i].key << endl;
-            }
+        }
+        for(int i = 0; i <= vetor_ordenado.fim; i++) {
+            cout <<  i << " " << vetor_ordenado.vetor[i].key << endl;
         }
     }
     else if(est == 2) {
