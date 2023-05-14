@@ -2,7 +2,7 @@
 #include "vo.h"
 #include <cstdlib>
 #include <cstring>
-#include <iostream> // Remover dps;
+#include <iostream> 
 
 VO::VO(int n) {
     size = 2;
@@ -52,6 +52,7 @@ int VO::busca(char * chave) {
     while(start < end) {
         meio = (start + end)/2;
         int comp = strcmp(chave, vetor[meio].key);
+        n_comp_busca++;
         if(comp == 0) {
             // palavra chave é igual a palavra so vetor[meio];
             return meio;

@@ -4,6 +4,7 @@
 #include <string>
 #include "item.h"
 #include "vo.h"
+#include "abb.h"
 using namespace std;
 
 int montagem() {
@@ -65,18 +66,33 @@ void coloca_na_estrutura(int est) {
     }
     else if(est == 2) {
         cout << "Árvore de Busca Binária escolhida!\n";
-
+        ABB arvo;
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
             cin.getline (aux_linha, 10000);
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
                 Item item(word);
+                arvo.arvore = arvo.add(item, arvo.arvore, 0);
                 word = strtok(nullptr, " .,?!");
                 cont++;
             }
         }
         // --------------------------------------------
+        arvo.print_in_order(arvo.arvore);
+
+        char busc[1000];
+        cin >> busc;
+        abb * b = arvo.busca(busc, arvo.arvore);
+        if(b == nullptr) {
+            cout << "Não há!\n";
+        }
+        else {
+            cout << b->val.key << " | " << b->val.repet << endl;
+        }
+        cout << arvo.n_comp_insercao << " comparações na inserção\n";
+        cout << arvo.n_comp_busca << " comparações na busca\n";
+        cout << arvo.altura << " altura da arvore\n";
 
     }
     else if(est == 3) {
