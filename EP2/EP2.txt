@@ -1,6 +1,12 @@
 Escrever para cada uma das estruturas:
-    - Vetor Dinâmico Ordenado; - OK
+    - Vetor Dinâmico Ordenado:
+        - Número de Comparações na inserção;
+        - Número de Comparações na Busca;
+        - Número de trocas de elementos;
     - Árvore de Busca Binária;
+        - Número de Comparações na inserção;
+        - Número de Comparações na busca;
+        - Altura da árvore;
     - TREAPS;
     - Árvores 2-3;
     - Árvores Rubro-Negras;
