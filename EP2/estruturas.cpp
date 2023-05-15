@@ -189,3 +189,19 @@ abb * ABB::busca(char * key, abb * raiz) {
 
 
 // FUNÇÕES DE TREAP // 
+
+TREAP::TREAP(int n) {
+    treap = nullptr;
+    n_comp_busca = 0;
+    n_comp_insercao = 0;
+    n_rotacoes = 0;
+    altura = -1;
+    valor_max_prioridade = 2 * n;
+}
+
+tree_heap * TREAP::add(Item item, tree_heap * raiz, int n) {
+    if(raiz == nullptr) {
+        raiz = (tree_heap *) malloc(sizeof(tree_heap));
+
+    }
+}

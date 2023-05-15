@@ -34,10 +34,10 @@ class VO {
 
 // ÁRVORE DE BUSCA BINÁRIA //
 
-typedef struct cel{
+typedef struct cel_abb {
     Item val;
-    struct cel * esq;
-    struct cel * dir;
+    struct cel_abb * esq;
+    struct cel_abb * dir;
 } abb;
 
 class ABB {
@@ -55,9 +55,30 @@ class ABB {
         void print_in_order(abb * raiz);
         // Dada uma chave, retorna um ponteiro para o nó em que está a chave, retorna nullptr se não houver item com aquela chave na ABB.arvore;
         abb * busca(char * key, abb * raiz);
-        int calcula_altura(abb * raiz);
 };
 
 // TREAPS //
 
-// ??? 
+typedef struct cel_treap {
+    Item val;
+    cel_treap * pai;
+    cel_treap * esq;
+    cel_treap * dir;
+    int prioridade;
+} tree_heap;
+
+class TREAP {
+    public:
+        tree_heap * treap;
+        int n_comp_busca;
+        int n_comp_insercao;
+        int n_rotacoes;
+        int altura;
+        int valor_max_prioridade;
+
+        TREAP(int n);
+        tree_heap * add(Item item, tree_heap * raiz, int n);
+        tree_heap * rotaciona(tree_heap * raiz, int lado);
+        void print_in_order(tree_heap * raiz);
+        tree_heap * busca(Item item, tree_heap * raiz);
+};
