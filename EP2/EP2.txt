@@ -26,3 +26,6 @@ Após ler e organizar as palavras na estrutura implementada, será necessário i
     - Dada uma palavra, imprimir quantas vezes ela ocorre no texto; (O 'palavra')
     - Quais as maiores palavras que não repetem letras; (SR)
     - QUias as menores palavras com mais vogais sem retição (VD)
+
+
+COMPILANDO: g++ EP2.cpp item.cpp vo.cpp abb.cpp -o EP2 

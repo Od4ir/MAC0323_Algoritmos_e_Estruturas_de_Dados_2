@@ -1,10 +1,9 @@
+#include "estruturas.h"
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
 #include <string>
-#include "item.h"
-#include "vo.h"
-#include "abb.h"
+
 using namespace std;
 
 int montagem() {
