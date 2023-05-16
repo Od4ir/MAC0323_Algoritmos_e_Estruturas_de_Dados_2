@@ -62,6 +62,7 @@ void coloca_na_estrutura(int est) {
             }
         }
         // --------------------------------------------
+        vetor_ordenado.printa();
     }
     else if(est == 2) {
         cout << "Árvore de Busca Binária escolhida!\n";
@@ -96,6 +97,7 @@ void coloca_na_estrutura(int est) {
     }
     else if(est == 3) {
         cout << "Treaps escolhida!\n";
+        TREAP arv(N);
 
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
@@ -103,11 +105,13 @@ void coloca_na_estrutura(int est) {
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
                 Item item(word);
+                arv.treap = arv.add(item, arv.treap, arv.treap, 0, 'x');
                 word = strtok(nullptr, " .,?!");
                 cont++;
             }
         }
         // --------------------------------------------
+        arv.print_in_order(arv.treap);
     }
     else if(est == 4) {
         cout << "Árvores 2-3 escolhida!\n";

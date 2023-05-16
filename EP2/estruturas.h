@@ -77,7 +77,7 @@ class TREAP {
         int valor_max_prioridade;
 
         TREAP(int n);
-        tree_heap * add(Item item, tree_heap * raiz, int n);
+        tree_heap * add(Item item, tree_heap * raiz, tree_heap * ant, int n, char lado);
         tree_heap * rotaciona(tree_heap * raiz, int lado);
         void print_in_order(tree_heap * raiz);
         tree_heap * busca(Item item, tree_heap * raiz);

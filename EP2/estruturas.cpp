@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
+#include <time.h>
 
 using namespace std;
 
@@ -148,6 +149,7 @@ abb * ABB::add(Item item, abb * raiz, int n) {
         raiz = (abb *) malloc(sizeof(abb));
         raiz->val = item;
         altura = max(altura, n);
+        raiz->dir = raiz->esq = nullptr;
         return raiz;
     }
     int comp = strcmp(item.key, raiz->val.key);
@@ -199,9 +201,51 @@ TREAP::TREAP(int n) {
     valor_max_prioridade = 2 * n;
 }
 
-tree_heap * TREAP::add(Item item, tree_heap * raiz, int n) {
+tree_heap * TREAP::add(Item item, tree_heap * raiz, tree_heap * ant, int n, char lado) {
     if(raiz == nullptr) {
         raiz = (tree_heap *) malloc(sizeof(tree_heap));
+        raiz->prioridade = rand()%valor_max_prioridade;
+        cout << "Prioridade do novo elemento: " << raiz->prioridade << endl;
+        raiz->dir = nullptr;
+        raiz->esq = nullptr;
+        raiz->pai = ant;
+        raiz->val = item;
+        altura = max(altura, n);
 
+        if(ant != nullptr) {
+            if(raiz->prioridade > ant->prioridade) {
+                if(lado == 'd') {
+                    cout << "É filho esquerdo, roda a direita!\n";
+                }
+                else {
+                    cout << "É filho direito, roda a esquerda!\n";
+                }
+                cout << raiz->val.key << endl;
+                cout << ant->val.key << endl;
+                // Vamos rodar;
+                // Mas precisamos analisar qual lado irá rodar;
+            }
+        }
+        return raiz;
     }
+    int comp = strcmp(item.key, raiz->val.key);
+    if(comp == 0) {
+        raiz->val.repet++;
+    }
+    else if(comp > 0) {
+        raiz->dir = add(item, raiz->dir, raiz, n + 1, 'e');
+    }
+    else {
+        raiz->esq = add(item, raiz->esq, raiz, n + 1, 'd');
+    }
+    return raiz;
+}
+
+void TREAP::print_in_order(tree_heap * raiz) {
+    if(raiz != nullptr) {
+        print_in_order(raiz->esq);
+        cout << raiz->val.key << endl;
+        print_in_order(raiz->dir);
+    }
+
 }
