@@ -209,6 +209,9 @@ tree_heap * TREAP::add(Item item, tree_heap * raiz, tree_heap * ant, int n, char
         raiz->dir = nullptr;
         raiz->esq = nullptr;
         raiz->pai = ant;
+        if(ant == nullptr) {
+            cout << "ESTAMOS NA RAIZ\n";
+        }
         raiz->val = item;
         altura = max(altura, n);
 
@@ -216,9 +219,11 @@ tree_heap * TREAP::add(Item item, tree_heap * raiz, tree_heap * ant, int n, char
             if(raiz->prioridade > ant->prioridade) {
                 if(lado == 'd') {
                     cout << "É filho esquerdo, roda a direita!\n";
+                    return rotaciona(raiz, 'd');
                 }
                 else {
                     cout << "É filho direito, roda a esquerda!\n";
+                    return rotaciona(raiz, 'e');
                 }
                 cout << raiz->val.key << endl;
                 cout << ant->val.key << endl;
@@ -247,5 +252,23 @@ void TREAP::print_in_order(tree_heap * raiz) {
         cout << raiz->val.key << endl;
         print_in_order(raiz->dir);
     }
+}
 
+tree_heap * TREAP::rotaciona(tree_heap * raiz, char lado) {
+    if(lado == 'd') {
+        // Rotação a direita;
+        raiz->pai->esq = raiz->dir;
+        raiz->dir = raiz->pai;
+
+        if(raiz->pai->pai != nullptr) {
+            if(raiz->pai->prioridade > raiz->pai->pai->prioridade)
+        }
+        return raiz;
+    }
+    else {
+        // Rotação a esquerda;
+        raiz->pai->dir = raiz->esq;
+        raiz->dir = raiz->pai;
+        return raiz;
+    }
 }
