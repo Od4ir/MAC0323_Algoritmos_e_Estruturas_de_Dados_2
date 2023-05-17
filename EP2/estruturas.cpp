@@ -209,28 +209,8 @@ tree_heap * TREAP::add(Item item, tree_heap * raiz, tree_heap * ant, int n, char
         raiz->dir = nullptr;
         raiz->esq = nullptr;
         raiz->pai = ant;
-        if(ant == nullptr) {
-            cout << "ESTAMOS NA RAIZ\n";
-        }
         raiz->val = item;
         altura = max(altura, n);
-
-        if(ant != nullptr) {
-            if(raiz->prioridade > ant->prioridade) {
-                if(lado == 'd') {
-                    cout << "É filho esquerdo, roda a direita!\n";
-                    return rotaciona(raiz, 'd');
-                }
-                else {
-                    cout << "É filho direito, roda a esquerda!\n";
-                    return rotaciona(raiz, 'e');
-                }
-                cout << raiz->val.key << endl;
-                cout << ant->val.key << endl;
-                // Vamos rodar;
-                // Mas precisamos analisar qual lado irá rodar;
-            }
-        }
         return raiz;
     }
     int comp = strcmp(item.key, raiz->val.key);
@@ -239,9 +219,17 @@ tree_heap * TREAP::add(Item item, tree_heap * raiz, tree_heap * ant, int n, char
     }
     else if(comp > 0) {
         raiz->dir = add(item, raiz->dir, raiz, n + 1, 'e');
+        if(raiz->dir->prioridade > raiz->prioridade) {
+            // Rotaciona;
+            raiz = rotaciona(raiz->dir, 'e');
+        }
     }
     else {
         raiz->esq = add(item, raiz->esq, raiz, n + 1, 'd');
+        if(raiz->esq->prioridade > raiz->prioridade) {
+            // Rotaciona;
+            raiz = rotaciona(raiz->esq, 'd');
+        }
     }
     return raiz;
 }
@@ -254,21 +242,30 @@ void TREAP::print_in_order(tree_heap * raiz) {
     }
 }
 
-tree_heap * TREAP::rotaciona(tree_heap * raiz, char lado) {
-    if(lado == 'd') {
-        // Rotação a direita;
-        raiz->pai->esq = raiz->dir;
-        raiz->dir = raiz->pai;
+void TREAP::print_pre_order(tree_heap * raiz) {
+    if(raiz != nullptr) {
+        cout << raiz->val.key << endl;
+        print_pre_order(raiz->esq);
+        print_pre_order(raiz->dir);
+    }
+}
 
-        if(raiz->pai->pai != nullptr) {
-            if(raiz->pai->prioridade > raiz->pai->pai->prioridade)
-        }
-        return raiz;
+tree_heap * TREAP::rotaciona(tree_heap * p, char lado) {
+    if(lado == 'd') {
+        tree_heap * aux = p->pai;
+        p->pai->esq = p->dir;
+        p->dir = p->pai;
+        p->pai = p->pai->pai;
+        return p;
     }
-    else {
-        // Rotação a esquerda;
-        raiz->pai->dir = raiz->esq;
-        raiz->dir = raiz->pai;
-        return raiz;
+    cout << "Entrei aqui!\n";
+    tree_heap * aux = p->pai;
+    cout << "Pai do p: " << aux->val.key << endl;
+    if(aux->dir == nullptr) {
+        cout << "Era nullptr" << endl;
     }
+    p->pai->dir = p->esq;
+    p->esq = p->pai;
+    p->pai = p->pai->pai;
+    return p;
 }

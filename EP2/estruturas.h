@@ -78,7 +78,8 @@ class TREAP {
 
         TREAP(int n);
         tree_heap * add(Item item, tree_heap * raiz, tree_heap * ant, int n, char lado);
-        tree_heap * rotaciona(tree_heap * raiz, char lado);
+        tree_heap * rotaciona(tree_heap * p, char lado);
         void print_in_order(tree_heap * raiz);
+        void print_pre_order(tree_heap * raiz);
         tree_heap * busca(Item item, tree_heap * raiz);
 };
