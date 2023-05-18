@@ -144,7 +144,11 @@ ABB::ABB() {
     altura = -1;
 }
 
-abb * ABB::add(Item item, abb * raiz, int n) {
+void ABB::add(Item item) {
+    arvore = put(item, arvore, 0);
+}
+
+abb * ABB::put(Item item, abb * raiz, int n) {
     if(raiz == nullptr) {
         raiz = (abb *) malloc(sizeof(abb));
         raiz->val = item;
@@ -158,10 +162,10 @@ abb * ABB::add(Item item, abb * raiz, int n) {
         raiz->val.repet++;
     }
     else if(comp > 0) { // A palavra do item é maior que a palavra da raiz.val;
-        raiz->dir = add(item, raiz->dir, n + 1);
+        raiz->dir = put(item, raiz->dir, n + 1);
     }
     else {
-        raiz->esq = add(item, raiz->esq, n + 1);
+        raiz->esq = put(item, raiz->esq, n + 1);
     }
     return raiz;
 }
@@ -201,7 +205,11 @@ TREAP::TREAP(int n) {
     valor_max_prioridade = 2 * n;
 }
 
-tree_heap * TREAP::add(Item item, tree_heap * raiz, tree_heap * ant, int n, char lado) {
+void TREAP::add(Item item) {
+    treap = put(item, treap, treap, 0);
+}
+
+tree_heap * TREAP::put(Item item, tree_heap * raiz, tree_heap * ant, int n) {
     if(raiz == nullptr) {
         raiz = (tree_heap *) malloc(sizeof(tree_heap));
         raiz->prioridade = rand()%valor_max_prioridade;
@@ -218,16 +226,18 @@ tree_heap * TREAP::add(Item item, tree_heap * raiz, tree_heap * ant, int n, char
         raiz->val.repet++;
     }
     else if(comp > 0) {
-        raiz->dir = add(item, raiz->dir, raiz, n + 1, 'e');
+        raiz->dir = put(item, raiz->dir, raiz, n + 1);
         if(raiz->dir->prioridade > raiz->prioridade) {
             // Rotaciona;
+            cout << "Vamos rodar a esquerda!\n";
             raiz = rotaciona(raiz->dir, 'e');
         }
     }
     else {
-        raiz->esq = add(item, raiz->esq, raiz, n + 1, 'd');
+        raiz->esq = put(item, raiz->esq, raiz, n + 1);
         if(raiz->esq->prioridade > raiz->prioridade) {
             // Rotaciona;
+            cout << "Vamos rodar a direita!\n";
             raiz = rotaciona(raiz->esq, 'd');
         }
     }
@@ -251,21 +261,25 @@ void TREAP::print_pre_order(tree_heap * raiz) {
 }
 
 tree_heap * TREAP::rotaciona(tree_heap * p, char lado) {
+    cout << p->val.key << " rodando\n";
     if(lado == 'd') {
+        cout << "Girando para direita\n";
         tree_heap * aux = p->pai;
+        cout << "Pai do p: " << aux->val.key << endl;
         p->pai->esq = p->dir;
         p->dir = p->pai;
         p->pai = p->pai->pai;
+        aux->pai = p;
         return p;
     }
-    cout << "Entrei aqui!\n";
+    cout << "Girando para esquerda!\n";
     tree_heap * aux = p->pai;
     cout << "Pai do p: " << aux->val.key << endl;
-    if(aux->dir == nullptr) {
-        cout << "Era nullptr" << endl;
-    }
     p->pai->dir = p->esq;
     p->esq = p->pai;
     p->pai = p->pai->pai;
+    aux->pai = p;
     return p;
 }
+
+// Simbol Table;

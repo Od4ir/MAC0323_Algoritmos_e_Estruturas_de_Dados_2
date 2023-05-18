@@ -29,3 +29,80 @@ Após ler e organizar as palavras na estrutura implementada, será necessário i
 
 
 COMPILANDO: g++ EP2.cpp item.cpp vo.cpp abb.cpp -o EP2 
+
+
+Treaps escolhida!
+Odair
+Prioridade do novo elemento: 1
+
+
+ ----- Árvore Atual: ----- 
+Odair
+
+abelha
+Prioridade do novo elemento: 4
+Vamos rodar a esquerda!
+Girando para esquerda!
+Pai do p: Odair
+
+
+ ----- Árvore Atual: ----- 
+abelha
+Odair
+
+raposa
+Prioridade do novo elemento: 9
+Vamos rodar a esquerda!
+Girando para esquerda!
+Pai do p: abelha
+
+
+ ----- Árvore Atual: ----- 
+raposa
+abelha
+Odair
+
+zddsd
+Prioridade do novo elemento: 5
+
+
+ ----- Árvore Atual: ----- 
+raposa
+abelha
+Odair
+zddsd
+
+dsfkd
+Prioridade do novo elemento: 1
+
+
+ ----- Árvore Atual: ----- 
+raposa
+abelha
+Odair
+dsfkd
+zddsd
+
+zebra
+Prioridade do novo elemento: 3
+
+
+ ----- Árvore Atual: ----- 
+raposa
+abelha
+Odair
+dsfkd
+zddsd
+zebra
+
+panda
+Prioridade do novo elemento: 10
+Vamos rodar a esquerda!
+Girando para esquerda!
+Pai do p: dsfkd
+Vamos rodar a esquerda!
+Girando para esquerda!
+Pai do p: abelha
+Vamos rodar a direita!
+Girando para direita
+Falha de segmentação (imagem do núcleo gravada)

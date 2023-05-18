@@ -73,7 +73,8 @@ void coloca_na_estrutura(int est) {
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
                 Item item(word);
-                arvo.arvore = arvo.add(item, arvo.arvore, 0);
+                arvo.add(item);
+                //arvo.arvore = arvo.add(item, arvo.arvore, 0);
                 word = strtok(nullptr, " .,?!");
                 cont++;
             }
@@ -105,7 +106,8 @@ void coloca_na_estrutura(int est) {
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
                 Item item(word);
-                arv.treap = arv.add(item, arv.treap, arv.treap, 0, 'x');
+                arv.add(item);
+                //arv.treap = arv.add(item, arv.treap, arv.treap, 0, 'x');
                 word = strtok(nullptr, " .,?!");
                 cout << "\n\n ----- Árvore Atual: ----- \n";
                 arv.print_pre_order(arv.treap);

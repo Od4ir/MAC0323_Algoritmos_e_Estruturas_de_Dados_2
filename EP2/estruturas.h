@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <cstring>
 
+
 // ITEM //
 class Item {
     public:
@@ -50,7 +51,8 @@ class ABB {
         // Cria um objeto do tipo ABB - Árvore de Busca Binária
         ABB();
         // Adiciona um item na ABB.arvore e devolve um ponteiro para a nova raiz;
-        abb * add(Item item, abb * raiz, int n);
+        void add(Item item);
+        abb * put(Item item, abb * raiz, int n);
         // Printa os valores salvos nos nós da árvore 'in order' (Esquerda - Raiz - Direita);
         void print_in_order(abb * raiz);
         // Dada uma chave, retorna um ponteiro para o nó em que está a chave, retorna nullptr se não houver item com aquela chave na ABB.arvore;
@@ -77,9 +79,15 @@ class TREAP {
         int valor_max_prioridade;
 
         TREAP(int n);
-        tree_heap * add(Item item, tree_heap * raiz, tree_heap * ant, int n, char lado);
+        void add(Item item);
+        tree_heap * put(Item item, tree_heap * raiz, tree_heap * ant, int n);
         tree_heap * rotaciona(tree_heap * p, char lado);
         void print_in_order(tree_heap * raiz);
         void print_pre_order(tree_heap * raiz);
         tree_heap * busca(Item item, tree_heap * raiz);
+};
+
+
+class simbol_table {
+    simbol_table(int est);
 };
