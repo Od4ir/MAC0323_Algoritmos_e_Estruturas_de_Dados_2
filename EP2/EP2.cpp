@@ -136,6 +136,7 @@ void coloca_na_estrutura(int est) {
     }
     else { 
         cout << "Árvores Rubro-Negras\n";
+        ARN arv;
 
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
@@ -143,11 +144,13 @@ void coloca_na_estrutura(int est) {
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
                 Item item(word);
+                arv.add(item);
                 word = strtok(nullptr, " .,?!");
                 cont++;
             }
         }
         // --------------------------------------------
+        arv.print_in_order(arv.arvore);
     }
 } 
 

@@ -88,6 +88,29 @@ class TREAP {
 };
 
 
-class simbol_table {
-    simbol_table(int est);
+// ÁRVORES RUBRO NEGRAS //
+
+typedef struct cel_arn {
+    Item val;
+    struct cel_arn * pai;
+    struct cel_arn * esq;
+    struct cel_arn * dir;
+    char cor;
+} arn;
+
+class ARN {
+    public:
+        arn * arvore;
+        int n_comp_busca;
+        int n_comp_insercao;
+        int altura;
+
+        ARN();
+        void add(Item item);
+        arn * put(Item item, arn * raiz, arn * ant);
+        arn * corrige_cor(arn * raiz);
+        arn * rotaciona(arn * p, char lado);
+        void print_in_order(arn * raiz);
+        void print_pre_order(arn * raiz);
+        void calcula_altura(arn * raiz);
 };

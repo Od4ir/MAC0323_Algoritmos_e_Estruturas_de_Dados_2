@@ -282,4 +282,93 @@ tree_heap * TREAP::rotaciona(tree_heap * p, char lado) {
     return p;
 }
 
-// Simbol Table;
+
+// FUNÇÕES DE RUBRO NEGRAS //
+
+ARN::ARN() {
+    arvore = nullptr;
+    n_comp_busca = 0;
+    n_comp_insercao = 0;
+    altura = 0;
+}
+
+void ARN::add(Item item) {
+    arvore = put(item, arvore, arvore);
+}
+
+arn * ARN::put(Item item, arn * raiz, arn * ant) {
+    if(raiz == nullptr) {
+        raiz = (arn *) malloc(sizeof(arn));
+        raiz->val = item;
+        raiz->cor = 'V';
+        raiz->dir = raiz->esq = nullptr;
+        raiz->pai = ant;
+        return raiz;
+    }
+    int comp = strcmp(item.key, raiz->val.key);
+    n_comp_insercao++;
+    if(comp == 0) {
+        raiz->val.repet++;
+    }
+    else if(comp > 0) { // A palavra do item é maior que a palavra da raiz.val;
+        raiz->dir = put(item, raiz->dir, raiz);
+        if(raiz->cor ==  'V' && raiz->dir->cor == 'V') {
+            cout << "Pai vermelho e filho vermelho!\n";
+            // Corrige;
+        }
+        // Verifica a cor e corrige;
+    }
+    else {
+        raiz->esq = put(item, raiz->esq, raiz);
+        if(raiz->cor == 'V' && raiz->esq->cor == 'V') {
+            cout << "Pai vermelho e filho vermelho!\n";
+        }
+        // Verifica a cor e corrige;
+    }
+    return raiz;
+}
+
+arn * ARN::corrige_cor(arn * raiz) {
+    if(raiz->pai == nullptr) {
+        cout << "É raiz!\n";
+        return raiz;
+    }
+    arn * pai = raiz->pai;
+    arn * avo = pai->pai;
+    if(pai->cor == raiz->cor) {
+        // Pai vermelho e filho vermelho;
+        if(avo == nullptr) {
+            // Sem avô;
+            // Pai é a raiz;
+            // Pinta o pai de preto e pronto!
+            pai->cor = 'B';
+            return raiz;
+        }
+        arn * tio_dir = avo->dir;
+        arn * tio_esq = avo->esq;
+        // Um desses tios é o pai;
+        if(tio_esq == nullptr || tio_esq->cor == 'B') { // Sem tio esquerdo ou com tio esquerdo preto;
+            // Roda a direita;
+        }
+        if(tio_dir == nullptr || tio_dir->cor == 'B') { // Sem tio direito ou com tio direito preto;
+            // Roda a esquerda;
+        }
+
+        // Se não caiu em nenhum desses casos, então o tio é vermelho;
+        // Trocamos a cor do pai, do tio e do avô;
+        tio_esq->cor = tio_dir->cor = 'B';
+        avo->cor = 'R';
+
+        // Precisa corrigir a partir do avô;
+        avo = corrige_cor(avo);
+    }
+    return raiz;
+} 
+
+void ARN::print_in_order(arn * raiz) {
+    if(raiz != nullptr) {
+        print_in_order(raiz->esq);
+        cout << raiz->val.key << endl;
+        print_in_order(raiz->dir);
+    }
+}
