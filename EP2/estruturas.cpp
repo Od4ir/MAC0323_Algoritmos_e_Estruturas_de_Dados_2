@@ -312,42 +312,55 @@ arn * ARN::put(Item item, arn * raiz, arn * ant) {
     }
     else if(comp > 0) { // A palavra do item é maior que a palavra da raiz.val;
         raiz->dir = put(item, raiz->dir, raiz);
-        if(raiz->cor ==  'V' && raiz->dir->cor == 'V') {
-            cout << "Pai vermelho e filho vermelho!\n";
-            // Corrige;
-        }
+        raiz = corrige_cor(raiz->dir);
         // Verifica a cor e corrige;
     }
     else {
         raiz->esq = put(item, raiz->esq, raiz);
-        if(raiz->cor == 'V' && raiz->esq->cor == 'V') {
-            cout << "Pai vermelho e filho vermelho!\n";
-        }
+        raiz = corrige_cor(raiz->esq);
         // Verifica a cor e corrige;
     }
     return raiz;
 }
 
 arn * ARN::corrige_cor(arn * raiz) {
-    if(raiz->pai == nullptr) {
-        cout << "É raiz!\n";
+    if(raiz->pai == nullptr || raiz->pai->cor == 'B') {
+        cout << "É raiz ou pai é black!\n";
         return raiz;
     }
     arn * pai = raiz->pai;
     arn * avo = pai->pai;
     if(pai->cor == raiz->cor) {
+        cout << "Pai vermelho e filho vermelho\n";
         // Pai vermelho e filho vermelho;
         if(avo == nullptr) {
+            cout << "Não tem avô - Pai fica black\n";
             // Sem avô;
             // Pai é a raiz;
             // Pinta o pai de preto e pronto!
             pai->cor = 'B';
-            return raiz;
+            return pai;
         }
+        cout << "Tem avô!\n";
         arn * tio_dir = avo->dir;
         arn * tio_esq = avo->esq;
         // Um desses tios é o pai;
         if(tio_esq == nullptr || tio_esq->cor == 'B') { // Sem tio esquerdo ou com tio esquerdo preto;
+            cout << "Tio é vazio ou black, vamos rodar a direita" << endl;
+            // Pai é o tio direito;
+            // Preciso decobrir de qual lado está o filho;
+            int aux = strcmp(raiz->val.key, pai->esq->val.key);
+            if(aux == 0) {
+                // É filho esquerdo, precisa de duas rotações;
+                pai = rotaciona(raiz, 'd');
+                raiz = pai->dir;
+
+
+            }
+            else {
+                // É filho direito, precisa apenas de uma rotação;
+            }
+
             // Roda a direita;
         }
         if(tio_dir == nullptr || tio_dir->cor == 'B') { // Sem tio direito ou com tio direito preto;
@@ -368,7 +381,42 @@ arn * ARN::corrige_cor(arn * raiz) {
 void ARN::print_in_order(arn * raiz) {
     if(raiz != nullptr) {
         print_in_order(raiz->esq);
-        cout << raiz->val.key << endl;
+        cout << raiz->val.key << " cor: " << raiz->cor << endl;
         print_in_order(raiz->dir);
     }
+}
+
+void ARN::print_pre_order(arn * raiz) {
+    if(raiz != nullptr) {
+        cout << raiz->val.key << " cor: " << raiz->cor << endl;
+        print_pre_order(raiz->esq);
+        print_pre_order(raiz->dir);
+    }
+}
+
+arn * ARN::rotaciona(arn * p, char lado) {
+    if(lado == 'd') {
+        cout << "Rotaciona a direita!\n";
+        arn * pai = p->pai;
+        char aux = pai->cor;
+        pai->cor = p->cor;
+        p->cor = aux;
+        pai->esq = p->dir;
+        p->dir = pai;
+        p->pai = pai->pai;
+        pai->pai = p;
+        return p;
+    }
+    cout << "Rotaciona a esquerda!\n";
+    arn * pai = p->pai;
+    char aux = pai->cor;
+    pai->cor = p->cor;
+    p->cor = aux;
+
+    pai->dir = p->esq;
+    p->esq = pai;
+    p->pai = pai->pai;
+    pai->pai = p;
+    return p;
+
 }

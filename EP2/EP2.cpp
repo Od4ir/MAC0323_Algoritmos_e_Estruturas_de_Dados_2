@@ -147,9 +147,12 @@ void coloca_na_estrutura(int est) {
                 arv.add(item);
                 word = strtok(nullptr, " .,?!");
                 cont++;
+                cout << "------ Árvore Atual: -------\n";
+                arv.print_pre_order(arv.arvore);
             }
         }
         // --------------------------------------------
+        cout << endl << "Árvore FINAL: " << endl;
         arv.print_in_order(arv.arvore);
     }
 } 
