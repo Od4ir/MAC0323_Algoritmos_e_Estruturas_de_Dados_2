@@ -2,7 +2,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
-#include <time.h>
 
 using namespace std;
 
@@ -31,6 +30,7 @@ int verifica_vogal(char atu) {
     }
     return 1;
 }
+int letras[26];
 
 Item::Item(char * chave) {
     for(int i = 0; i < 5; i++) vogais[i] = 0;
