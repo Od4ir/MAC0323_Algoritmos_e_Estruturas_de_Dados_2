@@ -293,10 +293,84 @@ ARN::ARN() {
 }
 
 void ARN::add(Item item) {
-    arvore = put(item, arvore, arvore);
+    arvore = put(item, arvore);
+    arvore->cor = 'B';
 }
 
-arn * ARN::put(Item item, arn * raiz, arn * ant) {
+arn * ARN::rotaciona(arn * p, char lado) {
+    if(lado == 'e') {
+        arn * x = p->dir;
+        p->dir = x->esq;
+        x->esq = p;
+        x->cor = p->cor;
+        p->cor = 'R';
+        return x;
+    }
+    arn * x = p->esq;
+    p->esq = x->dir;
+    x->dir = p;
+    x->cor = p->cor;
+    p->cor = 'R';
+    return x;
+}
+
+bool ARN::eh_vermelho(arn * no) {
+    if(no == nullptr) {
+        return false;
+    }
+    else return (no->cor == 'R');
+}
+
+arn * ARN::put(Item item, arn * raiz) {
+    if(raiz == nullptr) {
+        raiz = (arn *) malloc(sizeof(arn));
+        raiz->cor = 'R';
+        raiz->esq = raiz->dir = nullptr;
+        raiz->val = item;
+        return raiz;
+    }
+    int comp = strcmp(item.key, raiz->val.key);
+    if(comp == 0) {
+        raiz->val.repet++;
+    }
+    else if(comp > 0){
+        raiz->dir = put(item, raiz->dir);
+    }
+    else {
+        raiz->esq = put(item, raiz->esq);
+    }
+
+    if(eh_vermelho(raiz->dir) && !eh_vermelho(raiz->esq)) {
+        raiz = rotaciona(raiz, 'e');
+    }
+    if(eh_vermelho(raiz->esq) && eh_vermelho(raiz->esq->esq)) {
+        raiz = rotaciona(raiz, 'd');
+    }
+    if(eh_vermelho(raiz->esq) && eh_vermelho(raiz->dir)) {
+        raiz->cor = 'R';
+        raiz->esq->cor = 'B';
+        raiz->dir->cor = 'B';
+    }
+    return raiz;
+}
+
+void ARN::print_in_order(arn * raiz) {
+    if(raiz != nullptr) {
+        print_in_order(raiz->esq);
+        cout << raiz->val.key << " cor: " << raiz->cor << endl;
+        print_in_order(raiz->dir);
+    }
+}
+
+void ARN::print_pre_order(arn * raiz) {
+    if(raiz != nullptr) {
+        cout << raiz->val.key << " cor: " << raiz->cor << endl;
+        print_pre_order(raiz->esq);
+        print_pre_order(raiz->dir);
+    }
+} 
+
+/*arn * ARN::put(Item item, arn * raiz, arn * ant) {
     if(raiz == nullptr) {
         raiz = (arn *) malloc(sizeof(arn));
         raiz->val = item;
@@ -378,21 +452,7 @@ arn * ARN::corrige_cor(arn * raiz) {
     return raiz;
 } 
 
-void ARN::print_in_order(arn * raiz) {
-    if(raiz != nullptr) {
-        print_in_order(raiz->esq);
-        cout << raiz->val.key << " cor: " << raiz->cor << endl;
-        print_in_order(raiz->dir);
-    }
-}
 
-void ARN::print_pre_order(arn * raiz) {
-    if(raiz != nullptr) {
-        cout << raiz->val.key << " cor: " << raiz->cor << endl;
-        print_pre_order(raiz->esq);
-        print_pre_order(raiz->dir);
-    }
-}
 
 arn * ARN::rotaciona(arn * p, char lado) {
     if(lado == 'd') {
@@ -419,4 +479,4 @@ arn * ARN::rotaciona(arn * p, char lado) {
     pai->pai = p;
     return p;
 
-}
+} */

@@ -107,7 +107,8 @@ class ARN {
 
         ARN();
         void add(Item item);
-        arn * put(Item item, arn * raiz, arn * ant);
+        arn * put(Item item, arn * raiz);
+        bool eh_vermelho(arn * no);
         arn * corrige_cor(arn * raiz);
         arn * rotaciona(arn * p, char lado);
         void print_in_order(arn * raiz);
