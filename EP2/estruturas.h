@@ -12,6 +12,12 @@ class Item {
         long long int repet;
 };
 
+
+bool verifica_repeticoes(Item item);
+void insere_nos_vetores(Item item);
+void mais_repetida(Item item);
+long long int verifica_vogal(char atu);
+
 // VETOR ORDENADO DINÃMICO //
 
 class VO {
