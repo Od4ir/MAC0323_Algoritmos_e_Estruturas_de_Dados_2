@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int montagem() {
+long long int montagem() {
     char * E;
     cout << "Escolha a estrutura a ser utilizada: \n";
     printf("  [ VO  ] - Vetor Dinâmico Ordenado\n");
@@ -39,10 +39,10 @@ int montagem() {
     return 1;
 }
 
-void coloca_na_estrutura(int est) {
+void coloca_na_estrutura(long long int est) {
     cout << "Digite o número de palavras: ";
-    int N; cin >> N; cout << endl;
-    int cont = 0;
+    long long int N; cin >> N; cout << endl;
+    long long int cont = 0;
     char aux_linha[10000];
     char * word;
 

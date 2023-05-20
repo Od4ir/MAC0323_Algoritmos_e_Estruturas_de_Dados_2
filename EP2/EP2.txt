@@ -11,7 +11,7 @@ Escrever para cada uma das estruturas:
     - Árvores 2-3;
     - Árvores Rubro-Negras;
 
-As seguintes funções:
+As segulong long intes funções:
     - void add(Key key, Item val); -> Para inserir um elemento novo ou alterar o val desse elemento;
     - Item value(Key key); -> Para, dado uma chave, retornar o item que está representado por essa chave;
 

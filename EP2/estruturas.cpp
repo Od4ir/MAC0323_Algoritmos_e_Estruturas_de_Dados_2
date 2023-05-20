@@ -7,9 +7,9 @@ using namespace std;
 
 // FUNÇÕES ITEM //
 
-int vogais[5];
+long long int vogais[5];
 
-int verifica_vogal(char atu) {
+long long int verifica_vogal(char atu) {
     if(atu == 'a' || atu == 'A') {
         vogais[0] = vogais[0] + 1;
         return vogais[0];
@@ -30,17 +30,17 @@ int verifica_vogal(char atu) {
     }
     return 1;
 }
-int letras[26];
+long long int letras[26];
 
 Item::Item(char * chave) {
-    for(int i = 0; i < 5; i++) vogais[i] = 0;
+    for(long long int i = 0; i < 5; i++) vogais[i] = 0;
 
     key = (char *) malloc(sizeof(char) * strlen(chave));
     strcpy(key, chave);
     repet = 1;
     tam = strlen(chave);
     
-    int i;
+    long long int i;
     for(i = 0; i < tam; i++) {
         if(verifica_vogal(chave[i]) > 1) {
             i = tam + 1;
@@ -56,19 +56,22 @@ Item::Item(char * chave) {
 
 // FUNÇÕES VETOR ORDENADO DINÂMICO //
 
-VO::VO(int n) {
+VO::VO(long long int n) {
     size = 2;
     fim = -1;
     vetor = (Item *) malloc(sizeof(Item) * (n + 2));
+    n_comp_insercao = 0;
+    n_trocas = 0;
+    n_comp_busca = 0;
 }
 
 void VO::add(Item item) {
-    int start = 0, end = fim + 1, meio;
+    long long int start = 0, end = fim + 1, meio;
     bool colocado = false;
 
     while(start < end && !colocado) {
         meio = (start + end)/2;
-        int comp = strcmp(item.key, vetor[meio].key);
+        long long int comp = strcmp(item.key, vetor[meio].key);
         n_comp_insercao++;
         if(comp == 0) {
             // palavra do item é igual a palavra so vetor[meio];
@@ -88,7 +91,7 @@ void VO::add(Item item) {
     }
     if(!colocado) { 
         if(start != fim + 1) { 
-            for(int i = fim; i >= start; i--) {
+            for(long long int i = fim; i >= start; i--) {
                 vetor[i + 1] = vetor[i];
                 n_trocas++;
             } 
@@ -98,12 +101,12 @@ void VO::add(Item item) {
     }
 }
 
-int VO::busca(char * chave) {
-    int start = 0, end = fim + 1, meio;
+long long int VO::busca(char * chave) {
+    long long int start = 0, end = fim + 1, meio;
 
     while(start < end) {
         meio = (start + end)/2;
-        int comp = strcmp(chave, vetor[meio].key);
+        long long int comp = strcmp(chave, vetor[meio].key);
         n_comp_busca++;
         if(comp == 0) {
             // palavra chave é igual a palavra so vetor[meio];
@@ -128,7 +131,7 @@ void VO::printa() {
         cout << "Vetor vazio!\n";
     }
     else { 
-        for(int i = 0; i <= fim; i++) {
+        for(long long int i = 0; i <= fim; i++) {
             cout << i << ": " << vetor[i].key << " | repet: " << vetor[i].repet << " | vog: " << vetor[i].vog << endl;
         }
     }
@@ -148,7 +151,7 @@ void ABB::add(Item item) {
     arvore = put(item, arvore, 0);
 }
 
-abb * ABB::put(Item item, abb * raiz, int n) {
+abb * ABB::put(Item item, abb * raiz, long long int n) {
     if(raiz == nullptr) {
         raiz = (abb *) malloc(sizeof(abb));
         raiz->val = item;
@@ -156,7 +159,7 @@ abb * ABB::put(Item item, abb * raiz, int n) {
         raiz->dir = raiz->esq = nullptr;
         return raiz;
     }
-    int comp = strcmp(item.key, raiz->val.key);
+    long long int comp = strcmp(item.key, raiz->val.key);
     n_comp_insercao++;
     if(comp == 0) {
         raiz->val.repet++;
@@ -178,11 +181,20 @@ void ABB::print_in_order(abb * raiz) {
     }
 }
 
+void ABB::print_pre_order(abb * raiz) {
+    if(raiz != nullptr) {
+        cout << raiz->val.key <<  " | " << raiz->val.repet << endl;
+        print_pre_order(raiz->esq);
+        print_pre_order(raiz->dir);
+    }
+}
+
+
 abb * ABB::busca(char * key, abb * raiz) {
     if(raiz == nullptr) {
         return nullptr;
     }
-    int comp = strcmp(key, raiz->val.key);
+    long long int comp = strcmp(key, raiz->val.key);
     n_comp_busca++;
     if(comp == 0) {
         return raiz;
@@ -196,7 +208,7 @@ abb * ABB::busca(char * key, abb * raiz) {
 
 // FUNÇÕES DE TREAP // 
 
-TREAP::TREAP(int n) {
+TREAP::TREAP(long long int n) {
     treap = nullptr;
     n_comp_busca = 0;
     n_comp_insercao = 0;
@@ -206,14 +218,59 @@ TREAP::TREAP(int n) {
 }
 
 void TREAP::add(Item item) {
-    treap = put(item, treap, treap, 0);
+    treap = put(item, treap);
 }
 
-tree_heap * TREAP::put(Item item, tree_heap * raiz, tree_heap * ant, int n) {
+tree_heap * TREAP::put(Item item, tree_heap * raiz) {
+    if(raiz == nullptr) {
+        raiz = (tree_heap *) malloc(sizeof(tree_heap));
+        raiz->esq = raiz->dir = nullptr;
+        raiz->prioridade = rand() % valor_max_prioridade;
+        raiz->val = item;
+        return raiz;
+    }
+    long long int comp = strcmp(item.key, raiz->val.key);
+    n_comp_insercao++;
+    if(comp == 0) {
+        raiz->val.repet++;
+    }
+    else if(comp > 0){
+        raiz->dir = put(item, raiz->dir);
+    }
+    else {
+        raiz->esq = put(item, raiz->esq);
+    }
+
+    if(raiz->dir !=  nullptr && raiz->dir->prioridade > raiz->prioridade) {
+        raiz = rotaciona(raiz, 'e');
+        n_rotacoes++;
+    }
+    if(raiz->esq != nullptr && raiz->esq->prioridade > raiz->prioridade) {
+        raiz = rotaciona(raiz, 'd');
+        n_rotacoes++;
+    }
+
+    return raiz;
+}
+
+tree_heap * TREAP::rotaciona(tree_heap * p, char lado) {
+    if(lado == 'e') {
+        tree_heap * x = p->dir;
+        p->dir = x->esq;
+        x->esq = p;
+        return x;
+    }
+    tree_heap * x = p->esq;
+    p->esq = x->dir;
+    x->dir = p;
+    return x;
+}
+
+/*tree_heap * TREAP::put(Item item, tree_heap * raiz, tree_heap * ant, long long int n) {
     if(raiz == nullptr) {
         raiz = (tree_heap *) malloc(sizeof(tree_heap));
         raiz->prioridade = rand()%valor_max_prioridade;
-        cout << "Prioridade do novo elemento: " << raiz->prioridade << endl;
+        //cout << "Prioridade do novo elemento: " << raiz->prioridade << endl;
         raiz->dir = nullptr;
         raiz->esq = nullptr;
         raiz->pai = ant;
@@ -221,7 +278,8 @@ tree_heap * TREAP::put(Item item, tree_heap * raiz, tree_heap * ant, int n) {
         altura = max(altura, n);
         return raiz;
     }
-    int comp = strcmp(item.key, raiz->val.key);
+    long long int comp = strcmp(item.key, raiz->val.key);
+    n_comp_insercao++;
     if(comp == 0) {
         raiz->val.repet++;
     }
@@ -229,20 +287,23 @@ tree_heap * TREAP::put(Item item, tree_heap * raiz, tree_heap * ant, int n) {
         raiz->dir = put(item, raiz->dir, raiz, n + 1);
         if(raiz->dir->prioridade > raiz->prioridade) {
             // Rotaciona;
-            cout << "Vamos rodar a esquerda!\n";
+            //cout << "Vamos rodar a esquerda!\n";
             raiz = rotaciona(raiz->dir, 'e');
+            n_rotacoes++;
+
         }
     }
     else {
         raiz->esq = put(item, raiz->esq, raiz, n + 1);
         if(raiz->esq->prioridade > raiz->prioridade) {
             // Rotaciona;
-            cout << "Vamos rodar a direita!\n";
+            //cout << "Vamos rodar a direita!\n";
             raiz = rotaciona(raiz->esq, 'd');
+            n_rotacoes++;
         }
     }
     return raiz;
-}
+}*/
 
 void TREAP::print_in_order(tree_heap * raiz) {
     if(raiz != nullptr) {
@@ -260,27 +321,27 @@ void TREAP::print_pre_order(tree_heap * raiz) {
     }
 }
 
-tree_heap * TREAP::rotaciona(tree_heap * p, char lado) {
-    cout << p->val.key << " rodando\n";
+/*tree_heap * TREAP::rotaciona(tree_heap * p, char lado) {
+    //cout << p->val.key << " rodando\n";
     if(lado == 'd') {
-        cout << "Girando para direita\n";
+        //cout << "Girando para direita\n";
         tree_heap * aux = p->pai;
-        cout << "Pai do p: " << aux->val.key << endl;
+        //cout << "Pai do p: " << aux->val.key << endl;
         p->pai->esq = p->dir;
         p->dir = p->pai;
         p->pai = p->pai->pai;
         aux->pai = p;
         return p;
     }
-    cout << "Girando para esquerda!\n";
+    //cout << "Girando para esquerda!\n";
     tree_heap * aux = p->pai;
-    cout << "Pai do p: " << aux->val.key << endl;
+    //cout << "Pai do p: " << aux->val.key << endl;
     p->pai->dir = p->esq;
     p->esq = p->pai;
     p->pai = p->pai->pai;
     aux->pai = p;
     return p;
-}
+}*/
 
 
 // FUNÇÕES DE RUBRO NEGRAS //
@@ -289,6 +350,7 @@ ARN::ARN() {
     arvore = nullptr;
     n_comp_busca = 0;
     n_comp_insercao = 0;
+    n_rotacoes = 0;
     altura = 0;
 }
 
@@ -329,7 +391,8 @@ arn * ARN::put(Item item, arn * raiz) {
         raiz->val = item;
         return raiz;
     }
-    int comp = strcmp(item.key, raiz->val.key);
+    long long int comp = strcmp(item.key, raiz->val.key);
+    n_comp_insercao++;
     if(comp == 0) {
         raiz->val.repet++;
     }
@@ -342,9 +405,11 @@ arn * ARN::put(Item item, arn * raiz) {
 
     if(eh_vermelho(raiz->dir) && !eh_vermelho(raiz->esq)) {
         raiz = rotaciona(raiz, 'e');
+        n_rotacoes++;
     }
     if(eh_vermelho(raiz->esq) && eh_vermelho(raiz->esq->esq)) {
         raiz = rotaciona(raiz, 'd');
+        n_rotacoes++;
     }
     if(eh_vermelho(raiz->esq) && eh_vermelho(raiz->dir)) {
         raiz->cor = 'R';
@@ -379,7 +444,7 @@ void ARN::print_pre_order(arn * raiz) {
         raiz->pai = ant;
         return raiz;
     }
-    int comp = strcmp(item.key, raiz->val.key);
+    long long int comp = strcmp(item.key, raiz->val.key);
     n_comp_insercao++;
     if(comp == 0) {
         raiz->val.repet++;
@@ -411,7 +476,7 @@ arn * ARN::corrige_cor(arn * raiz) {
             cout << "Não tem avô - Pai fica black\n";
             // Sem avô;
             // Pai é a raiz;
-            // Pinta o pai de preto e pronto!
+            // Plong long inta o pai de preto e pronto!
             pai->cor = 'B';
             return pai;
         }
@@ -423,7 +488,7 @@ arn * ARN::corrige_cor(arn * raiz) {
             cout << "Tio é vazio ou black, vamos rodar a direita" << endl;
             // Pai é o tio direito;
             // Preciso decobrir de qual lado está o filho;
-            int aux = strcmp(raiz->val.key, pai->esq->val.key);
+            long long int aux = strcmp(raiz->val.key, pai->esq->val.key);
             if(aux == 0) {
                 // É filho esquerdo, precisa de duas rotações;
                 pai = rotaciona(raiz, 'd');
