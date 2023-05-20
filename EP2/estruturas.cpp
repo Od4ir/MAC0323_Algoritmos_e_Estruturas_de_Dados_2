@@ -30,7 +30,6 @@ long long int verifica_vogal(char atu) {
     }
     return 1;
 }
-long long int letras[26];
 
 Item::Item(char * chave) {
     for(long long int i = 0; i < 5; i++) vogais[i] = 0;
@@ -189,7 +188,6 @@ void ABB::print_pre_order(abb * raiz) {
     }
 }
 
-
 abb * ABB::busca(char * key, abb * raiz) {
     if(raiz == nullptr) {
         return nullptr;
@@ -266,45 +264,6 @@ tree_heap * TREAP::rotaciona(tree_heap * p, char lado) {
     return x;
 }
 
-/*tree_heap * TREAP::put(Item item, tree_heap * raiz, tree_heap * ant, long long int n) {
-    if(raiz == nullptr) {
-        raiz = (tree_heap *) malloc(sizeof(tree_heap));
-        raiz->prioridade = rand()%valor_max_prioridade;
-        //cout << "Prioridade do novo elemento: " << raiz->prioridade << endl;
-        raiz->dir = nullptr;
-        raiz->esq = nullptr;
-        raiz->pai = ant;
-        raiz->val = item;
-        altura = max(altura, n);
-        return raiz;
-    }
-    long long int comp = strcmp(item.key, raiz->val.key);
-    n_comp_insercao++;
-    if(comp == 0) {
-        raiz->val.repet++;
-    }
-    else if(comp > 0) {
-        raiz->dir = put(item, raiz->dir, raiz, n + 1);
-        if(raiz->dir->prioridade > raiz->prioridade) {
-            // Rotaciona;
-            //cout << "Vamos rodar a esquerda!\n";
-            raiz = rotaciona(raiz->dir, 'e');
-            n_rotacoes++;
-
-        }
-    }
-    else {
-        raiz->esq = put(item, raiz->esq, raiz, n + 1);
-        if(raiz->esq->prioridade > raiz->prioridade) {
-            // Rotaciona;
-            //cout << "Vamos rodar a direita!\n";
-            raiz = rotaciona(raiz->esq, 'd');
-            n_rotacoes++;
-        }
-    }
-    return raiz;
-}*/
-
 void TREAP::print_in_order(tree_heap * raiz) {
     if(raiz != nullptr) {
         print_in_order(raiz->esq);
@@ -320,28 +279,6 @@ void TREAP::print_pre_order(tree_heap * raiz) {
         print_pre_order(raiz->dir);
     }
 }
-
-/*tree_heap * TREAP::rotaciona(tree_heap * p, char lado) {
-    //cout << p->val.key << " rodando\n";
-    if(lado == 'd') {
-        //cout << "Girando para direita\n";
-        tree_heap * aux = p->pai;
-        //cout << "Pai do p: " << aux->val.key << endl;
-        p->pai->esq = p->dir;
-        p->dir = p->pai;
-        p->pai = p->pai->pai;
-        aux->pai = p;
-        return p;
-    }
-    //cout << "Girando para esquerda!\n";
-    tree_heap * aux = p->pai;
-    //cout << "Pai do p: " << aux->val.key << endl;
-    p->pai->dir = p->esq;
-    p->esq = p->pai;
-    p->pai = p->pai->pai;
-    aux->pai = p;
-    return p;
-}*/
 
 
 // FUNÇÕES DE RUBRO NEGRAS //
@@ -434,114 +371,3 @@ void ARN::print_pre_order(arn * raiz) {
         print_pre_order(raiz->dir);
     }
 } 
-
-/*arn * ARN::put(Item item, arn * raiz, arn * ant) {
-    if(raiz == nullptr) {
-        raiz = (arn *) malloc(sizeof(arn));
-        raiz->val = item;
-        raiz->cor = 'V';
-        raiz->dir = raiz->esq = nullptr;
-        raiz->pai = ant;
-        return raiz;
-    }
-    long long int comp = strcmp(item.key, raiz->val.key);
-    n_comp_insercao++;
-    if(comp == 0) {
-        raiz->val.repet++;
-    }
-    else if(comp > 0) { // A palavra do item é maior que a palavra da raiz.val;
-        raiz->dir = put(item, raiz->dir, raiz);
-        raiz = corrige_cor(raiz->dir);
-        // Verifica a cor e corrige;
-    }
-    else {
-        raiz->esq = put(item, raiz->esq, raiz);
-        raiz = corrige_cor(raiz->esq);
-        // Verifica a cor e corrige;
-    }
-    return raiz;
-}
-
-arn * ARN::corrige_cor(arn * raiz) {
-    if(raiz->pai == nullptr || raiz->pai->cor == 'B') {
-        cout << "É raiz ou pai é black!\n";
-        return raiz;
-    }
-    arn * pai = raiz->pai;
-    arn * avo = pai->pai;
-    if(pai->cor == raiz->cor) {
-        cout << "Pai vermelho e filho vermelho\n";
-        // Pai vermelho e filho vermelho;
-        if(avo == nullptr) {
-            cout << "Não tem avô - Pai fica black\n";
-            // Sem avô;
-            // Pai é a raiz;
-            // Plong long inta o pai de preto e pronto!
-            pai->cor = 'B';
-            return pai;
-        }
-        cout << "Tem avô!\n";
-        arn * tio_dir = avo->dir;
-        arn * tio_esq = avo->esq;
-        // Um desses tios é o pai;
-        if(tio_esq == nullptr || tio_esq->cor == 'B') { // Sem tio esquerdo ou com tio esquerdo preto;
-            cout << "Tio é vazio ou black, vamos rodar a direita" << endl;
-            // Pai é o tio direito;
-            // Preciso decobrir de qual lado está o filho;
-            long long int aux = strcmp(raiz->val.key, pai->esq->val.key);
-            if(aux == 0) {
-                // É filho esquerdo, precisa de duas rotações;
-                pai = rotaciona(raiz, 'd');
-                raiz = pai->dir;
-
-
-            }
-            else {
-                // É filho direito, precisa apenas de uma rotação;
-            }
-
-            // Roda a direita;
-        }
-        if(tio_dir == nullptr || tio_dir->cor == 'B') { // Sem tio direito ou com tio direito preto;
-            // Roda a esquerda;
-        }
-
-        // Se não caiu em nenhum desses casos, então o tio é vermelho;
-        // Trocamos a cor do pai, do tio e do avô;
-        tio_esq->cor = tio_dir->cor = 'B';
-        avo->cor = 'R';
-
-        // Precisa corrigir a partir do avô;
-        avo = corrige_cor(avo);
-    }
-    return raiz;
-} 
-
-
-
-arn * ARN::rotaciona(arn * p, char lado) {
-    if(lado == 'd') {
-        cout << "Rotaciona a direita!\n";
-        arn * pai = p->pai;
-        char aux = pai->cor;
-        pai->cor = p->cor;
-        p->cor = aux;
-        pai->esq = p->dir;
-        p->dir = pai;
-        p->pai = pai->pai;
-        pai->pai = p;
-        return p;
-    }
-    cout << "Rotaciona a esquerda!\n";
-    arn * pai = p->pai;
-    char aux = pai->cor;
-    pai->cor = p->cor;
-    p->cor = aux;
-
-    pai->dir = p->esq;
-    p->esq = pai;
-    p->pai = pai->pai;
-    pai->pai = p;
-    return p;
-
-} */
