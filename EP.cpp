@@ -6,6 +6,8 @@
 #include <vector>
 using namespace std;
 
+int est;
+
 vector<char *> f_words;        // Vetor para palavras mais frequentes;
 long long int max_freq = 1;       // Valor para determinar qual foi a maior frequẽncia;
 
@@ -16,6 +18,10 @@ vector<char *> srv_words;      // Vetor para MENORES palavras com mais vogais se
 long long int max_vog = 0;        // Valor para maior número de vogais sem repetição entre todas as palavras;
 long long int min_tam_srv = 101;  // Valor para menor tamanho de palavra com vog = max_vog;
 
+vector<char *> max_words;
+long long int max_size = 1;
+
+int est;
 
 bool compara_caracter(char x, char y) {
     int a = x;
@@ -34,26 +40,19 @@ bool compara_caracter(char x, char y) {
 }
 
 bool verifica_repeticoes(Item item) {
-    cout << "Verificando repetições!\n";
     for(int i = 0; i < item.tam; i++) {
         for(int j = i + 1; j < item.tam; j++) {
             if(compara_caracter(item.key[i], item.key[j])) {
-                cout << item.key << " tem repetição!\n";
                 return false;
             }
         }
     }
-    cout << item.key << " não tem repetição!\n";
     return true;
 }
 
 void insere_nos_vetores(Item item) {
-    cout << "Vamos inserir nos vetores!\n";
-    cout << item.vog << endl;
-    cout << max_vog << endl;
     if(item.vog > max_vog) {
         if(!srv_words.empty()) {
-            cout << "Não estava vazio!\n";
             srv_words.clear();
         }
         srv_words.push_back(item.key);
@@ -66,12 +65,9 @@ void insere_nos_vetores(Item item) {
         }
         if(item.tam < min_tam_srv) {
             if(!srv_words.empty()) { 
-                cout << "Estava não vazio!\n";
                 srv_words.clear();
             }
-            cout << "Hieee\n";
             srv_words.push_back(item.key);
-            cout << "Ueh\n";
             min_tam_srv = item.tam;
         }
     }
@@ -88,6 +84,15 @@ void insere_nos_vetores(Item item) {
             }
         }
     }
+
+    if(item.tam == max_size) {
+        max_words.push_back(item.key);
+    }
+    else if(item.tam > max_size) {
+        max_words.clear();
+        max_size = item.tam;
+        max_words.push_back(item.key);
+    }
 }
 
 void mais_repetida(Item item) {
@@ -101,6 +106,7 @@ void mais_repetida(Item item) {
     }
 }
 
+*/
 int montagem() {
     char E[10];
     cout << "Escolha a estrutura a ser utilizada: \n";
@@ -141,48 +147,47 @@ void coloca_na_estrutura(int est) {
     char aux_linha[10000];
     char * word;
 
+    VO vetor_ordenado(N);
+    ABB arvore_abb;
+    TREAP treaps(N);
+    ARN arvore_rn;
+
     if(est == 1) {  
         cout << "Vetor Dinâmico Ordenado escolhido!\n";
-        VO vetor_ordenado(N);
-
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
             cin.getline (aux_linha, 10000);
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
-                cout << word << endl;
                 Item item(word);
-                vetor_ordenado.add(item);
+                vetor_ordenado.add(word, item);
                 word = strtok(nullptr, " .,?!");
                 cont++;
             }
         }
         // --------------------------------------------
-        
         vetor_ordenado.printa();
     }
     else if(est == 2) {
         cout << "Árvore de Busca Binária escolhida!\n";
-        ABB arvo;
-        
+
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
             cin.getline (aux_linha, 10000);
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
                 Item item(word);
-                arvo.add(item);
+                arvore_abb.add(word, item);
                 word = strtok(nullptr, " .,?!");
                 cont++;
             }
         }
         // --------------------------------------------
-        arvo.print_in_order(arvo.arvore);
+        arvore_abb.print_pre_order(arvore_abb.arvore);
 
     }
     else if(est == 3) {
         cout << "Treaps escolhida!\n";
-        TREAP arv(N);
 
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
@@ -190,13 +195,13 @@ void coloca_na_estrutura(int est) {
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
                 Item item(word);
-                arv.add(item);
+                treaps.add(word, item);
                 word = strtok(nullptr, " .,?!");
                 cont++;
             }
         }
         // --------------------------------------------
-        arv.print_in_order(arv.treap);
+        treaps.print_pre_order(treaps.treap);
     }
     else if(est == 4) {
         cout << "Árvores 2-3 escolhida!\n";
@@ -216,7 +221,6 @@ void coloca_na_estrutura(int est) {
     }
     else { 
         cout << "Árvores Rubro-Negras\n";
-        ARN arv;
 
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
@@ -224,36 +228,106 @@ void coloca_na_estrutura(int est) {
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
                 Item item(word);
-                arv.add(item);
+                arvore_rn.add(word, item);
                 word = strtok(nullptr, " .,?!");
                 cont++;
             }
         }
         // --------------------------------------------
+        arvore_rn.print_pre_order(arvore_rn.arvore);
     }
 
-    cout << "Maiores palavras sem repetição de letras: \n";
-    cout << "Tamanho máximo: " << max_tam_sr << endl;
-    for(int i = 0; i < sr_words.size(); i++) {
-        cout << i << ": " << sr_words[i] << endl;
-    }
-    cout << endl;
+    /*char querie[100];
+    char aux_word[100];
+    vector<int> consultas;
+    cout << "Digite o número de consultas que deseja fazer: " << endl;
+    int n_queries; cin >> n_queries;
+    cout << " F - Palavras mais frequente; " << endl;
+    cout << " O 'termo' - Quantas vezes 'termo' aparece no texto;" << endl;
+    cout << " L - Palavras mais longas;" << endl;
+    cout << " SR - Maiores palavras sem repetição;" << endl;
+    cout << " VD - Menores palavras com mais vogais sem repetição;" << endl;
 
-    cout << "Menores palavras sem vogais repetidas: \n";
-    cout << "Número de Vogais: " << max_vog << endl;
-    for(int i = 0; i < srv_words.size(); i++) {
-        cout << i << ": " << srv_words[i] << endl;
-    }
-    cout << endl;
+    cout << endl << "Digite as consultas: \n" << endl;
 
-    cout << "Palavras mais frequentes: \n";
-    cout << "Frequência: " << max_freq << endl;
-    for(int i = 0; i < f_words.size(); i++) {
-        cout << i << ": " << f_words[i] << endl;
+    for(int i = 0; i < n_queries; i++) {
+        cin >> querie;
+
+        if(strcmp(querie, "F") == 0) {
+            consultas.push_back(1);
+        }
+        else if(querie[0] == 'O') {
+            for(int k = 2; k < strlen(querie); k++) {
+                aux_word[k - 2] = querie[k];
+            }
+            consultas.push_back(2);
+        }
+        else if(strcmp(querie, "L") == 0) {
+            consultas.push_back(3);
+        }
+        else if(strcmp(querie, "SR") == 0) {
+            consultas.push_back(4);
+        }
+        else {
+            consultas.push_back(5);
+        }
     }
+
+    for(int i = 0; i < n_queries; i++) {
+        if(consultas[i] == 1) {
+            cout << "Palavras mais frequentes: \n";
+            cout << "Frequência: " << max_freq << endl;
+            for(int j = 0; j < f_words.size(); j++) {
+                cout << j + 1 << ": " << f_words[j] << endl;
+            }
+        }
+        else if(consultas[i] == 2) {
+            cout << "Buscando " << aux_word << endl;
+            if(est == 1) {
+                vetor_ordenado.busca(aux_word);
+            }
+            else if(est == 2) {
+            }
+            else if(est == 3) {
+                
+            }
+            else if(est == 4) {
+
+            }
+            else {
+
+            }
+        }
+        else if(consultas[i] == 3) {
+            cout << "Maiores palavras sem repetição de letras: \n";
+            cout << "Tamanho máximo: " << max_tam_sr << endl;
+            for(int j = 0; j < sr_words.size(); j++) {
+                cout << j + 1 << ": " << sr_words[j] << endl;
+            }
+            cout << endl;
+        }
+        else if(consultas[i] == 4) {
+            cout << "Palavras mais longas: \n";
+            cout << "Tamanho máximo: " << max_size << endl;
+            for(int j = 0; j < max_words.size(); j++) {
+                cout << j + 1 << ": " << max_words[j] << endl;
+            }
+            cout << endl;
+        }
+        else {
+            cout << "Menores palavras sem vogais repetidas: \n";
+            cout << "Número de Vogais: " << max_vog << endl;
+            for(int j = 0; j < srv_words.size(); j++) {
+                cout << j << ": " << srv_words[j] << endl;
+            }
+            cout << endl;
+        }
+    }*/
 } 
 
 int main() {
-    coloca_na_estrutura(montagem());
+    est = montagem();
+    coloca_na_estrutura(est);
+    cout << "-- FIM DO PROGRAMA -- " << endl;
     return 0;
 }
