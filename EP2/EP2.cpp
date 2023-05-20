@@ -51,8 +51,7 @@ void insere_nos_vetores(Item item) {
     cout << "Vamos inserir nos vetores!\n";
     cout << item.vog << endl;
     cout << max_vog << endl;
-    srv_words.push_back(item.key);
-    /*if(item.vog > max_vog) {
+    if(item.vog > max_vog) {
         if(!srv_words.empty()) {
             cout << "Não estava vazio!\n";
             srv_words.clear();
@@ -88,7 +87,7 @@ void insere_nos_vetores(Item item) {
                 sr_words.push_back(item.key);
             }
         }
-    }*/
+    }
 }
 
 void mais_repetida(Item item) {
@@ -153,8 +152,6 @@ void coloca_na_estrutura(int est) {
             while(word != nullptr && cont < N) {
                 cout << word << endl;
                 Item item(word);
-                //verifica_repeticoes(item);
-                insere_nos_vetores(item);
                 vetor_ordenado.add(item);
                 word = strtok(nullptr, " .,?!");
                 cont++;
@@ -167,6 +164,7 @@ void coloca_na_estrutura(int est) {
     else if(est == 2) {
         cout << "Árvore de Busca Binária escolhida!\n";
         ABB arvo;
+        
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
             cin.getline (aux_linha, 10000);
@@ -174,26 +172,12 @@ void coloca_na_estrutura(int est) {
             while(word != nullptr && cont < N) {
                 Item item(word);
                 arvo.add(item);
-                //arvo.arvore = arvo.add(item, arvo.arvore, 0);
                 word = strtok(nullptr, " .,?!");
                 cont++;
             }
         }
         // --------------------------------------------
         arvo.print_in_order(arvo.arvore);
-
-        char busc[1000];
-        cin >> busc;
-        abb * b = arvo.busca(busc, arvo.arvore);
-        if(b == nullptr) {
-            cout << "Não há!\n";
-        }
-        else {
-            cout << b->val.key << " | " << b->val.repet << endl;
-        }
-        cout << arvo.n_comp_insercao << " comparações na inserção\n";
-        cout << arvo.n_comp_busca << " comparações na busca\n";
-        cout << arvo.altura << " altura da arvore\n";
 
     }
     else if(est == 3) {
@@ -207,11 +191,7 @@ void coloca_na_estrutura(int est) {
             while(word != nullptr && cont < N) {
                 Item item(word);
                 arv.add(item);
-                //arv.treap = arv.add(item, arv.treap, arv.treap, 0, 'x');
                 word = strtok(nullptr, " .,?!");
-                cout << "\n\n ----- Árvore Atual: ----- \n";
-                arv.print_pre_order(arv.treap);
-                cout << endl;
                 cont++;
             }
         }
@@ -247,19 +227,33 @@ void coloca_na_estrutura(int est) {
                 arv.add(item);
                 word = strtok(nullptr, " .,?!");
                 cont++;
-                cout << "------ Árvore Atual: -------\n";
-                arv.print_pre_order(arv.arvore);
             }
         }
         // --------------------------------------------
-        cout << endl << "Árvore FINAL: " << endl;
-        arv.print_in_order(arv.arvore);
+    }
+
+    cout << "Maiores palavras sem repetição de letras: \n";
+    cout << "Tamanho máximo: " << max_tam_sr << endl;
+    for(int i = 0; i < sr_words.size(); i++) {
+        cout << i << ": " << sr_words[i] << endl;
+    }
+    cout << endl;
+
+    cout << "Menores palavras sem vogais repetidas: \n";
+    cout << "Número de Vogais: " << max_vog << endl;
+    for(int i = 0; i < srv_words.size(); i++) {
+        cout << i << ": " << srv_words[i] << endl;
+    }
+    cout << endl;
+
+    cout << "Palavras mais frequentes: \n";
+    cout << "Frequência: " << max_freq << endl;
+    for(int i = 0; i < f_words.size(); i++) {
+        cout << i << ": " << f_words[i] << endl;
     }
 } 
 
 int main() {
-    vector <int> X(10, 0);
-    cout << X[0] << endl;
     coloca_na_estrutura(montagem());
     return 0;
 }

@@ -77,7 +77,9 @@ void VO::add(Item item) {
         n_comp_insercao++;
         if(comp == 0) {
             // palavra do item é igual a palavra so vetor[meio];
+
             vetor[meio].repet++;
+            mais_repetida(vetor[meio]);
             colocado = true;
             
         }
@@ -100,6 +102,7 @@ void VO::add(Item item) {
         }
         fim++;
         vetor[start] = item;
+        insere_nos_vetores(item);
     }
 }
 
@@ -159,12 +162,14 @@ abb * ABB::put(Item item, abb * raiz, long long int n) {
         raiz->val = item;
         altura = max(altura, n);
         raiz->dir = raiz->esq = nullptr;
+        insere_nos_vetores(item);
         return raiz;
     }
     long long int comp = strcmp(item.key, raiz->val.key);
     n_comp_insercao++;
     if(comp == 0) {
         raiz->val.repet++;
+        mais_repetida(raiz->val);
     }
     else if(comp > 0) { // A palavra do item é maior que a palavra da raiz.val;
         raiz->dir = put(item, raiz->dir, n + 1);
@@ -228,12 +233,14 @@ tree_heap * TREAP::put(Item item, tree_heap * raiz) {
         raiz->esq = raiz->dir = nullptr;
         raiz->prioridade = rand() % valor_max_prioridade;
         raiz->val = item;
+        insere_nos_vetores(item);
         return raiz;
     }
     long long int comp = strcmp(item.key, raiz->val.key);
     n_comp_insercao++;
     if(comp == 0) {
         raiz->val.repet++;
+        mais_repetida(raiz->val);
     }
     else if(comp > 0){
         raiz->dir = put(item, raiz->dir);
@@ -329,12 +336,14 @@ arn * ARN::put(Item item, arn * raiz) {
         raiz->cor = 'R';
         raiz->esq = raiz->dir = nullptr;
         raiz->val = item;
+        insere_nos_vetores(item);
         return raiz;
     }
     long long int comp = strcmp(item.key, raiz->val.key);
     n_comp_insercao++;
     if(comp == 0) {
         raiz->val.repet++;
+        mais_repetida(raiz->val);
     }
     else if(comp > 0){
         raiz->dir = put(item, raiz->dir);
