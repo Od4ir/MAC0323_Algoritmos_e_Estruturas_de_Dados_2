@@ -6,6 +6,7 @@
 
 using namespace std;
 
+
 // FUNÇÕES ITEM //
 
 long long int vogais[5];
@@ -84,7 +85,7 @@ void VO::add(Key key, Item val) {
             // palavra do item é igual a palavra so vetor[meio];
 
             vetor[meio].val.repet++;
-            //mais_repetida(vetor[meio].);
+            mais_repetida(vetor[meio].key, vetor[meio].val);
             colocado = true;
             
         }
@@ -109,8 +110,8 @@ void VO::add(Key key, Item val) {
         vetor[start].key = (Key) malloc(sizeof(char) * strlen(key));
         strcpy(vetor[start].key, key);
         vetor[start].val = val;
-        //mais_repetida(item);
-        //insere_nos_vetores(item);
+        mais_repetida(vetor[start].key, val);
+        insere_nos_vetores(vetor[start].key, val);
     }
 }
 
@@ -160,6 +161,9 @@ void VO::printa() {
     }
 }
 
+
+
+
 // FUNÇÕES ÁRVORE DE BUSCA BINÁRIA //
 
 ABB::ABB() {
@@ -181,15 +185,15 @@ abb * ABB::put(Key key, Item val, abb * raiz, long long int n) {
         strcpy(raiz->key, key);
         altura = max(altura, n);
         raiz->dir = raiz->esq = nullptr;
-        //insere_nos_vetores(item);
-        //mais_repetida(item);
+        insere_nos_vetores(raiz->key, val);
+        mais_repetida(raiz->key, val);
         return raiz;
     }
     long long int comp = strcmp(key, raiz->key);
     n_comp_insercao++;
     if(comp == 0) {
         raiz->val.repet++;
-        //mais_repetida(raiz->val);
+        mais_repetida(raiz->key, raiz->val);
     }
     else if(comp > 0) { // A palavra do item é maior que a palavra da raiz.val;
         raiz->dir = put(key, val, raiz->dir, n + 1);
@@ -242,6 +246,8 @@ abb * ABB::busca_aux(Key key, abb * raiz) {
 }
 
 
+
+
 // FUNÇÕES TREAPS //
 
 TREAP::TREAP(long long int n) {
@@ -265,15 +271,15 @@ tree_heap * TREAP::put(Key key, Item val, tree_heap * raiz) {
         raiz->key = (Key) malloc(sizeof(char) * strlen(key));
         strcpy(raiz->key, key);
         raiz->val = val;
-        //insere_nos_vetores(item);
-        //mais_repetida(item);
+        insere_nos_vetores(raiz->key, val);
+        mais_repetida(raiz->key, val);
         return raiz;
     }
     long long int comp = strcmp(key, raiz->key);
     n_comp_insercao++;
     if(comp == 0) {
         raiz->val.repet++;
-        //mais_repetida(raiz->val);
+        mais_repetida(raiz->key, raiz->val);
     }
     else if(comp > 0){
         raiz->dir = put(key, val, raiz->dir);
@@ -347,6 +353,8 @@ void TREAP::print_pre_order(tree_heap * raiz) {
     }
 }
 
+
+
 // FUNÇÕES ÁRVORES RUBRO NEGRAS //
 
 ARN::ARN() {
@@ -395,15 +403,15 @@ arn * ARN::put(Key key, Item val, arn * raiz) {
         raiz->key = (Key) malloc(sizeof(char) * strlen(key));
         strcpy(raiz->key, key);
 
-        //insere_nos_vetores(item);
-        //mais_repetida(item);
+        insere_nos_vetores(raiz->key, val);
+        mais_repetida(raiz->key, val);
         return raiz;
     }
     long long int comp = strcmp(key, raiz->key);
     n_comp_insercao++;
     if(comp == 0) {
         raiz->val.repet++;
-        //mais_repetida(raiz->val);
+        mais_repetida(raiz->key, raiz->val);
     }
     else if(comp > 0){
         raiz->dir = put(key, val, raiz->dir);

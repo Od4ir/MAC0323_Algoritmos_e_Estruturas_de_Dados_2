@@ -1,10 +1,10 @@
 #include <cstdlib>
 #include <cstring>
-
-
-// ITEM -- OK //
+#include <vector>
 
 typedef char * Key;
+
+// FUNÇÕES ITEM // 
 
 class Item {
     public:
@@ -14,11 +14,12 @@ class Item {
         long long int repet;
 };
 
-
-bool verifica_repeticoes(Item item);
-void insere_nos_vetores(Item item);
-void mais_repetida(Item item);
+bool compara_caracter(char x, char y);
+bool verifica_repeticoes(Key key);
+void insere_nos_vetores(Key key, Item item);
+void mais_repetida(Key key, Item item);
 long long int verifica_vogal(char atu);
+
 
 // VETOR ORDENADO DINÃMICO -- OK //
 
@@ -75,7 +76,7 @@ class ABB {
         abb * busca_aux(Key key, abb * raiz);
 };
 
-// TREAPS //
+// TREAPS - OK //
 
 typedef struct cel_treap {
     Item val;
@@ -106,7 +107,7 @@ class TREAP {
 };
 
 
-// ÁRVORES RUBRO NEGRAS //
+// ÁRVORES RUBRO NEGRAS - OK //
 
 typedef struct cel_arn {
     Item val;
@@ -134,3 +135,6 @@ class ARN {
         Item value(Key key);
         arn * busca(Key key, arn * raiz);
 };
+
+
+// ÁRVORES 2-3 BALANCEADAS // 

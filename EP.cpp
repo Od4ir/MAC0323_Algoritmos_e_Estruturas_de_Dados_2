@@ -6,8 +6,6 @@
 #include <vector>
 using namespace std;
 
-int est;
-
 vector<char *> f_words;        // Vetor para palavras mais frequentes;
 long long int max_freq = 1;       // Valor para determinar qual foi a maior frequẽncia;
 
@@ -20,6 +18,8 @@ long long int min_tam_srv = 101;  // Valor para menor tamanho de palavra com vog
 
 vector<char *> max_words;
 long long int max_size = 1;
+
+vector<char *> www;
 
 int est;
 
@@ -39,10 +39,10 @@ bool compara_caracter(char x, char y) {
     return (a == b);
 }
 
-bool verifica_repeticoes(Item item) {
-    for(int i = 0; i < item.tam; i++) {
-        for(int j = i + 1; j < item.tam; j++) {
-            if(compara_caracter(item.key[i], item.key[j])) {
+bool verifica_repeticoes(Key key) {
+    for(int i = 0; i < strlen(key); i++) {
+        for(int j = i + 1; j < strlen(key); j++) {
+            if(compara_caracter(key[i], key[j])) {
                 return false;
             }
         }
@@ -50,64 +50,65 @@ bool verifica_repeticoes(Item item) {
     return true;
 }
 
-void insere_nos_vetores(Item item) {
+void insere_nos_vetores(Key key, Item item) {
     if(item.vog > max_vog) {
         if(!srv_words.empty()) {
             srv_words.clear();
         }
-        srv_words.push_back(item.key);
+        srv_words.push_back(key);
         max_vog = item.vog;
         min_tam_srv = item.tam;
     }
     else if(item.vog == max_vog) {
         if(item.tam == min_tam_srv) {
-            srv_words.push_back(item.key);
+            srv_words.push_back(key);
         }
         if(item.tam < min_tam_srv) {
             if(!srv_words.empty()) { 
                 srv_words.clear();
             }
-            srv_words.push_back(item.key);
+            srv_words.push_back(key);
             min_tam_srv = item.tam;
         }
     }
 
     if(item.vog != 0) {
-        if(verifica_repeticoes(item)) {
+        if(verifica_repeticoes(key)) {
             if(item.tam == max_tam_sr) {
-                sr_words.push_back(item.key);
+                sr_words.push_back(key);
             }
             else if(item.tam > max_tam_sr) {
                 max_tam_sr = item.tam;
                 sr_words.clear();
-                sr_words.push_back(item.key);
+                sr_words.push_back(key);
             }
         }
     }
 
     if(item.tam == max_size) {
-        max_words.push_back(item.key);
+        max_words.push_back(key);
     }
     else if(item.tam > max_size) {
         max_words.clear();
         max_size = item.tam;
-        max_words.push_back(item.key);
+        max_words.push_back(key);
     }
 }
 
-void mais_repetida(Item item) {
+void mais_repetida(Key key, Item item) {
     if(item.repet == max_freq) {
-        f_words.push_back(item.key);
+        f_words.push_back(key);
     }
     else if(item.repet > max_freq) {
         max_freq = item.repet;
         f_words.clear();
-        f_words.push_back(item.key);
+        f_words.push_back(key);
     }
 }
 
-*/
+
 int montagem() {
+    cout << " --------- Bem Vindx ao EP2 - Od4ir --------- \n\n";
     char E[10];
     cout << "Escolha a estrutura a ser utilizada: \n";
     printf("  [ VO  ] - Vetor Dinâmico Ordenado\n");
@@ -141,7 +142,7 @@ int montagem() {
 }
 
 void coloca_na_estrutura(int est) {
-    cout << "Digite o número de palavras: ";
+    cout << "\nDigite o número de palavras: ";
     long long int N; cin >> N; cout << endl;
     long long int cont = 0;
     char aux_linha[10000];
@@ -152,8 +153,10 @@ void coloca_na_estrutura(int est) {
     TREAP treaps(N);
     ARN arvore_rn;
 
+    cout << "Digite as palavras: ";
+
     if(est == 1) {  
-        cout << "Vetor Dinâmico Ordenado escolhido!\n";
+        //cout << "Vetor Dinâmico Ordenado escolhido!\n";
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
             cin.getline (aux_linha, 10000);
@@ -167,9 +170,12 @@ void coloca_na_estrutura(int est) {
         }
         // --------------------------------------------
         vetor_ordenado.printa();
+
+
+        cout << endl;
     }
     else if(est == 2) {
-        cout << "Árvore de Busca Binária escolhida!\n";
+        //cout << "Árvore de Busca Binária escolhida!\n";
 
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
@@ -187,7 +193,7 @@ void coloca_na_estrutura(int est) {
 
     }
     else if(est == 3) {
-        cout << "Treaps escolhida!\n";
+        //cout << "Treaps escolhida!\n";
 
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
@@ -220,7 +226,7 @@ void coloca_na_estrutura(int est) {
 
     }
     else { 
-        cout << "Árvores Rubro-Negras\n";
+        //cout << "Árvores Rubro-Negras\n";
 
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
@@ -237,29 +243,31 @@ void coloca_na_estrutura(int est) {
         arvore_rn.print_pre_order(arvore_rn.arvore);
     }
 
-    /*char querie[100];
+    char querie[100];
     char aux_word[100];
     vector<int> consultas;
-    cout << "Digite o número de consultas que deseja fazer: " << endl;
+    cout << "Hora das Consultas: \n";
+    cout << " [ F  ] - Palavras mais frequente; " << endl;
+    cout << " [ O  ] 'termo' - Quantas vezes 'termo' aparece no texto;" << endl;
+    cout << " [ L  ]- Palavras mais longas;" << endl;
+    cout << " [ SR ] - Maiores palavras sem repetição;" << endl;
+    cout << " [ VD ] - Menores palavras com mais vogais sem repetição;" << endl;
+
+    cout << "\nDigite o número de consultas que deseja fazer: \n";
+    cout << "   >> ";
     int n_queries; cin >> n_queries;
-    cout << " F - Palavras mais frequente; " << endl;
-    cout << " O 'termo' - Quantas vezes 'termo' aparece no texto;" << endl;
-    cout << " L - Palavras mais longas;" << endl;
-    cout << " SR - Maiores palavras sem repetição;" << endl;
-    cout << " VD - Menores palavras com mais vogais sem repetição;" << endl;
 
     cout << endl << "Digite as consultas: \n" << endl;
 
     for(int i = 0; i < n_queries; i++) {
+        cout << "   >> ";
         cin >> querie;
 
         if(strcmp(querie, "F") == 0) {
             consultas.push_back(1);
         }
         else if(querie[0] == 'O') {
-            for(int k = 2; k < strlen(querie); k++) {
-                aux_word[k - 2] = querie[k];
-            }
+            cin >> aux_word;
             consultas.push_back(2);
         }
         else if(strcmp(querie, "L") == 0) {
@@ -274,6 +282,7 @@ void coloca_na_estrutura(int est) {
     }
 
     for(int i = 0; i < n_queries; i++) {
+        cout << "\n CONSULTA " << i + 1 << "! \n";
         if(consultas[i] == 1) {
             cout << "Palavras mais frequentes: \n";
             cout << "Frequência: " << max_freq << endl;
@@ -284,33 +293,58 @@ void coloca_na_estrutura(int est) {
         else if(consultas[i] == 2) {
             cout << "Buscando " << aux_word << endl;
             if(est == 1) {
-                vetor_ordenado.busca(aux_word);
+                Item item_aux = vetor_ordenado.value(aux_word);
+                if(item_aux.repet == -1) {
+                    cout << "Palavra: " << aux_word << " não está na estrutura!" << endl;
+                }
+                else {
+                    cout << "Número de repetições da palavra " << aux_word << ": " << item_aux.repet << endl;
+                }
             }
             else if(est == 2) {
+                Item item_aux = arvore_abb.value(aux_word);
+                if(item_aux.repet == -1) {
+                    cout << "Palavra: " << aux_word << " não está na estrutura!" << endl;
+                }
+                else {
+                    cout << "Número de repetições da palavra " << aux_word << ": " << item_aux.repet << endl;
+                }
             }
             else if(est == 3) {
-                
+                Item item_aux = treaps.value(aux_word);
+                if(item_aux.repet == -1) {
+                    cout << "Palavra: " << aux_word << " não está na estrutura!" << endl;
+                }
+                else {
+                    cout << "Número de repetições da palavra " << aux_word << ": " << item_aux.repet << endl;
+                }
             }
-            else if(est == 4) {
-
+            else if(est == 5) {
+                Item item_aux = arvore_rn.value(aux_word);
+                if(item_aux.repet == -1) {
+                    cout << "Palavra: " << aux_word << " não está na estrutura!" << endl;
+                }
+                else {
+                    cout << "Número de repetições da palavra " << aux_word << ": " << item_aux.repet << endl;
+                }
             }
             else {
 
             }
         }
         else if(consultas[i] == 3) {
-            cout << "Maiores palavras sem repetição de letras: \n";
+            cout << "Palavras mais longas: \n";
             cout << "Tamanho máximo: " << max_tam_sr << endl;
-            for(int j = 0; j < sr_words.size(); j++) {
-                cout << j + 1 << ": " << sr_words[j] << endl;
+            for(int j = 0; j < max_words.size(); j++) {
+                cout << j + 1 << ": " << max_words[j] << endl;
             }
             cout << endl;
         }
         else if(consultas[i] == 4) {
-            cout << "Palavras mais longas: \n";
-            cout << "Tamanho máximo: " << max_size << endl;
-            for(int j = 0; j < max_words.size(); j++) {
-                cout << j + 1 << ": " << max_words[j] << endl;
+            cout << "Maiores palavras sem repetição de letras: \n";
+            cout << "Tamanho máximo: " << max_tam_sr << endl;
+            for(int j = 0; j < sr_words.size(); j++) {
+                cout << j + 1 << ": " << sr_words[j] << endl;
             }
             cout << endl;
         }
@@ -322,7 +356,7 @@ void coloca_na_estrutura(int est) {
             }
             cout << endl;
         }
-    }*/
+    }
 } 
 
 int main() {
