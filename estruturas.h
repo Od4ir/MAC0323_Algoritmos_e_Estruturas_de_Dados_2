@@ -138,3 +138,32 @@ class ARN {
 
 
 // ÁRVORES 2-3 BALANCEADAS // 
+
+
+typedef struct cel_a23 {
+    cel_a23 * p1;
+    cel_a23 * p2;
+    cel_a23 * p3;
+    Item val1;
+    Item val2;
+    Key key1;
+    Key key2;
+    bool eh_2no;
+} arv23;
+
+class A23 {
+    public:
+        arv23 * arvore;
+
+        A23();
+        void add(Key key, Item val);
+        arv23 * put(Key key, Item val, arv23 * raiz, bool &cresceu);
+        arv23 * insere_2_no_folha(Key key, Item val, arv23 * no);
+        void print_in_order(arv23 * raiz);
+        void print_pre_order(arv23 * raiz);
+        Item value(Key key);
+        arv23 * busca(Key key, arv23 * raiz);
+        // Informa se o nó é folha ou não;
+        bool eh_folha(arv23 * no);
+
+};

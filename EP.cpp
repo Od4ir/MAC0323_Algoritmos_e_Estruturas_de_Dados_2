@@ -72,16 +72,14 @@ void insere_nos_vetores(Key key, Item item) {
         }
     }
 
-    if(item.vog != 0) {
-        if(verifica_repeticoes(key)) {
-            if(item.tam == max_tam_sr) {
-                sr_words.push_back(key);
-            }
-            else if(item.tam > max_tam_sr) {
-                max_tam_sr = item.tam;
-                sr_words.clear();
-                sr_words.push_back(key);
-            }
+    if(verifica_repeticoes(key)) {
+        if(item.tam == max_tam_sr) {
+            sr_words.push_back(key);
+        }
+        else if(item.tam > max_tam_sr) {
+            max_tam_sr = item.tam;
+            sr_words.clear();
+            sr_words.push_back(key);
         }
     }
 
@@ -211,6 +209,7 @@ void coloca_na_estrutura(int est) {
     }
     else if(est == 4) {
         cout << "Árvores 2-3 escolhida!\n";
+        A23 arvore_23;
 
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
@@ -218,10 +217,17 @@ void coloca_na_estrutura(int est) {
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
                 Item item(word);
+                arvore_23.add(word, item);
                 word = strtok(nullptr, " .,?!");
                 cont++;
             }
         }
+
+        cout << "Árvore 2-3 In Order\n";
+        arvore_23.print_in_order(arvore_23.arvore);
+
+        cout << "\nÁrvore 2-3 Pre Order\n";
+        arvore_23.print_pre_order(arvore_23.arvore);
         // --------------------------------------------
 
     }

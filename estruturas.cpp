@@ -476,3 +476,414 @@ void ARN::print_in_order(arn * raiz) {
         print_pre_order(raiz->dir);
     }
 }
+
+
+// FUNÇÕES ÁRVORES 2 3 //
+
+bool cresceu = false;
+
+A23::A23() {
+    arvore = nullptr;
+}
+
+void A23::add(Key key, Item val) {
+    arvore = put(key, val, arvore, cresceu);
+}
+
+bool A23::eh_folha(arv23 * no) {
+    if(no->p1 == nullptr ) {
+        return true;
+    }
+    return false;
+}
+
+arv23 * A23::insere_2_no_folha(Key key, Item val, arv23 * no) {
+    cout << "Chegay aqui\n";
+    int comp = strcmp(key, no->key1);
+    if(comp == 0) {
+        // Se forem iguais, apenas atualiza o valor;
+        no->val1.repet++;
+        mais_repetida(no->key1, no->val1);
+        return no;
+    }
+    if(comp > 0) {
+        cout << "Era maior que " << no->key1 << endl;
+        // Se a nova palavra for maior, coloca a ela no espaço 2;
+        no->key2 = (Key) malloc(sizeof(char) * strlen(key));
+        strcpy(no->key2, key);
+        no->val2 = val;
+        no->eh_2no = false;
+        insere_nos_vetores(no->key2, val);
+        mais_repetida(no->key2, val);
+        return no;
+    }
+    // Se a palavra for menor, troca elas de lugar;
+    cout << "Era menor, trocando de lugar " << no->key1 << endl;
+    char aux[100];
+    strcmp(aux, no->key1);
+    cout << aux << endl;
+    Item val_aux = no->val1;
+
+    no->key1 = (Key) malloc(sizeof(char) * strlen(key));
+    strcpy(no->key1, key);
+    cout << no->key1 << endl;
+    no->val1 = val;
+
+    no->key2 = (Key) malloc(sizeof(char) * strlen(aux));
+    strcpy(no->key2, aux);
+    cout << aux << endl;
+    cout << no->key2 << endl;
+    no->val2 = val_aux;
+
+    insere_nos_vetores(no->key1, val);
+    mais_repetida(no->key1, val);
+
+    no->eh_2no = false;
+    return no;
+}
+
+arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
+    if(raiz == nullptr) {
+        cout << "Primeiro elemento inserido!\n";
+        raiz = (arv23 *) malloc(sizeof(arv23));
+
+        raiz->p1 = nullptr;
+        raiz->p2 = nullptr;
+        raiz->p3 = nullptr;
+
+        raiz->key1 = (Key) malloc(sizeof(char) * strlen(key));
+        strcpy(raiz->key1, key);
+
+        raiz->val1 = val;
+        raiz->eh_2no = true;
+        cresceu = true;
+
+        insere_nos_vetores(raiz->key1, val);
+        mais_repetida(raiz->key1, val);
+        return raiz;
+    }
+    if(eh_folha(raiz)) {
+        cout << " Inserindo em uma folha!\n";
+        if(raiz->eh_2no) {   
+            cout << " Era uma 2 nó!\n";
+            // Inserindo a árvore no lugar correto;
+            int comp = strcmp(key, raiz->key1);
+            if(comp == 0) {
+                // Se forem iguais, apenas atualiza o valor;
+                raiz->val1.repet++;
+                mais_repetida(raiz->key1, raiz->val1);
+                cresceu = false;
+                return raiz;
+            }
+            if(comp > 0) {
+                cout << " Era maior que " << raiz->key1 << endl;
+                // Se a nova palavra for maior, coloca a ela no espaço 2;
+                raiz->key2 = (Key) malloc(sizeof(char) * strlen(key));
+                strcpy(raiz->key2, key);
+                raiz->val2 = val;
+                raiz->eh_2no = false;
+                insere_nos_vetores(raiz->key2, val);
+                mais_repetida(raiz->key2, val);
+                cresceu = false;
+                return raiz;
+            }
+            // Se a palavra for menor, troca elas de lugar;
+            cout << " Era menor, trocando de lugar " << raiz->key1 << endl;
+            Key aux = raiz->key1;
+            //strcmp(aux, raiz->key1);
+            Item val_aux = raiz->val1;
+
+            raiz->key1 = (Key) malloc(sizeof(char) * strlen(key));
+            strcpy(raiz->key1, key);
+            raiz->val1 = val;
+
+            raiz->key2 = (Key) malloc(sizeof(char) * strlen(aux));
+            strcpy(raiz->key2, aux);
+            raiz->val2 = val_aux;
+
+            insere_nos_vetores(raiz->key1, val);
+            mais_repetida(raiz->key1, val);
+
+            raiz->eh_2no = false;
+            cresceu = false;
+            return raiz;
+        }
+        // Folha é 3 nó:
+        cout << "Era 3 nó!\n";
+        arv23 * meio = (arv23 *) malloc(sizeof(arv23));
+        arv23 * maior = (arv23 *) malloc(sizeof(arv23));
+
+        char word_meio[100];
+        char word_maior[100];
+
+        int comp1 = strcmp(key, raiz->key1);
+        int comp2 = strcmp(key, raiz->key2);
+
+        if(comp1 == 0) {
+            cout << " Era igual key 1\n";
+            raiz->val1.repet++;
+            mais_repetida(raiz->key1, raiz->val1);
+            cresceu = false;
+            return raiz;
+        }
+        else if(comp2 == 0) {
+            cout << " Era igual key 2\n";
+            raiz->val2.repet++;
+            mais_repetida(raiz->key2, raiz->val2);
+            cresceu = false;
+            return raiz;
+        }
+        else if(comp1 < 0) { // O key é o menor de todos;
+            cout << " Era menor que todos " << raiz->key1 << " e " << raiz->key2 << endl;
+            strcpy(word_meio, raiz->key1);
+            strcpy(word_maior, raiz->key2);
+
+            meio->val1= raiz->val1;
+            maior->val1 = raiz->val2;
+            raiz->val1 = val;
+
+            raiz->key1 = (Key) malloc(sizeof(char) * strlen(key));
+            strcpy(raiz->key1, key);
+
+            mais_repetida(raiz->key1, val);
+            insere_nos_vetores(raiz->key1, val);
+
+        } // O key é o meio;
+        else if(comp2 < 0) {
+            cout << " Está no meio de todos " << raiz->key1 << " e " << raiz->key2 << endl;
+            strcpy(word_meio, key);
+            strcpy(word_maior, raiz->key2);
+            meio->val1 = val;
+            maior->val1 = raiz->val2;
+
+        }
+        else { // O key é o maior;
+            cout << " Era maior que todos " << raiz->key1 << " e " << raiz->key2 << endl;
+            strcpy(word_maior, key);
+            strcpy(word_meio, raiz->key2);
+
+            meio->val1 = raiz->val2;
+            maior->val1 = val;
+        } 
+
+        raiz->eh_2no = true;
+
+        maior->key1 = (Key) malloc(sizeof(char) * strlen(word_maior));
+        strcpy(maior->key1, word_maior);
+        maior->eh_2no = true;
+
+        maior->p1 = nullptr;
+        maior->p2 = nullptr;
+        maior->p3 = nullptr;
+
+        meio->key1 = (Key) malloc(sizeof(char) * strlen(word_meio));
+        strcpy(meio->key1, word_meio);
+        meio->eh_2no = true;
+
+        meio->p1 = raiz;
+        meio->p2 = maior;
+        meio->p3 = nullptr;
+
+        if(comp2 < 0 && comp1 > 0) {
+            mais_repetida(meio->key1, meio->val1);
+            insere_nos_vetores(meio->key1, meio->val1);
+        }
+        else if(comp1 > 0) {
+            mais_repetida(maior->key1, maior->val1);
+            insere_nos_vetores(maior->key1, maior->val1);
+        }
+
+        cresceu = true;
+        return meio;
+    }
+    if(raiz->eh_2no) {
+        cout << " Inserindo em uma raiz 2 nó!\n";
+        int comp = strcmp(key, raiz->key1);
+        if(comp == 0) {
+            cout << " Era igual\n";
+            raiz->val1.repet++;
+            mais_repetida(raiz->key1, raiz->val1);
+            return raiz;
+        }
+        if(comp < 0) {
+            cout << " Era menor que " << raiz->key1 << endl;
+            arv23 * p = put(key, val, raiz->p1, cresceu);
+            if(!cresceu) { 
+                return raiz;
+            }
+            cout << " Cresceu!\n";
+            char aux_word[100];
+            strcpy(aux_word, raiz->key1);
+            Item item_aux = raiz->val1;
+
+            raiz->key1 = (Key) malloc(sizeof(char) * strlen(p->key1));
+            strcpy(raiz->key1, p->key1);
+            raiz->val1 = p->val1;
+
+            raiz->key2 = (Key) malloc(sizeof(char) * strlen(aux_word));
+            strcpy(raiz->key2, aux_word);
+            raiz->val2 = item_aux;
+
+            raiz->p3 = raiz->p2;
+            raiz->p2 = p->p2;
+            raiz->p1 = p->p1;
+            free(p);
+            cresceu = false;
+            raiz->eh_2no = false;
+            return raiz;
+        }
+        cout << " Era maior que " << raiz->key1 << endl;
+        arv23 * p = put(key, val, raiz->p2, cresceu);
+        if(!cresceu) { 
+            return raiz;
+        }
+        cout << " Cresceu!\n";
+        char aux_word[100];
+        strcpy(aux_word, raiz->key1);
+        Item item_aux = raiz->val1;
+
+        raiz->key2 = (Key) malloc(sizeof(char) * strlen(p->key1));
+        strcpy(raiz->key2, p->key1);
+        raiz->val2 = p->val1;
+
+        raiz->p2 = p->p1;
+        raiz->p3 = p->p2;
+        cresceu = false;
+        raiz->eh_2no = false;
+        return raiz;
+    }
+    // Raiz é 3 nó;
+    int comp1 = strcmp(key, raiz->key1);
+    int comp2 = strcmp(key, raiz->key2);
+
+    if(comp1 == 0) {
+        raiz->val1.repet++;
+        mais_repetida(raiz->key1, raiz->val1);
+        cresceu = false;
+        return raiz;
+    }
+    if(comp2 == 0) {
+        raiz->val2.repet++;
+        mais_repetida(raiz->key2, raiz->val2);
+        cresceu = false;
+        return raiz;
+    }
+    if(comp1 < 0) { // Key é menor que todos;
+        arv23 * p = put(key, val, raiz->p1, cresceu);
+
+        if(!cresceu) {
+            return raiz;
+        }
+        arv23 * novo_meio = (arv23 *) malloc(sizeof(arv23));
+        novo_meio->key1 = (Key) malloc(sizeof(char) * strlen(raiz->key1));
+        strcpy(novo_meio->key1, raiz->key1);
+
+        novo_meio->val1 = raiz->val1;
+        novo_meio->eh_2no = true;
+
+        raiz->p1 = raiz->p2;
+        raiz->p2 = raiz->p3;
+        raiz->p3 = nullptr;
+
+        raiz->eh_2no = true;
+
+        raiz->key1 = (Key) malloc(sizeof(char) * strlen(raiz->key2));
+        strcpy(raiz->key1, raiz->key2);
+
+        raiz->val1 = raiz->val2;
+
+        novo_meio->p1 = p;
+        novo_meio->p2 = raiz;
+        novo_meio->p3 = nullptr;
+
+        cresceu = true;
+
+        return novo_meio;
+    }
+    if(comp2 < 0) { // Key está no meio de todos;
+        arv23 * p = put(key, val, raiz->p2, cresceu);
+
+        if(!cresceu) {
+            return raiz;
+        }
+        arv23 * novo_meio = (arv23 *) malloc(sizeof(arv23));
+
+        novo_meio->key1 = (Key) malloc(sizeof(char) * strlen(p->key1));
+        strcpy(novo_meio->key1, p->key1);
+
+        novo_meio->val1 = p->val1;
+        novo_meio->eh_2no = true;
+
+        raiz->p2 = p->p1;
+
+        raiz->eh_2no = true;
+
+        p->key1 = (Key) malloc(sizeof(char) * strlen(raiz->key2));
+        strcpy(p->key1, raiz->key2);
+
+        p->p1 = p->p2;
+        p->p2 = raiz->p3; 
+        p->p3 = nullptr;
+
+        p->eh_2no = true;
+
+        novo_meio->p1 = raiz;
+        novo_meio->p2 = p;
+        novo_meio->p3 = nullptr;
+
+        cresceu = true;
+
+        return novo_meio;  
+    }
+    arv23 * p = put(key, val, raiz->p3, cresceu);
+    if(!cresceu) {
+        return raiz;
+    }
+    arv23 * novo_meio = (arv23 *) malloc(sizeof(arv23));
+    novo_meio->key1 = (Key) malloc(sizeof(char) * strlen(raiz->key2));
+    strcpy(novo_meio->key1, raiz->key2);
+
+    novo_meio->val1 = raiz->val2;
+    novo_meio->eh_2no = true;
+
+    raiz->p3 = nullptr;
+    raiz->eh_2no = true;
+
+    raiz->val1 = raiz->val2;
+
+    novo_meio->p1 = raiz;
+    novo_meio->p2 = p;
+    novo_meio->p3 = nullptr;
+
+    cresceu = true;
+
+    return novo_meio;
+}
+
+void A23::print_in_order(arv23 * raiz) {
+    if(raiz != nullptr) {
+        print_in_order(raiz->p1);
+        cout << raiz->key1 << endl;
+        print_in_order(raiz->p2);
+
+        if(!raiz->eh_2no) { 
+            cout << raiz->key2 << endl;
+            print_in_order(raiz->p3);
+        }
+    }
+}
+
+void A23::print_pre_order(arv23 * raiz) {
+    if(raiz != nullptr) {
+        cout << raiz->key1 << endl;
+        if(!raiz->eh_2no) {
+            cout << " 2 ";
+            cout << raiz->key2 << endl;
+        }
+        print_pre_order(raiz->p1);
+        print_pre_order(raiz->p2);
+        if(!raiz->eh_2no) {
+            print_pre_order(raiz->p3);
+        }
+    }
+}
