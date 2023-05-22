@@ -58,6 +58,7 @@ void testes() {
     ABB arvore_busca_binaria;
     TREAP treeheap(tam);
     ARN arvorerubronegra;
+    A23 arvore23;
 
     // Contador para inserir o número de palavras indicado:
     long long int cont = 0;
@@ -72,6 +73,7 @@ void testes() {
         arvore_busca_binaria.add(aux_word, item);
         treeheap.add(aux_word, item);
         arvorerubronegra.add(aux_word, item);
+        arvore23.add(aux_word, item);
 
         cont++;
     }

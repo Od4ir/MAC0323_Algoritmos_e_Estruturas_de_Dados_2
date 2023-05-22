@@ -154,6 +154,11 @@ typedef struct cel_a23 {
 class A23 {
     public:
         arv23 * arvore;
+        long long int n_comp_busca;
+        long long int n_comp_insercao;
+        long long int quebras;
+        long long int altura;
+
 
         A23();
         void add(Key key, Item val);

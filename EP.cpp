@@ -150,6 +150,7 @@ void coloca_na_estrutura(int est) {
     ABB arvore_abb;
     TREAP treaps(N);
     ARN arvore_rn;
+    A23 arvore_23;
 
     cout << "Digite as palavras: ";
 
@@ -209,7 +210,6 @@ void coloca_na_estrutura(int est) {
     }
     else if(est == 4) {
         cout << "Árvores 2-3 escolhida!\n";
-        A23 arvore_23;
 
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
@@ -335,7 +335,13 @@ void coloca_na_estrutura(int est) {
                 }
             }
             else {
-
+                Item item_aux = arvore_23.value(aux_word);
+                if(item_aux.repet == -1) {
+                    cout << "Palavra: " << aux_word << " não está na estrutura!" << endl;
+                }
+                else {
+                    cout << "Número de repetições da palavra " << aux_word << ": " << item_aux.repet << endl;
+                }
             }
         }
         else if(consultas[i] == 3) {

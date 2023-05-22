@@ -484,6 +484,11 @@ bool cresceu = false;
 
 A23::A23() {
     arvore = nullptr;
+    n_comp_busca = 0;
+    n_comp_insercao = 0;
+    quebras = 0;
+    altura = 0;
+
 }
 
 void A23::add(Key key, Item val) {
@@ -886,4 +891,38 @@ void A23::print_pre_order(arv23 * raiz) {
             print_pre_order(raiz->p3);
         }
     }
+}
+
+Item A23::value(Key key) {
+    arv23 * aux = busca(key, arvore);
+    if(aux == nullptr) {
+        char a[] = "000";
+        Item item_aux(a);
+        return item_aux;
+    }
+    if(strcmp(key, aux->key1))
+        return aux->val1;
+    return aux->val2;
+}
+
+arv23 * A23::busca(Key key, arv23 * raiz) {
+    if(raiz == nullptr) {
+        return nullptr;
+    }
+    int comp1 = strcmp(key, raiz->key1);
+    if(comp1 == 0) return raiz;
+
+    if(raiz->eh_2no) {
+        int comp2 = strcmp(key, raiz->key2);
+        if(comp2 == 0) {
+            return raiz;
+        }
+        if(comp2 > 0) {
+            return busca(key, raiz->p3);
+        }
+    }
+    if(comp1 < 0) {
+        return busca(key, raiz->p1);
+    }
+    return busca(key, raiz->p2);
 }
