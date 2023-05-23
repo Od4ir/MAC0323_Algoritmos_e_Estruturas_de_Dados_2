@@ -942,10 +942,12 @@ arv23 * A23::busca(Key key, arv23 * raiz) {
         return nullptr;
     }
     int comp1 = strcmp(key, raiz->key1);
+    n_comp_busca++;
     if(comp1 == 0) return raiz;
 
     if(raiz->eh_2no) {
         int comp2 = strcmp(key, raiz->key2);
+        n_comp_busca++;
         if(comp2 == 0) {
             return raiz;
         }
