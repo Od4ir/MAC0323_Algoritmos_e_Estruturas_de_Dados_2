@@ -4,7 +4,7 @@
 
 typedef char * Key;
 
-// FUNÇÕES ITEM // 
+// ITEM // 
 
 class Item {
     public:
@@ -13,6 +13,9 @@ class Item {
         long long int vog;
         long long int repet;
 };
+
+
+// FUNÇÕES AUXILIARES // 
 
 bool compara_caracter(char x, char y);
 bool verifica_repeticoes(Key key);
@@ -138,7 +141,6 @@ class ARN {
 
 
 // ÁRVORES 2-3 BALANCEADAS // 
-
 
 typedef struct cel_a23 {
     cel_a23 * p1;

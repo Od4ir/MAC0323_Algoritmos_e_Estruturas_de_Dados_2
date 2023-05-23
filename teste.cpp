@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+bool promoveu[2] = {false, false};
+
 vector<char *> www;
 
 int main() {

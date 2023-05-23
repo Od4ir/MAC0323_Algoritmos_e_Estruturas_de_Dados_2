@@ -502,7 +502,7 @@ bool A23::eh_folha(arv23 * no) {
     return false;
 }
 
-arv23 * A23::insere_2_no_folha(Key key, Item val, arv23 * no) {
+/*arv23 * A23::insere_2_no_folha(Key key, Item val, arv23 * no) {
     cout << "Chegay aqui\n";
     int comp = strcmp(key, no->key1);
     if(comp == 0) {
@@ -545,7 +545,7 @@ arv23 * A23::insere_2_no_folha(Key key, Item val, arv23 * no) {
 
     no->eh_2no = false;
     return no;
-}
+}*/
 
 arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
     if(raiz == nullptr) {
@@ -567,35 +567,43 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
         mais_repetida(raiz->key1, val);
         return raiz;
     }
-    if(eh_folha(raiz)) {
-        cout << " Inserindo em uma folha!\n";
-        if(raiz->eh_2no) {   
-            cout << " Era uma 2 nó!\n";
-            // Inserindo a árvore no lugar correto;
+    if(eh_folha(raiz)) {  // Estamos em uma folha;
+
+        if(raiz->eh_2no) {   // A folha é 2 nó;
+
+            // Vamos comparar para ver se é maior ou menor;
             int comp = strcmp(key, raiz->key1);
-            if(comp == 0) {
-                // Se forem iguais, apenas atualiza o valor;
+            n_comp_insercao++;
+
+            if(comp == 0) {  // Se forem iguais, apenas atualiza o valor;
+
                 raiz->val1.repet++;
+
+                // Verificando se ela tornou-se uma das palavras mais repetidas;
                 mais_repetida(raiz->key1, raiz->val1);
+
                 cresceu = false;
                 return raiz;
+
             }
-            if(comp > 0) {
-                cout << " Era maior que " << raiz->key1 << endl;
-                // Se a nova palavra for maior, coloca a ela no espaço 2;
+            if(comp > 0) {   // Se a nova palavra for maior, coloca a ela no espaço 2;
+                
                 raiz->key2 = (Key) malloc(sizeof(char) * strlen(key));
                 strcpy(raiz->key2, key);
                 raiz->val2 = val;
                 raiz->eh_2no = false;
+
+                // Inserindo nos vetores para as consultas;
                 insere_nos_vetores(raiz->key2, val);
                 mais_repetida(raiz->key2, val);
+
                 cresceu = false;
                 return raiz;
             }
-            // Se a palavra for menor, troca elas de lugar;
-            cout << " Era menor, trocando de lugar " << raiz->key1 << endl;
+
+            // Se a palavra for menor, trocamos elas de lugar;
+
             Key aux = raiz->key1;
-            //strcmp(aux, raiz->key1);
             Item val_aux = raiz->val1;
 
             raiz->key1 = (Key) malloc(sizeof(char) * strlen(key));
@@ -606,6 +614,7 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
             strcpy(raiz->key2, aux);
             raiz->val2 = val_aux;
 
+            // Inserindo nos vetores para as consultas;
             insere_nos_vetores(raiz->key1, val);
             mais_repetida(raiz->key1, val);
 
@@ -613,33 +622,42 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
             cresceu = false;
             return raiz;
         }
-        // Folha é 3 nó:
-        cout << "Era 3 nó!\n";
+        // Inserindo em uma folha 3 nó;
+
         arv23 * meio = (arv23 *) malloc(sizeof(arv23));
         arv23 * maior = (arv23 *) malloc(sizeof(arv23));
 
         char word_meio[100];
         char word_maior[100];
 
+        // Comparando para decidir onde iremos colocar a nova chave;
+
         int comp1 = strcmp(key, raiz->key1);
         int comp2 = strcmp(key, raiz->key2);
+        n_comp_insercao += 2;
 
-        if(comp1 == 0) {
-            cout << " Era igual key 1\n";
+        if(comp1 == 0) { // Se for a key1, apenas atualiza o valor da key1;
+
             raiz->val1.repet++;
+
+            // Verificando se ela tornou-se uma das palavras mais repetidas;
             mais_repetida(raiz->key1, raiz->val1);
+
             cresceu = false;
             return raiz;
         }
-        else if(comp2 == 0) {
-            cout << " Era igual key 2\n";
+        else if(comp2 == 0) { // Se for igual a key2, apenas atualiza o valor;
+
             raiz->val2.repet++;
+
+            // Verificando se ela tornou-se uma das palavras mais repetidas;
             mais_repetida(raiz->key2, raiz->val2);
+
             cresceu = false;
             return raiz;
         }
         else if(comp1 < 0) { // O key é o menor de todos;
-            cout << " Era menor que todos " << raiz->key1 << " e " << raiz->key2 << endl;
+
             strcpy(word_meio, raiz->key1);
             strcpy(word_maior, raiz->key2);
 
@@ -650,11 +668,12 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
             raiz->key1 = (Key) malloc(sizeof(char) * strlen(key));
             strcpy(raiz->key1, key);
 
+            // Inserindo a nova palavra nos vetores:
             mais_repetida(raiz->key1, val);
             insere_nos_vetores(raiz->key1, val);
 
-        } // O key é o meio;
-        else if(comp2 < 0) {
+        } 
+        else if(comp2 < 0) { // O key é o meio;
             cout << " Está no meio de todos " << raiz->key1 << " e " << raiz->key2 << endl;
             strcpy(word_meio, key);
             strcpy(word_maior, raiz->key2);
@@ -701,22 +720,25 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
         cresceu = true;
         return meio;
     }
-    if(raiz->eh_2no) {
-        cout << " Inserindo em uma raiz 2 nó!\n";
+    if(raiz->eh_2no) { // Não estamos em uma folha e a raiz é 2 nó;
+
         int comp = strcmp(key, raiz->key1);
-        if(comp == 0) {
-            cout << " Era igual\n";
+        n_comp_insercao++;
+
+        if(comp == 0) { // Era igual, apenas atualiza o valor;
             raiz->val1.repet++;
             mais_repetida(raiz->key1, raiz->val1);
             return raiz;
-        }
-        if(comp < 0) {
-            cout << " Era menor que " << raiz->key1 << endl;
+        } 
+        if(comp < 0) { // Era menor, insere recursivamente no pontero p1;
             arv23 * p = put(key, val, raiz->p1, cresceu);
-            if(!cresceu) { 
+
+            if(!cresceu) {  // Se não cresceu, apenas retorna a raiz;
                 return raiz;
             }
-            cout << " Cresceu!\n";
+            // Se cresceu, precisa ajustar:
+            // Como estamos um 2-nó, iremos coloca esse valor dentro do nó raiz;
+
             char aux_word[100];
             strcpy(aux_word, raiz->key1);
             Item item_aux = raiz->val1;
@@ -733,16 +755,20 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
             raiz->p2 = p->p2;
             raiz->p1 = p->p1;
             free(p);
+
             cresceu = false;
             raiz->eh_2no = false;
             return raiz;
-        }
-        cout << " Era maior que " << raiz->key1 << endl;
+        } 
+        // Era maior, insere recursivamente no ponteiro p2;
+
         arv23 * p = put(key, val, raiz->p2, cresceu);
-        if(!cresceu) { 
+
+        if(!cresceu) {  // Se não cresceu, está tudo certo;
             return raiz;
         }
-        cout << " Cresceu!\n";
+        // Se cresceu, como estamos em um 2-nó, basta colocar junto da chave;
+
         char aux_word[100];
         strcpy(aux_word, raiz->key1);
         Item item_aux = raiz->val1;
@@ -757,9 +783,11 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
         raiz->eh_2no = false;
         return raiz;
     }
-    // Raiz é 3 nó;
+    // Não estamos em uma folha, e a raiz é 3 nó;
+
     int comp1 = strcmp(key, raiz->key1);
     int comp2 = strcmp(key, raiz->key2);
+    n_comp_insercao += 2;
 
     if(comp1 == 0) {
         raiz->val1.repet++;
@@ -774,6 +802,8 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
         return raiz;
     }
     if(comp1 < 0) { // Key é menor que todos;
+
+        // Insere recursivamente no ponteiro p1;
         arv23 * p = put(key, val, raiz->p1, cresceu);
 
         if(!cresceu) {
@@ -806,6 +836,7 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
         return novo_meio;
     }
     if(comp2 < 0) { // Key está no meio de todos;
+        // Insere recursivamente no ponteiro p2;
         arv23 * p = put(key, val, raiz->p2, cresceu);
 
         if(!cresceu) {
@@ -841,6 +872,7 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
         return novo_meio;  
     }
     arv23 * p = put(key, val, raiz->p3, cresceu);
+    // Insere recursivamente no ponteiro p3;
     if(!cresceu) {
         return raiz;
     }
