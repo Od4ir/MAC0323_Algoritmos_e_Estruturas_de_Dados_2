@@ -502,54 +502,8 @@ bool A23::eh_folha(arv23 * no) {
     return false;
 }
 
-/*arv23 * A23::insere_2_no_folha(Key key, Item val, arv23 * no) {
-    cout << "Chegay aqui\n";
-    int comp = strcmp(key, no->key1);
-    if(comp == 0) {
-        // Se forem iguais, apenas atualiza o valor;
-        no->val1.repet++;
-        mais_repetida(no->key1, no->val1);
-        return no;
-    }
-    if(comp > 0) {
-        cout << "Era maior que " << no->key1 << endl;
-        // Se a nova palavra for maior, coloca a ela no espaço 2;
-        no->key2 = (Key) malloc(sizeof(char) * strlen(key));
-        strcpy(no->key2, key);
-        no->val2 = val;
-        no->eh_2no = false;
-        insere_nos_vetores(no->key2, val);
-        mais_repetida(no->key2, val);
-        return no;
-    }
-    // Se a palavra for menor, troca elas de lugar;
-    cout << "Era menor, trocando de lugar " << no->key1 << endl;
-    char aux[100];
-    strcmp(aux, no->key1);
-    cout << aux << endl;
-    Item val_aux = no->val1;
-
-    no->key1 = (Key) malloc(sizeof(char) * strlen(key));
-    strcpy(no->key1, key);
-    cout << no->key1 << endl;
-    no->val1 = val;
-
-    no->key2 = (Key) malloc(sizeof(char) * strlen(aux));
-    strcpy(no->key2, aux);
-    cout << aux << endl;
-    cout << no->key2 << endl;
-    no->val2 = val_aux;
-
-    insere_nos_vetores(no->key1, val);
-    mais_repetida(no->key1, val);
-
-    no->eh_2no = false;
-    return no;
-}*/
-
 arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
     if(raiz == nullptr) {
-        cout << "Primeiro elemento inserido!\n";
         raiz = (arv23 *) malloc(sizeof(arv23));
 
         raiz->p1 = nullptr;
@@ -674,7 +628,7 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
 
         } 
         else if(comp2 < 0) { // O key é o meio;
-            cout << " Está no meio de todos " << raiz->key1 << " e " << raiz->key2 << endl;
+        
             strcpy(word_meio, key);
             strcpy(word_maior, raiz->key2);
             meio->val1 = val;
@@ -682,7 +636,7 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
 
         }
         else { // O key é o maior;
-            cout << " Era maior que todos " << raiz->key1 << " e " << raiz->key2 << endl;
+
             strcpy(word_maior, key);
             strcpy(word_meio, raiz->key2);
 
@@ -718,6 +672,7 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
         }
 
         cresceu = true;
+        quebras++;
         return meio;
     }
     if(raiz->eh_2no) { // Não estamos em uma folha e a raiz é 2 nó;
@@ -832,6 +787,7 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
         novo_meio->p3 = nullptr;
 
         cresceu = true;
+        quebras++;
 
         return novo_meio;
     }
@@ -868,6 +824,7 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
         novo_meio->p3 = nullptr;
 
         cresceu = true;
+        quebras++;
 
         return novo_meio;  
     }
@@ -893,6 +850,7 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
     novo_meio->p3 = nullptr;
 
     cresceu = true;
+    quebras++;
 
     return novo_meio;
 }

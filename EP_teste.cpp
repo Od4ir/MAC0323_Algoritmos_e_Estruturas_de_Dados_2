@@ -89,6 +89,8 @@ void testes() {
         cout << " 5 - Treap - Pre Order\n";
         cout << " 6 - Árvores Rubro Negras - In Order\n";
         cout << " 7 - Árvores Rubro Negras - Pre Order\n";
+        cout << " 8 - Árvores 2-3 - In Order\n";
+        cout << " 9 - Árvores 2-3 - Pre Order\n";
         cout << " 0 - Sair\n\n";
         cin >> S;
         if(S == 1) {
@@ -119,6 +121,14 @@ void testes() {
             cout << "ARN - Pre Order: \n";
             arvorerubronegra.print_pre_order(arvorerubronegra.arvore);
         }
+        else if(S == 8) {
+            cout << "A23 - In Order:\n";
+            arvore23.print_in_order(arvore23.arvore);
+        }
+        else if(S == 9) {
+            cout << 'A23 - Pre Order: \n';
+            arvore23.print_pre_order(arvore23.arvore);
+        }
     }
 
 
@@ -141,8 +151,13 @@ void testes() {
     cout << "Número de Comparações Inserção......." << arvorerubronegra.n_comp_insercao << endl;
     cout << "Altura..............................." << arvorerubronegra.altura << endl;
     cout << "Número de Rotações..................." << arvorerubronegra.n_rotacoes << endl << endl;
-}
 
+    cout << " 5 - ÁRVORE 2-3: " << endl;
+    cout << "Número de Comparações Inserção......." << arvore23.n_comp_insercao << endl;
+    cout << "Altura..............................." << arvore23.altura << endl;
+    cout << "Número de Quebras...................." << arvore23.quebras << endl << endl;
+
+}
 int main() {
     testes();
     return 0;
