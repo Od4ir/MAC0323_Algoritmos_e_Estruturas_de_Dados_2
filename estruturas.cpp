@@ -36,7 +36,7 @@ long long int verifica_vogal(char atu) {
 }
 
 Item::Item(Key key) {
-    if(strcmp(key, "000") == 0) { 
+    if(strcmp(key, "##!PALAVRAERRO!##") == 0) { 
         repet = -1;
         tam = 0;
         vog = 0;
@@ -145,7 +145,7 @@ Item VO::value(Key key) {
     if(aux >= 0) {
         return vetor[aux].val;
     }
-    char a[] = "000";
+    char a[] = "##!PALAVRAERRO!##";
     Item item(a);
     return item;
 }
@@ -223,7 +223,7 @@ void ABB::print_pre_order(abb * raiz) {
 Item ABB::value(Key key) {
     abb * aux = busca_aux(key, arvore);
     if(aux == nullptr) {
-        char a[] = "000";
+        char a[] = "##!PALAVRAERRO!##";
         Item item(a);
         return item;
     }
@@ -300,7 +300,7 @@ tree_heap * TREAP::put(Key key, Item val, tree_heap * raiz) {
 Item TREAP::value(Key key) {
     tree_heap * aux = busca(key, treap);
     if(aux == nullptr) {
-        char a[] = "000";
+        char a[] = "##!PALAVRAERRO!##";
         Item item(a);
         return item;
     }
@@ -447,7 +447,7 @@ arn * ARN::put(Key key, Item val, arn * raiz) {
 Item ARN::value(Key key) {
     arn * aux = busca(key, arvore);
     if(aux == nullptr) {
-        char a[] = "000";
+        char a[] = "##!PALAVRAERRO!##";
         Item item(a);
         return item;
     }
@@ -742,10 +742,6 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
         }
         // Se cresceu, como estamos em um 2-nó, basta colocar junto da chave;
 
-        char aux_word[100];
-        strcpy(aux_word, raiz->key1);
-        Item item_aux = raiz->val1;
-
         raiz->key2 = (Key) malloc(sizeof(char) * strlen(p->key1));
         strcpy(raiz->key2, p->key1);
         raiz->val2 = p->val1;
@@ -904,7 +900,7 @@ void A23::print_pre_order(arv23 * raiz) {
 Item A23::value(Key key) {
     arv23 * aux = busca(key, arvore);
     if(aux == nullptr) {
-        char a[] = "000";
+        char a[] = "##!PALAVRAERRO!##";
         Item item_aux(a);
         return item_aux;
     }

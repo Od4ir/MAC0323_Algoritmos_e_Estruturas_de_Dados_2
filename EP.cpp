@@ -19,7 +19,7 @@ long long int min_tam_srv = 101;  // Valor para menor tamanho de palavra com vog
 vector<char *> max_words;
 long long int max_size = 1;
 
-vector<char *> www;
+constexpr long long int CHAR_MAX_LINHA = 100000;
 
 int est;
 
@@ -143,7 +143,7 @@ void coloca_na_estrutura(int est) {
     cout << "\nDigite o número de palavras: ";
     long long int N; cin >> N; cout << endl;
     long long int cont = 0;
-    char aux_linha[10000];
+    char aux_linha[CHAR_MAX_LINHA];
     char * word;
 
     VO vetor_ordenado(N);
@@ -158,7 +158,7 @@ void coloca_na_estrutura(int est) {
         //cout << "Vetor Dinâmico Ordenado escolhido!\n";
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
-            cin.getline (aux_linha, 10000);
+            cin.getline (aux_linha, CHAR_MAX_LINHA);
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
                 Item item(word);
@@ -178,7 +178,7 @@ void coloca_na_estrutura(int est) {
 
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
-            cin.getline (aux_linha, 10000);
+            cin.getline (aux_linha, CHAR_MAX_LINHA);
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
                 Item item(word);
@@ -196,7 +196,7 @@ void coloca_na_estrutura(int est) {
 
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
-            cin.getline (aux_linha, 10000);
+            cin.getline (aux_linha, CHAR_MAX_LINHA);
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
                 Item item(word);
@@ -213,7 +213,7 @@ void coloca_na_estrutura(int est) {
 
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
-            cin.getline (aux_linha, 10000);
+            cin.getline (aux_linha, CHAR_MAX_LINHA);
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
                 Item item(word);
@@ -236,7 +236,7 @@ void coloca_na_estrutura(int est) {
 
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
-            cin.getline (aux_linha, 10000);
+            cin.getline (aux_linha, CHAR_MAX_LINHA);
             word = strtok(aux_linha, " .,?!");
             while(word != nullptr && cont < N) {
                 Item item(word);
@@ -375,7 +375,7 @@ void testes() {
     cout << " ----------- EP2 - Versão de Testes ------------ " << endl << endl;
     cout << " >> Digite o tipo de teste que deseja realizar: " << endl << endl;
     cout << " 1 - Lista de palavras em ordem crescente;" << endl;
-    cout << " 2 - Lista de palavras em ordem descrescente;" << endl;
+    cout << " 2 - Lista de palavras em ordem decrescente;" << endl;
     cout << " 3 - Lista de palavras em ordem aleatória;" << endl << " >> ";
 
     long long int op; cin >> op;
@@ -385,7 +385,7 @@ void testes() {
     long long int tam;
 
     if(op == 1) {
-        cout << "[TAM_MAX = 256k]\n";
+        cout << "[TAM_MAX = 80k]\n";
         cout << " >> ";
         cin >> tam;
         strcpy(nome_arquivo, "teste_oc.txt");
@@ -408,10 +408,10 @@ void testes() {
         }
     }
 
+
     // Abertura do arquivo escolhido pelo teste:
     FILE * f;
     f = fopen(nome_arquivo, "rt");
-
     // Varíaveis auxiliares para leitura do arquivo: 
     char word[100]; // 100 - É o tamanho máximo de uma palavra;
     char * aux_word;
@@ -496,7 +496,7 @@ void testes() {
     }
 
 
-    cout << ">>> Resultados para testes com " << tam << " palavras!" << endl;
+    cout << "\n>>> Resultados para testes com " << tam << " palavras!" << endl << endl;
 
     cout << " 1 - VETOR ORDENADO: " << endl;
     cout << "Número de Comparações Inserção......." << vetor_ordenado.n_comp_insercao << endl;
