@@ -508,17 +508,17 @@ void testes() {
 
     cout << " 3 - TREAPS: " << endl;
     cout << "Número de Comparações Inserção......." << treeheap.n_comp_insercao << endl;
-    cout << "Altura..............................." << treeheap.altura << endl;
+    cout << "Altura..............................." << treeheap.calcula_altura(treeheap.treap) << endl;
     cout << "Número de Rotações..................." << treeheap.n_rotacoes << endl << endl;
 
     cout << " 4 - ÁRVORES RUBRO NEGRAS: " << endl;
     cout << "Número de Comparações Inserção......." << arvorerubronegra.n_comp_insercao << endl;
-    cout << "Altura..............................." << arvorerubronegra.altura << endl;
+    cout << "Altura..............................." << arvorerubronegra.calcula_altura(arvorerubronegra.arvore) << endl;
     cout << "Número de Rotações..................." << arvorerubronegra.n_rotacoes << endl << endl;
 
     cout << " 5 - ÁRVORE 2-3: " << endl;
     cout << "Número de Comparações Inserção......." << arvore23.n_comp_insercao << endl;
-    cout << "Altura..............................." << arvore23.altura << endl;
+    cout << "Altura..............................." << arvore23.calcula_altura(arvore23.arvore) << endl;
     cout << "Número de Quebras...................." << arvore23.quebras << endl << endl;
 
     /*cout << "Palavras mais frequentes: \n";

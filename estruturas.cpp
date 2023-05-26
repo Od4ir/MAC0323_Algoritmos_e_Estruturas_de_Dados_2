@@ -247,7 +247,6 @@ abb * ABB::busca_aux(Key key, abb * raiz) {
 
 
 
-
 // FUNÇÕES TREAPS //
 
 TREAP::TREAP(long long int n) {
@@ -255,7 +254,6 @@ TREAP::TREAP(long long int n) {
     n_comp_busca = 0;
     n_comp_insercao = 0;
     n_rotacoes = 0;
-    altura = -1;
     valor_max_prioridade = 2 * n;
 }
 
@@ -353,7 +351,18 @@ void TREAP::print_pre_order(tree_heap * raiz) {
     }
 }
 
-
+long long int TREAP::calcula_altura(tree_heap * raiz) {
+    int alt_esq, alt_dir;
+    if(raiz == nullptr) {
+        return -1;
+    }
+    alt_esq = calcula_altura(raiz->esq);
+    alt_dir = calcula_altura(raiz->dir);
+    if(alt_esq > alt_dir) {
+        return 1 + alt_esq;
+    }
+    return 1 + alt_dir;
+}
 
 // FUNÇÕES ÁRVORES RUBRO NEGRAS //
 
@@ -362,7 +371,6 @@ ARN::ARN() {
     n_comp_busca = 0;
     n_comp_insercao = 0;
     n_rotacoes = 0;
-    altura = 0;
 }
 
 void ARN::add(Key key, Item val) {
@@ -477,6 +485,18 @@ void ARN::print_in_order(arn * raiz) {
     }
 }
 
+long long int ARN::calcula_altura(arn * raiz) {
+    int alt_esq, alt_dir;
+    if(raiz == nullptr) {
+        return -1;
+    }
+    alt_esq = calcula_altura(raiz->esq);
+    alt_dir = calcula_altura(raiz->dir);
+    if(alt_esq > alt_dir) {
+        return 1 + alt_esq;
+    }
+    return 1 + alt_dir;
+}
 
 // FUNÇÕES ÁRVORES 2 3 //
 
@@ -487,8 +507,6 @@ A23::A23() {
     n_comp_busca = 0;
     n_comp_insercao = 0;
     quebras = 0;
-    altura = 0;
-
 }
 
 void A23::add(Key key, Item val) {
@@ -917,4 +935,11 @@ arv23 * A23::busca(Key key, arv23 * raiz) {
         return busca(key, raiz->p1);
     }
     return busca(key, raiz->p2);
+}
+
+long long int A23::calcula_altura(arv23 * raiz) {
+    if(raiz == nullptr) {
+        return -1;
+    }
+    return 1 + calcula_altura(raiz->p1);
 }

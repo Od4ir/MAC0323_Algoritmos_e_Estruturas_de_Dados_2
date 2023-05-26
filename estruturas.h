@@ -68,11 +68,12 @@ class ABB {
 
         // Cria um objeto do tipo ABB - Árvore de Busca Binária
         ABB();
-        // Adiciona um item na ABB.arvore e devolve um ponteiro para a nova raiz;
+        // Adiciona um item na ABB.arvore;
         void add(Key key, Item val);
         abb * put(Key key, Item val, abb * raiz, long long int n);
-        // Prlong long inta os valores salvos nos nós da árvore 'in order' (Esquerda - Raiz - Direita);
+        // Printa os valores salvos nos nós da árvore 'in order' (Esquerda - Raiz - Direita);
         void print_in_order(abb * raiz);
+        // Printa os calores salvos nos nós da árvore 'pre order' (Raiz - Esquerda - Direita);
         void print_pre_order(abb * raiz);
         // Dada uma chave, retorna um ponteiro para o nó em que está a chave, retorna nullptr se não houver item com aquela chave na ABB.arvore;
         Item value(Key key);
@@ -95,18 +96,25 @@ class TREAP {
         long long int n_comp_busca;
         long long int n_comp_insercao;
         long long int n_rotacoes;
-        long long int altura;
         long long int valor_max_prioridade;
 
+        // Cria um objeto do tipo raiz:
         TREAP(long long int n);
+        // Adiciona o par (key, val) na estrutura;
         void add(Key key, Item val);
+        tree_heap * put(Key key, Item val, tree_heap * raiz);
+        // Rotaciona a árvore para direita ou esquerda;
+        tree_heap * rotaciona(tree_heap * p, char lado);
+        // Busca se há um nó com a chave key na estrutura;
         Item value(Key key);
         tree_heap * busca(Key key, tree_heap * raiz);
-        tree_heap * put(Key key, Item val, tree_heap * raiz);
-        tree_heap * rotaciona(tree_heap * p, char lado);
-        void print_in_order(tree_heap * raiz);
-        void print_pre_order(tree_heap * raiz);
 
+        // Printa as informações 'in order';
+        void print_in_order(tree_heap * raiz);
+        // Printa as informações 'pre order';
+        void print_pre_order(tree_heap * raiz);
+        // Salva no parâmetro 'altura' a altura da árvore;
+        long long int calcula_altura(tree_heap * raiz);
 };
 
 
@@ -126,17 +134,24 @@ class ARN {
         long long int n_comp_busca;
         long long int n_comp_insercao;
         long long int n_rotacoes;
-        long long int altura;
 
+        // Cria um objeto do tipo árvore;
         ARN();
+        // Adiciona o par (key, val) na estrutura:
         void add(Key key, Item val);
         arn * put(Key key, Item val, arn * raiz);
+        // Verifica se o nó é vermelho ou nullptr:
         bool eh_vermelho(arn * no);
+        // Rotaciona a árvore:
         arn * rotaciona(arn * p, char lado);
+        // Printa 'in order';
         void print_in_order(arn * raiz);
+        // Printa 'pre order';
         void print_pre_order(arn * raiz);
+        // Dada uma key, busca o val dessa key na estrutura;
         Item value(Key key);
         arn * busca(Key key, arn * raiz);
+        long long int calcula_altura(arn * raiz);
 };
 
 
@@ -161,16 +176,20 @@ class A23 {
         long long int quebras;
         long long int altura;
 
-
+        // Cria um objeto do tiṕo A23;
         A23();
+        // Adciona o par (key, val) na estrutura;
         void add(Key key, Item val);
         arv23 * put(Key key, Item val, arv23 * raiz, bool &cresceu);
-        arv23 * insere_2_no_folha(Key key, Item val, arv23 * no);
+        // Imprime 'in order' a árvore;
         void print_in_order(arv23 * raiz);
+        // Imprime 'pre order' a árvore;
         void print_pre_order(arv23 * raiz);
+        // Dada uma key, busca o seu val na estrutura;
         Item value(Key key);
         arv23 * busca(Key key, arv23 * raiz);
         // Informa se o nó é folha ou não;
         bool eh_folha(arv23 * no);
-
+        // Calcula a altura da árvore:
+        long long int calcula_altura(arv23 * raiz);
 };
