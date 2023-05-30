@@ -515,6 +515,9 @@ void testes() {
 
     int buscar;
 
+    cout << vetor_ordenado.vetor[0].key << endl;
+    cout << vetor_ordenado.vetor[tam - 1].key << endl;
+
 
     while(1) {
         cout << "\nDeseja testar a busca? " << endl;

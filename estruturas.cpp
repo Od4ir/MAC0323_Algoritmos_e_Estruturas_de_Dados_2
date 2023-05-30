@@ -246,7 +246,7 @@ abb * ABB::busca_aux(Key key, abb * raiz) {
     else if(comp > 0) {
         return busca_aux(key, raiz->dir);
     }
-    return busca_aux(key, raiz->dir);
+    return busca_aux(key, raiz->esq);
 }
 
 
