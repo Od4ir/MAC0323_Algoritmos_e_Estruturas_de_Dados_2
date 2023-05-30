@@ -109,7 +109,9 @@ void VO::add(Key key, Item val) {
         fim++;
         vetor[start].key = (Key) malloc(sizeof(char) * strlen(key));
         strcpy(vetor[start].key, key);
-        vetor[start].val = val;
+        vetor[start].val.repet = val.repet;
+        vetor[start].val.tam = val.tam;
+        vetor[start].val.vog = val.vog;
         mais_repetida(vetor[start].key, val);
         insere_nos_vetores(vetor[start].key, val);
     }
@@ -141,6 +143,7 @@ long long int VO::busca(Key key) {
 }
 
 Item VO::value(Key key) {
+    n_comp_busca = 0;
     long long int aux = busca(key);
     if(aux >= 0) {
         return vetor[aux].val;
@@ -180,6 +183,8 @@ void ABB::add(Key key, Item val) {
 abb * ABB::put(Key key, Item val, abb * raiz, long long int n) {
     if(raiz == nullptr) {
         raiz = (abb *) malloc(sizeof(abb));
+        raiz->val.repet = val.repet;
+        raiz->val.tam =
         raiz->val = val;
         raiz->key = (Key) malloc(sizeof(char) * strlen(key));
         strcpy(raiz->key, key);
@@ -221,6 +226,7 @@ void ABB::print_pre_order(abb * raiz) {
 }
 
 Item ABB::value(Key key) {
+    n_comp_busca = 0;
     abb * aux = busca_aux(key, arvore);
     if(aux == nullptr) {
         char a[] = "##!PALAVRAERRO!##";
@@ -298,6 +304,7 @@ tree_heap * TREAP::put(Key key, Item val, tree_heap * raiz) {
 }
 
 Item TREAP::value(Key key) {
+    n_comp_busca = 0;
     tree_heap * aux = busca(key, treap);
     if(aux == nullptr) {
         char a[] = "##!PALAVRAERRO!##";
@@ -445,6 +452,7 @@ arn * ARN::put(Key key, Item val, arn * raiz) {
 }
 
 Item ARN::value(Key key) {
+    n_comp_busca = 0;
     arn * aux = busca(key, arvore);
     if(aux == nullptr) {
         char a[] = "##!PALAVRAERRO!##";
@@ -898,6 +906,8 @@ void A23::print_pre_order(arv23 * raiz) {
 }
 
 Item A23::value(Key key) {
+    n_comp_busca = 0;
+    cout << "Buscando " << key << endl;
     arv23 * aux = busca(key, arvore);
     if(aux == nullptr) {
         char a[] = "##!PALAVRAERRO!##";
@@ -917,7 +927,7 @@ arv23 * A23::busca(Key key, arv23 * raiz) {
     n_comp_busca++;
     if(comp1 == 0) return raiz;
 
-    if(raiz->eh_2no) {
+    if(!raiz->eh_2no) {
         int comp2 = strcmp(key, raiz->key2);
         n_comp_busca++;
         if(comp2 == 0) {

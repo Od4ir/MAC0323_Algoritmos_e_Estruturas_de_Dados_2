@@ -24,7 +24,7 @@ void mais_repetida(Key key, Item item);
 long long int verifica_vogal(char atu);
 
 
-// VETOR ORDENADO DINÃMICO -- OK //
+// VETOR ORDENADO DINÃMICO  //
 
 typedef struct {
     Key key;
@@ -50,7 +50,7 @@ class VO {
         void printa();
 };
 
-// ÁRVORE DE BUSCA BINÁRIA -- OK //
+// ÁRVORE DE BUSCA BINÁRIA  //
 
 typedef struct cel_abb {
     Item val;
@@ -80,7 +80,7 @@ class ABB {
         abb * busca_aux(Key key, abb * raiz);
 };
 
-// TREAPS - OK //
+// TREAPS //
 
 typedef struct cel_treap {
     Item val;
@@ -118,7 +118,7 @@ class TREAP {
 };
 
 
-// ÁRVORES RUBRO NEGRAS - OK //
+// ÁRVORES RUBRO NEGRAS //
 
 typedef struct cel_arn {
     Item val;
@@ -178,7 +178,7 @@ class A23 {
 
         // Cria um objeto do tiṕo A23;
         A23();
-        // Adciona o par (key, val) na estrutura;
+        // Adiciona o par (key, val) na estrutura;
         void add(Key key, Item val);
         arv23 * put(Key key, Item val, arv23 * raiz, bool &cresceu);
         // Imprime 'in order' a árvore;

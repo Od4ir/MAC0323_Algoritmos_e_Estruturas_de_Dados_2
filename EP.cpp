@@ -104,7 +104,6 @@ void mais_repetida(Key key, Item item) {
     }
 }
 
-
 int montagem() {
     cout << " --------- Bem Vindx ao EP2 - Od4ir --------- \n\n";
     char E[10];
@@ -385,13 +384,13 @@ void testes() {
     long long int tam;
 
     if(op == 1) {
-        cout << "[TAM_MAX = 80k]\n";
+        cout << "[TAM_MAX = 87k]\n";
         cout << " >> ";
         cin >> tam;
         strcpy(nome_arquivo, "teste_oc.txt");
     }
     else if(op == 2) {
-        cout << "[TAM_MAX = 256k]\n";
+        cout << "[TAM_MAX = 87k]\n";
         cout << " >> ";
         cin >> tam;
         strcpy(nome_arquivo, "teste_od.txt");
@@ -437,7 +436,7 @@ void testes() {
         treeheap.add(aux_word, item);
         arvorerubronegra.add(aux_word, item);
         arvore23.add(aux_word, item);
-        //cout << cont << ": " << aux_word << endl;
+        cout << cont << ": " << aux_word << endl;
 
         cont++;
     }
@@ -495,6 +494,55 @@ void testes() {
         }
     }
 
+    int buscar;
+
+
+    while(1) {
+        cout << "\nDeseja testar a busca? " << endl;
+        cout << " >> 1 - Sim" << endl;
+        cout << " >> 0 - Não" << endl;
+        cout << " >> ";
+        cin >> buscar;
+        if(buscar == 1) {
+            char aux_palavra[100];
+            cout << "Digite a palavra que deseja buscar: \n";
+            cout << " >> ";
+            cin >> aux_palavra; 
+
+            Item aux_vo = vetor_ordenado.value(aux_palavra);
+            Item aux_abb = arvore_busca_binaria.value(aux_palavra);
+            Item aux_tr = treeheap.value(aux_palavra);
+            Item aux_arn = arvorerubronegra.value(aux_palavra);
+            Item aux_a23 = arvore23.value(aux_palavra);
+
+            cout << aux_vo.repet << endl;
+            cout << aux_abb.repet << endl;
+            cout << aux_tr.repet << endl;
+            cout << aux_arn.repet << endl;
+            cout << aux_a23.repet << endl;
+
+            if(aux_vo.repet == -1) {
+                cout << "A palavra não estava na estrutura\n";
+            }
+            else {
+                cout << "A palavra " << aux_palavra << " apareceu " << aux_vo.repet << endl;
+            }
+
+            cout << "\n>>> Resultados para a busca da palavra " << aux_palavra << " em números de comparações realizadas: \n"; 
+            cout << " 1 - Vetor Ordenado................." << vetor_ordenado.n_comp_busca << endl;
+            cout << " 2 - Árvore de Busca Binária........" << arvore_busca_binaria.n_comp_busca << endl;
+            cout << " 3 - Treap.........................." << treeheap.n_comp_busca << endl;
+            cout << " 4 - Árvore Rubro Negra............." << arvorerubronegra.n_comp_busca << endl;
+            cout << " 5 - Árvore 2-3....................." << arvore23.n_comp_busca << endl;
+        }
+        else {
+            break;
+        }
+    }
+
+    
+    
+
 
     cout << "\n>>> Resultados para testes com " << tam << " palavras!" << endl << endl;
 
@@ -520,21 +568,6 @@ void testes() {
     cout << "Número de Comparações Inserção......." << arvore23.n_comp_insercao << endl;
     cout << "Altura..............................." << arvore23.calcula_altura(arvore23.arvore) << endl;
     cout << "Número de Quebras...................." << arvore23.quebras << endl << endl;
-
-    /*cout << "Palavras mais frequentes: \n";
-    cout << "Frequência: " << max_freq << endl;
-    for(int j = 0; j < f_words.size(); j++) {
-        cout << j + 1 << ": " << f_words[j] << endl;
-    }*/
-
-    /*cout << "Palavras mais longas: \n";
-    cout << "Tamanho máximo: " << max_tam_sr << endl;
-    for(int j = 0; j < max_words.size(); j++) {
-        cout << j + 1 << ": " << max_words[j] << endl;
-    }
-    cout << endl;*/
-
-
 }
 
 
