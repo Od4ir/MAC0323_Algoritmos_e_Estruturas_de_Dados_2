@@ -159,7 +159,7 @@ void VO::printa() {
     }
     else { 
         for(long long int i = 0; i <= fim; i++) {
-            cout << i + 1 << ": " << vetor[i].key << endl;
+            cout << i + 1 << ": " << vetor[i].key << "(" << vetor[i].val.repet << ")" << endl;
         }
     }
 }
@@ -183,8 +183,6 @@ void ABB::add(Key key, Item val) {
 abb * ABB::put(Key key, Item val, abb * raiz, long long int n) {
     if(raiz == nullptr) {
         raiz = (abb *) malloc(sizeof(abb));
-        raiz->val.repet = val.repet;
-        raiz->val.tam =
         raiz->val = val;
         raiz->key = (Key) malloc(sizeof(char) * strlen(key));
         strcpy(raiz->key, key);
@@ -212,14 +210,14 @@ abb * ABB::put(Key key, Item val, abb * raiz, long long int n) {
 void ABB::print_in_order(abb * raiz) {
     if(raiz != nullptr) {
         print_in_order(raiz->esq);
-        cout << raiz->key << endl;
+        cout << raiz->key << " (" << raiz->val.repet << ")\n";
         print_in_order(raiz->dir);
     }
 }
 
 void ABB::print_pre_order(abb * raiz) {
     if(raiz != nullptr) {
-        cout << raiz->key << endl;
+        cout << raiz->key << " (" << raiz->val.repet << ")\n";
         print_pre_order(raiz->esq);
         print_pre_order(raiz->dir);
     }
@@ -326,7 +324,7 @@ tree_heap * TREAP::busca(Key key, tree_heap * raiz) {
     else if(comp > 0) {
         return busca(key, raiz->dir);
     }
-    return busca(key, raiz->dir);
+    return busca(key, raiz->esq);
 }
 
 tree_heap * TREAP::rotaciona(tree_heap * p, char lado) {
@@ -345,14 +343,14 @@ tree_heap * TREAP::rotaciona(tree_heap * p, char lado) {
 void TREAP::print_in_order(tree_heap * raiz) {
     if(raiz != nullptr) {
         print_in_order(raiz->esq);
-        cout << raiz->key << endl;
+        cout << raiz->key << " (" << raiz->val.repet << ")\n";
         print_in_order(raiz->dir);
     }
 }
 
 void TREAP::print_pre_order(tree_heap * raiz) {
     if(raiz != nullptr) {
-        cout << raiz->key << endl;
+        cout << raiz->key << " (" << raiz->val.repet << ")\n";
         print_pre_order(raiz->esq);
         print_pre_order(raiz->dir);
     }
@@ -474,12 +472,13 @@ arn * ARN::busca(Key key, arn * raiz) {
     else if(comp > 0) {
         return busca(key, raiz->dir);
     }
-    return busca(key, raiz->dir);
+    return busca(key, raiz->esq);
 }
 
 void ARN::print_pre_order(arn * raiz) {
     if(raiz != nullptr) {
-        cout << raiz->key << endl;
+        printf("(%c) - ", raiz->cor);
+        cout << raiz->key << " (" << raiz->val.repet << ")\n";
         print_pre_order(raiz->esq);
         print_pre_order(raiz->dir);
     }
@@ -488,7 +487,8 @@ void ARN::print_pre_order(arn * raiz) {
 void ARN::print_in_order(arn * raiz) {
     if(raiz != nullptr) {
         print_pre_order(raiz->esq);
-        cout << raiz->key << endl;
+        printf("(%c) - ", raiz->cor);
+        cout << raiz->key << " (" << raiz->val.repet << ")\n";
         print_pre_order(raiz->dir);
     }
 }
@@ -880,11 +880,11 @@ arv23 * A23::put(Key key, Item val, arv23 * raiz, bool &cresceu) {
 void A23::print_in_order(arv23 * raiz) {
     if(raiz != nullptr) {
         print_in_order(raiz->p1);
-        cout << raiz->key1 << endl;
+        cout << raiz->key1 << " (" << raiz->val1.repet << ")\n";
         print_in_order(raiz->p2);
 
         if(!raiz->eh_2no) { 
-            cout << raiz->key2 << endl;
+            cout << raiz->key2 << " (" << raiz->val2.repet << ")\n";
             print_in_order(raiz->p3);
         }
     }
@@ -892,10 +892,10 @@ void A23::print_in_order(arv23 * raiz) {
 
 void A23::print_pre_order(arv23 * raiz) {
     if(raiz != nullptr) {
-        cout << raiz->key1 << endl;
+        cout << raiz->key1 << " (" << raiz->val1.repet << ")\n";
         if(!raiz->eh_2no) {
             cout << " 2 ";
-            cout << raiz->key2 << endl;
+            cout << raiz->key2 << " (" << raiz->val2.repet << ")\n";
         }
         print_pre_order(raiz->p1);
         print_pre_order(raiz->p2);
@@ -914,7 +914,7 @@ Item A23::value(Key key) {
         Item item_aux(a);
         return item_aux;
     }
-    if(strcmp(key, aux->key1))
+    if(strcmp(key, aux->key1) == 0)
         return aux->val1;
     return aux->val2;
 }
