@@ -154,7 +154,6 @@ void coloca_na_estrutura(int est) {
     cout << "Digite as palavras: ";
 
     if(est == 1) {  
-        //cout << "Vetor Dinâmico Ordenado escolhido!\n";
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
             cin.getline (aux_linha, CHAR_MAX_LINHA);
@@ -167,14 +166,16 @@ void coloca_na_estrutura(int est) {
             }
         }
         // --------------------------------------------
-        vetor_ordenado.printa();
-
-
+        char print;
+        cout << " \nDeseja imprimir? S / N\n";
+        cin >> print;
+        cout << endl;
+        if(print == 'S') {
+            vetor_ordenado.printa();
+        }
         cout << endl;
     }
     else if(est == 2) {
-        //cout << "Árvore de Busca Binária escolhida!\n";
-
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
             cin.getline (aux_linha, CHAR_MAX_LINHA);
@@ -187,12 +188,16 @@ void coloca_na_estrutura(int est) {
             }
         }
         // --------------------------------------------
-        arvore_abb.print_pre_order(arvore_abb.arvore);
-
+        char print;
+        cout << " \nDeseja imprimir? S / N\n";
+        cin >> print;
+        cout << endl;
+        if(print == 'S') {
+            arvore_abb.print_in_order(arvore_abb.arvore);
+        }
+        cout << endl;
     }
     else if(est == 3) {
-        //cout << "Treaps escolhida!\n";
-
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
             cin.getline (aux_linha, CHAR_MAX_LINHA);
@@ -205,11 +210,17 @@ void coloca_na_estrutura(int est) {
             }
         }
         // --------------------------------------------
-        treaps.print_pre_order(treaps.treap);
+        char print;
+        cout << " \nDeseja imprimir? S / N\n";
+        cin >> print;
+        cout << endl;
+        if(print == 'S') {
+            treaps.print_in_order(treaps.treap);
+        }
+        cout << endl;
+
     }
     else if(est == 4) {
-        cout << "Árvores 2-3 escolhida!\n";
-
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
             cin.getline (aux_linha, CHAR_MAX_LINHA);
@@ -221,18 +232,18 @@ void coloca_na_estrutura(int est) {
                 cont++;
             }
         }
-
-        cout << "Árvore 2-3 In Order\n";
-        arvore_23.print_in_order(arvore_23.arvore);
-
-        cout << "\nÁrvore 2-3 Pre Order\n";
-        arvore_23.print_pre_order(arvore_23.arvore);
         // --------------------------------------------
+        char print;
+        cout << " \nDeseja imprimir? S / N\n";
+        cin >> print;
+        cout << endl;
+        if(print == 'S') {
+            arvore_23.print_in_order(arvore_23.arvore);
+        }
+        cout << endl;
 
     }
     else { 
-        //cout << "Árvores Rubro-Negras\n";
-
         // LEITURA DAS PALAVRAS -----------------------
         while(cont < N) {
             cin.getline (aux_linha, CHAR_MAX_LINHA);
@@ -245,7 +256,15 @@ void coloca_na_estrutura(int est) {
             }
         }
         // --------------------------------------------
-        arvore_rn.print_pre_order(arvore_rn.arvore);
+        char print;
+        cout << "\nDeseja imprimir? S / N\n";
+        cin >> print;
+        cout << endl;
+        if(print == 'S') {
+            arvore_rn.print_in_order(arvore_rn.arvore);
+        }
+        cout << endl;
+
     }
 
     char querie[100];
@@ -262,7 +281,8 @@ void coloca_na_estrutura(int est) {
     cout << "   >> ";
     int n_queries; cin >> n_queries;
 
-    cout << endl << "Digite as consultas: \n" << endl;
+    if(n_queries != 0)
+        cout << endl << "Digite as consultas: \n" << endl;
 
     for(int i = 0; i < n_queries; i++) {
         cout << "   >> ";
@@ -287,7 +307,7 @@ void coloca_na_estrutura(int est) {
     }
 
     for(int i = 0; i < n_queries; i++) {
-        cout << "\n CONSULTA " << i + 1 << "! \n";
+        cout << "\n >>> CONSULTA " << i + 1 << "! \n";
         if(consultas[i] == 1) {
             if(f_words.size() == 0) {
                 cout << "Não há palavras\n";
@@ -348,6 +368,7 @@ void coloca_na_estrutura(int est) {
                     cout << "Número de repetições da palavra " << aux_word << ": " << item_aux.repet << endl;
                 }
             }
+            cout << endl;
         }
         else if(consultas[i] == 3) {
             if(max_words.size() == 0) {
@@ -355,7 +376,7 @@ void coloca_na_estrutura(int est) {
             }
             else { 
                 cout << "Palavras mais longas: \n";
-                cout << "Tamanho máximo: " << max_tam_sr << endl;
+                cout << "Tamanho máximo: " << max_size << endl;
                 for(int j = 0; j < max_words.size(); j++) {
                     cout << j + 1 << ": " << max_words[j] << endl;
                 }
@@ -516,7 +537,7 @@ void testes() {
     int buscar;
 
     cout << vetor_ordenado.vetor[0].key << endl;
-    cout << vetor_ordenado.vetor[tam - 1].key << endl;
+    cout << vetor_ordenado.vetor[vetor_ordenado.fim].key << endl;
 
 
     while(1) {
@@ -602,7 +623,7 @@ int main() {
     if(modo == 1) {
         est = montagem();
         coloca_na_estrutura(est);
-        cout << "\n\n-- FIM DO PROGRAMA -- " << endl;
+        cout << "\n-- FIM DO PROGRAMA -- " << endl;
     }
     else {
         testes();
