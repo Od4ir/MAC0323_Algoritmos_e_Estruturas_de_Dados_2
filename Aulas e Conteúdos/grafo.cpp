@@ -2,6 +2,8 @@
 #include "grafo.h"
 using namespace std;
 
+// Funções de Grafo Implementado como Matriz:
+
 GrafoM::GrafoM(int N) {
     // Número de vértices:
     V = N;
@@ -44,6 +46,8 @@ void GrafoM::print() {
     }
 }
 
+// Funções de Grafo Implementado como Vetor:
+
 GrafoL::GrafoL(int N) {
     E = 0;
     V = N;
@@ -71,6 +75,8 @@ void GrafoL::print() {
     }
 }
 
+
+
 int main() {
     cout << "Digite o número de vértices: \n";
     int N; cin >> N;
@@ -89,6 +95,3 @@ int main() {
     GG.print();
     return 0;
 }
-
-
-
