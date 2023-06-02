@@ -28,4 +28,6 @@ class GrafoL {
         void dfs();                     // Busca em profundidade;
         void dfsR(int u, bool * vis);
         bool tem_caminho(int u, int v);
+        void acha_caminho_r(int v, bool * visitado, int * pred);
+        void imprime_caminho(int u, int v);
 };

@@ -71,14 +71,58 @@ void GrafoL::dfsR(int u, bool * visitado) {
     // de um componente conexo, todos os vértices estarão marcados;
 }
 
+
+// Dados dois vértices, determina se existe caminho eles ou não;
 bool GrafoL::tem_caminho(int u, int v) {
+    // Criamos um vetor para marcar que todos os vértices ainda não 
+    // foram visitados;
     bool * visitado = new bool[V + 2];
     for(int i = 0; i < V; i++) visitado[i] = false;
+
+    // Rodamos uma dfs patindo de u, se chegamos em v, então visitado[v]
+    // é true, se não chegamos é false;
 
     dfsR(u, visitado);
     return visitado[v];
 }
 
+
+void GrafoL::imprime_caminho(int u, int v) {
+    bool * visitado = new bool[V + 2];
+    int * pred = new int[V + 2];
+
+    for(int i =0; i < V; i++) {
+        visitado[i] = false;
+        pred[i] = -1;
+    }
+
+    pred[u] = u;
+    acha_caminho_r(u, visitado, pred);
+
+    if(pred[v] == -1) {
+        cout << "Não tem caminho!\n";
+    }
+    else { 
+        for(int w = v; w != u; w = pred[w]) {
+            printf("%d - ", w);
+        }
+        cout << u << '\n';
+    }
+
+}
+
+void GrafoL::acha_caminho_r(int v, bool * visitado, int * pred) {
+    // É uma dfs com a diferença que estamos marcando o predecessor;
+    visitado[v] = true;
+
+    for(int w: adj[v]) {
+        if(!visitado[w]) {
+            // Salva no pred qual foi o vértice que foi visto anteriormente;
+            pred[w] = v;
+            acha_caminho_r(w, visitado, pred);
+        }
+    }
+}
 
 
 int main() {
@@ -104,16 +148,34 @@ int main() {
     // --> Roda a dfs recursiva partindo de u, se o visitado de u marcar
     //     falso após a dfsR, então não existe caminho;
 
-    cout << "Digite dois vértices: ";
-    int u, v; cin >> u >> v;
+    /* int ok = 1;
 
-    if(GG.tem_caminho(u, v)) printf("Tem caminho entre %d e %d\n", u, v);
-    else printf("Não tem caminho entre %d e %d\n", u, v);
+    while(ok) { 
+        cout << "Digite dois vértices: ";
+        int u, v; cin >> u >> v;
 
+        if(GG.tem_caminho(u, v)) printf("Tem caminho entre %d e %d\n", u, v);
+        else printf("Não tem caminho entre %d e %d\n", u, v);
+        cin >> ok;
+    }
+
+    */
 
     // Se tem caminho, como imprimir esse caminho?
-    // --> 
+    // --> Roda uma dfs e salva num vetor de predecessores qual foi o vértice
+    //     que foi visitado antes do vértice de valor do índice. Exemplo: se
+    //     pred[i] = y, então o vértice visitado antes do y foi o i;
 
+
+    int ok = 1;
+
+    while(ok) { 
+        cout << "Digite dois vértices: ";
+        int u, v; cin >> u >> v;
+
+        GG.imprime_caminho(u, v);
+        cout << "Continuar? "; cin >> ok;
+    }
 
     return 0;
 }
