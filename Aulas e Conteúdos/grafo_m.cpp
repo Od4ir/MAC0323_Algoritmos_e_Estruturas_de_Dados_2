@@ -4,6 +4,7 @@ using namespace std;
 
 // Funções de Grafo Implementado como Matriz:
 
+// Criação do grafo:
 GrafoM::GrafoM(int N) {
     // Número de vértices:
     V = N;
@@ -22,6 +23,7 @@ GrafoM::GrafoM(int N) {
     E = 0;
 }
 
+// Adicão de nova aresta com direção;
 void GrafoM::add_d(int u, int v) {
     u = u - 1;
     v = v - 1;
@@ -30,6 +32,7 @@ void GrafoM::add_d(int u, int v) {
     E++;
 }
 
+// Adição de nova aresta sem direção;
 void GrafoM::add(int u, int v) {
     // Adicionando uma aresta sem direção:
     add_d(u, v);
@@ -37,6 +40,7 @@ void GrafoM::add(int u, int v) {
     E--; // Retira a aresta que foi contada duplamente;
 }
 
+// Printar a matriz de adjacências;
 void GrafoM::print() { 
     for(int i = 0; i < V; i++) {
         for(int j = 0; j < V; j++) {
@@ -46,41 +50,41 @@ void GrafoM::print() {
     }
 }
 
-// Funções de Grafo Implementado como Vetor:
-
-GrafoL::GrafoL(int N) {
-    E = 0;
-    V = N;
-    adj = (vector<int> *) malloc(sizeof(vector<int>) * (N + 2));
-}
-
-void GrafoL::add_d(int v, int u) {
-    adj[v].push_back(u);
-    E++;
-}
-
-void GrafoL::add(int v, int u) {
-    add_d(v, u);
-    add_d(u, v);
-    E--; 
-}
-
-void GrafoL::print() {
-    for(int i = 1; i <= V; i++) {
-        cout << "Vértice: " << i << ": ";
-        for(int j = 0; j < adj[i].size(); j++) {
-            cout << adj[i][j] << " - ";
+// BUsca em largura;
+// --> Vai visitando todos os vértices (Modelo Geral);
+void GrafoM::dfs() {
+    // Vetor para marcar os vértices visitados;
+    bool * visitado = new bool[V + 2];
+    // Marcamos todos os vértices como não visitado;
+    for(int i = 0; i < V; i++) visitado[i] = false;
+    // Percorremos os vértices e se ele não foi visitado, chamamamos
+    // a dfs recursiva nele que irá marcar os vértices conectados;
+    for(int i = 0; i < V; i++) {
+        if(!visitado[i]) {
+            dfsR(i, visitado);
         }
-        cout << endl;
+    }
+    delete[] visitado;
+}
+
+// A partir de um vértice, visita todos seus adjacentes e assim 
+// vai recursivamente;
+// --> É pior que o modelo de vetor pois precisa iterar por todos os vértices
+//     e verificar se existe aresta entre o atual e o iterado; 
+void GrafoM::dfsR(int u, bool * visitado) {
+    visitado[u] = true;
+    for(int v = 0; v < V; v++) {
+        if(adj[u][v] == 1 && !visitado[v]) {
+            dfsR(v, visitado);
+        }
     }
 }
-
 
 
 int main() {
     cout << "Digite o número de vértices: \n";
     int N; cin >> N;
-    GrafoL GG(N);
+    GrafoM GG(N);
 
     cout << "Digite o número de arestas: \n";
     int A; cin >> A;
@@ -92,6 +96,10 @@ int main() {
         cin >> a >> b;
         GG.add_d(a, b);
     }
+
+
+    // 
     GG.print();
     return 0;
 }
+ 
