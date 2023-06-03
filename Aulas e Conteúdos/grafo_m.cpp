@@ -25,8 +25,6 @@ GrafoM::GrafoM(int N) {
 
 // Adicão de nova aresta com direção;
 void GrafoM::add_d(int u, int v) {
-    u = u - 1;
-    v = v - 1;
     // Adicionando uma aresta de u para v (com direção);
     adj[u][v] = 1;
     E++;
@@ -80,7 +78,48 @@ void GrafoM::dfsR(int u, bool * visitado) {
     }
 }
 
+bool GrafoM::tem_caminho(int u, int v) {
+    bool * visitado = new bool[V + 2];
 
+    for(int i = 0; i < V; i++) visitado[i] = false;
+
+    dfsR(u, visitado);
+    return visitado[v];
+}
+
+void GrafoM::imprime_caminho(int u, int v) {
+    bool * visitado = new bool[V + 2];
+    int * pred = new int[V + 2];
+
+    for(int i =0; i < V; i++) {
+        visitado[i] = false;
+        pred[i] = -1;
+    }
+
+    pred[u] = u;
+    acha_caminho_r(u, visitado, pred);
+
+    if(pred[v] == -1) {
+        cout << "Não tem caminho\n";
+    }
+    else {
+        for(int w = v; w != u; w = pred[w]) {
+            printf("%d - ", w);
+        }
+        cout << u << endl;
+    }
+}
+
+void GrafoM::acha_caminho_r(int v, bool * visitado, int * pred) {
+    visitado[v] = true;
+
+    for(int i = 0; i < V; i++) {
+        if(adj[v][i] != 0 && !visitado[i]) {
+            pred[i] = v;
+            acha_caminho_r(i, visitado, pred);
+        }
+    }
+}
 int main() {
     cout << "Digite o número de vértices: \n";
     int N; cin >> N;
@@ -96,10 +135,21 @@ int main() {
         cin >> a >> b;
         GG.add_d(a, b);
     }
+    int ok = 1;
+
+    // PROBLEMA 1 //
+
+    /*while(ok) { 
+        cout << "Digite dois vértices: ";
+        int u, v; cin >> u >> v;
+
+        GG.imprime_caminho(u, v);
+        cout << "Continuar? "; cin >> ok;
+    }
+    return 0;*/
+
+    
 
 
-    // 
-    GG.print();
-    return 0;
 }
  

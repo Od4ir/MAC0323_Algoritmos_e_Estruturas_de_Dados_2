@@ -143,39 +143,39 @@ int main() {
     }
     GG.print();
 
+    int ok = 1;
+
+
+    // PROBLEMA 1 // 
 
     // Tem caminho de u a v? Como resolver esse problema?
     // --> Roda a dfs recursiva partindo de u, se o visitado de u marcar
     //     falso após a dfsR, então não existe caminho;
 
-    /* int ok = 1;
-
-    while(ok) { 
+    /*while(ok) { 
         cout << "Digite dois vértices: ";
         int u, v; cin >> u >> v;
 
         if(GG.tem_caminho(u, v)) printf("Tem caminho entre %d e %d\n", u, v);
         else printf("Não tem caminho entre %d e %d\n", u, v);
         cin >> ok;
-    }
+    }*/
 
-    */
+
+    // PROBLEMA 2 //
 
     // Se tem caminho, como imprimir esse caminho?
     // --> Roda uma dfs e salva num vetor de predecessores qual foi o vértice
     //     que foi visitado antes do vértice de valor do índice. Exemplo: se
     //     pred[i] = y, então o vértice visitado antes do y foi o i;
 
-
-    int ok = 1;
-
-    while(ok) { 
+    /*while(ok) { 
         cout << "Digite dois vértices: ";
         int u, v; cin >> u >> v;
 
         GG.imprime_caminho(u, v);
         cout << "Continuar? "; cin >> ok;
-    }
+    }*/
 
     return 0;
 }
