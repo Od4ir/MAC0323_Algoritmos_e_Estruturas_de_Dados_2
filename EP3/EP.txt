@@ -1,3 +1,10 @@
+>> Função para gerar letras (x);
+>> Função para cortar a string ( );
+
+
+
+
+
 // Valores da Tabela ASCII:
 // >> A = 65;
 // >> C = 67;
@@ -6,6 +13,18 @@
 
 Para gerar as letras, terei que fazer um rand entre 1 e 4, e dependendo
 do valor, fazer um append da letra que der; 
+
+Como eu posso cortar? 
+Queremos ter dois parâmetros para o tamanho máximo e mínimo em quantidade
+de letras;
+E depois, realizar o recorte... Mas como?
+
+Vamos supor que temos 100 letras. Queremos variar o tamanho entre 10 e 20
+letras. 
+
+Podemos sortear o tamanho - que será t (com 10 <= t <= 20);
+Sorteamos um índice de 0 até 100 - t;
+Cortamos a substring;
 
 
 // Funções que podem ser utéis:
