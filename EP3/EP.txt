@@ -1,8 +1,10 @@
 >> Função para gerar letras (x);
->> Função para cortar a string ( );
-
-
-
+>> Função para cortar a string (x);
+>> Função que lê strings como id de vértices e adiciona uma aresta
+entre esses vértices;
+>> Função que verifica se uma aresta u - v está em um circuito;
+>> Função que encontra em um grafo acíclico um caminho de comprimen-
+to máximo;
 
 
 // Valores da Tabela ASCII:
@@ -11,8 +13,12 @@
 // >> G = 71;
 // >> T = 84;
 
+------------------------------------------------------------------------
+
 Para gerar as letras, terei que fazer um rand entre 1 e 4, e dependendo
 do valor, fazer um append da letra que der; 
+
+------------------------------------------------------------------------
 
 Como eu posso cortar? 
 Queremos ter dois parâmetros para o tamanho máximo e mínimo em quantidade
@@ -26,6 +32,30 @@ Podemos sortear o tamanho - que será t (com 10 <= t <= 20);
 Sorteamos um índice de 0 até 100 - t;
 Cortamos a substring;
 
+-----------------------------------------------------------------------
+
+Como fazer um grafo com vértices que tem como id strings?
+
+Fazer uma class Node com as seguintes propridades;
+    - key -- Que identifica o id do vértice (Uma substring);
+    - vector<Node> adj -- Vetores de adjagência do vértice;
+    - bool vis;
+
+Para uma função que varia pelo Node, para acessar o vetor de
+adjagências basta:
+
+for(Node v: atual.adj) {
+    if(!v.vis) {
+        dfs(v);
+    }
+}
+
+Como fazer um vetor de visitados?
+Ao invés de manter um vetor, mantém um parâmetro em cada Node;
+Inicia sempre como false;
+(Talvez seja necessário fazer uma função que falsifique-os);
+
+-----------------------------------------------------------------------
 
 // Funções que podem ser utéis:
 
@@ -82,6 +112,10 @@ Tenho uma string ACC e uma outra CACCT, ACC está dentro da segunda,
 e eu consigo verificar isso, eu posso simplesmente excluir a primeira
 como se eu estivesse admitindo que ela está dentro da outra?
 
+
+(?)
+O resultado final, tem que ter o mesmo tamanho do inicial? Tipo
+eu tenho essa informação?
 
 
 */
