@@ -33,4 +33,6 @@ class GrafoL {
         bool tem_caminho(int u, int v);
         void acha_caminho_r(int v, bool * visitado, int * pred);
         void imprime_caminho(int u, int v);
+        int comp_conexa();
+        vector<int> vetor_comp_conexas();
 };
