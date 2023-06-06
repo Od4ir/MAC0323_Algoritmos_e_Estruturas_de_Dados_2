@@ -35,4 +35,6 @@ class GrafoL {
         void imprime_caminho(int u, int v);
         int comp_conexa();
         vector<int> vetor_comp_conexas();
+        bool eh_bipartido();
+        bool bipartidoR(int v, vector<int>& cores, int cor);
 };

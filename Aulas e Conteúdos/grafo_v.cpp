@@ -174,8 +174,56 @@ que os vértices adjacentes do u não tenham sido todos ainda verificados, eu
 vou ir verificar os adjacentes a algum adjacente. 
 
 A diferença da dfs para bfs é isso, na bfs, busca em profundidade, eu visito
-todos os adjacentes ao u antes de ir recursivamente para um deles. 
+todos os adjacentes ao u antes de ir recursivamente para um deles. Uma das 
+aplicações dessa forma de busca é para verificar se o grafo é bipartido ou
+não. Veja a função abaixo:
+
 */
+
+// Decide se o grafo é bipartido ou não;
+bool GrafoL::eh_bipartido() {
+    // Criamos um vetor para ir marcando as cores e o preenchemos com -1;
+    vector<int> cores(V + 2, -1);
+    // A variável 'resp' irá guardar a resposta final da função recursiva
+    // bipartidoR(). Caso em algum momento ela retorne false, já sabemos
+    // que o grafo não é, então paramos o loop e devolvemos false;
+    bool resp = true;
+
+    // Como o grafo pode ter várias componentes conexas, chamamos a função
+    // para todos os vértices não visitados. Verificamos se ele já foi vi-
+    // sitado olhando para o vetor cores; 
+    for(int i = 0; i < V && resp; i++) {
+        if(cores[i] == -1) {
+            resp = bipartidoR(i, cores, 0);
+        }
+    }
+    return resp;
+}
+
+// Essa função vai pintando os vértices para verificar se o grafo é bipar-
+// tido ou não;
+bool GrafoL::bipartidoR(int v, vector<int>& cores, int cor) {
+    // Pintamos o vértice atual com a cor mandada;
+    cores[v] = cor;
+
+    // Verificamos os vizinhos do vértice atual. Se algum deles já estiver
+    // pintado e a cor for igual a cor do vértice atual, já sabemos que a 
+    // resposta é false. 
+    for(int u: adj[v]) {
+        if(cores[u] == cor) return false;
+        // Caso ele ainda não tenha sido visitado, chamamos a função recur-
+        // siva, se ela devolver false, retornamos falso e acabou. Caso con-
+        // trário, apenas continuamos. 
+        if(cores[u] == -1) {
+            if(!bipartidoR(u, cores, 1 - cor)) {
+                return false;
+            }
+        }
+    }
+    // Se der tudo certo, sabemos que é verdade e retornamos true;
+    return true;
+}
+
 
 
 int main() {
@@ -207,6 +255,9 @@ int main() {
         i++;
         if(i == N) break;
     } 
+
+
+    cout << "O grafo é bipartido? " << GG.eh_bipartido() << endl;
 
     int ok = 1;
 
@@ -269,6 +320,7 @@ int main() {
 
         vetor_comp_conexas();
     */
+
     //--------------------------------------------------------------------------
     /* PROBLEMA 5 //
     Análogo ao 4, porém queremos saber o seguinte, dado um id de uma componente
@@ -292,8 +344,25 @@ int main() {
     Não to afim de implementar isso, entretanto. :)
     */
 
+    //--------------------------------------------------------------------------
+    /* PROBLEMA 6 //
 
+    Dado uum grafo, queremos decidir se ele é bipartido ou não. Um grafo binpar-
+    tido é aquele em que podemos pintar os vértices de 2 cores de tal forma que
+    todos os pares de 2 vértices que tem uma aresta em comum não possuem a mes-
+    ma cor. 
+
+    Como fazer isso? Comece por um vértice e pinte de uma cor x (Vamos supor que
+    temos 2 cores: x e y). Então, visite todos os vizinhos e pinte-os da cor y e
+    depois vá para o próximo vértice. Caso algum vizinho já esteja pintado, veri-
+    fique se a cor do vértice atual é igual a cor desse vizinho, se for, já pode
+    devolver que não é bipartido. Caso não seja, está ok e podemos continuar a ve-
+    rificação. Se der tudo certo, ao final podemos concluir que é um grafo bipar-
+    tido. 
+
+    Veja a função: bipR();
     
+    */
 
 
     return 0;
