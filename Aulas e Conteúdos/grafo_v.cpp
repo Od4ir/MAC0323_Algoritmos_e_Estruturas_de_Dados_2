@@ -164,23 +164,12 @@ vector<int> GrafoL::vetor_comp_conexas() {
     return comp_conexa;
 }
 
-//--------------------------------------------------------------------------
-/*
-O que fizemos até agora foi uma busca em largadura, dfs. A dfs funciona da
-seguinte forma - Começo em um vértice u, marco que ele foi visitado e vou 
-chamando a função recursivamente para os vértices adjacentes que não foram
-visitados ainda. Quando encontro um, chamo a função para ele, ou seja, mesmo
-que os vértices adjacentes do u não tenham sido todos ainda verificados, eu
-vou ir verificar os adjacentes a algum adjacente. 
-
-A diferença da dfs para bfs é isso, na bfs, busca em profundidade, eu visito
-todos os adjacentes ao u antes de ir recursivamente para um deles. Uma das 
-aplicações dessa forma de busca é para verificar se o grafo é bipartido ou
-não. Veja a função abaixo:
-
-*/
 
 // Decide se o grafo é bipartido ou não;
+/* Um grafo é bipartido de pudermos pintar todos os vértices de uma tal for-
+ma que toda aresta do grafo possua um vértice de cada cor em cada extremidade.
+Se tiver da mesma cor, então não é bipartido. 
+*/
 bool GrafoL::eh_bipartido() {
     // Criamos um vetor para ir marcando as cores e o preenchemos com -1;
     vector<int> cores(V + 2, -1);
@@ -224,6 +213,48 @@ bool GrafoL::bipartidoR(int v, vector<int>& cores, int cor) {
     return true;
 }
 
+//--------------------------------------------------------------------------
+/*
+O que fizemos até agora foi uma busca em profundidade, dfs. A dfs funciona da
+seguinte forma - Começo em um vértice u, marco que ele foi visitado e vou 
+chamando a função recursivamente para os vértices adjacentes que não foram
+visitados ainda. Quando encontro um, chamo a função para ele, ou seja, mesmo
+que os vértices adjacentes do u não tenham sido todos ainda verificados, eu
+vou ir verificar os adjacentes a algum adjacente. 
+
+A diferença da dfs para bfs é isso, na bfs, busca em largura, eu visito
+todos os adjacentes ao u antes de ir recursivamente para um deles. Vamos ao
+código:
+
+*/
+
+vector<int> GrafoL::caminho_mais_curto(int u) {
+    // Um valor para preencher nossa dist inicialmente;
+    int infinito = V + 100;
+    // Vetor dist para marcar as distâncias de u para todos os outros vérti-
+    // ces. Note que não precisamos de um vetor de visitados, pois sabemos 
+    // que um vértice u não foi visitado se seu dist[u] = infinito;
+    vector<int> dist(V + 2, infinito);
+
+    queue<int> fila; // queue -> Estrutura de fila do C++;
+    // Dá para usar uma pilha também (stack);
+
+    // Colocamos u na fila e marcamos que distância de u para u é 0;
+    fila.push(u);
+    dist[u] = 0;
+
+    while(!fila.empty()) {
+        int v = fila.front();
+        fila.pop();
+        for(int w: adj[v]) {
+            if(dist[w] > dist[v] + 1) {
+                dist[w] = dist[v] + 1;
+                fila.push(w);
+            }
+        }
+    }
+    return dist;
+}
 
 
 int main() {
@@ -258,6 +289,17 @@ int main() {
 
 
     cout << "O grafo é bipartido? " << GG.eh_bipartido() << endl;
+
+    cout << "Digite um vértice: ";
+    int vert; cin >> vert;
+
+    cout << "Caminho mínimo de todos os vértices até ele: " << endl;
+    
+    i = 0;
+    for(int x: GG.caminho_mais_curto(vert)) { 
+        cout << i << ": " << x << endl;
+        i++;
+    }
 
     int ok = 1;
 
