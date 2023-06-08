@@ -6,6 +6,7 @@ using namespace std;
 struct node {
     string key;
     int id;
+    node(string chave, int i);
 };
 
 typedef struct vector<node> vertices;
@@ -16,4 +17,6 @@ bool compara_nodes(node& a, node& b);
 string gera_string(int k);
 // Gera uma substring de tamanho tam a partir da string dna;
 string gera_substring(int tam, const string& dna);
+// Função que guarda os nodes em um vetor;
+
 

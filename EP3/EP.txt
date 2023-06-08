@@ -77,6 +77,37 @@ Inicia sempre como false;
 
 -----------------------------------------------------------------------
 
+Planejamento:
+
+Vamos gerar uma string:
+Digite o número de caracteres que deseja na string;
+>> string;
+
+
+Vamos dividir:
+Digite o número de substrings que deseja gerar:
+<< k;
+Digite o tamanho máximo e mínimo dessas strings:
+(Lembre-se que para um bom funcionamento MAX != MIN e MAX <= tamanho da
+string maior);
+>> MIN: 
+>> MAX:
+
+Deseja visualizar as strings geradas?
+>> S/n
+
+Vamos guardar os vértices gerados em um vetor e ordená-los por ordem alfa-
+bética das substrings de cada um;
+
+Pronto!
+
+Vamos adicionar as arestas entre os vértices. 
+Deseja visualizar as arestas para cada vértice?
+>> S/N;
+
+
+
+
 
 
 -----------------------------------------------------------------------
