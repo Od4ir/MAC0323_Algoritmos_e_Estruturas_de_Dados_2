@@ -15,6 +15,8 @@ string gera(int k) {
     return dna;
 }
 
+
+
 void corta_dna(int k, int t_min, int t_max, string &dna) {
     int tam = dna.size();
     int t_aux = t_max - t_min + 1;
@@ -29,6 +31,8 @@ void corta_dna(int k, int t_min, int t_max, string &dna) {
 
     }
 }
+
+
 
 int main() {
     int k; cin >> k;

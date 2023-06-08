@@ -35,6 +35,26 @@ Cortamos a substring;
 -----------------------------------------------------------------------
 
 Como fazer um grafo com vértices que tem como id strings?
+Preciso de uma estrutura que tenha salvo as chaves ordenadas para faci-
+litar sua busca. 
+
+Eu posso ter a estrutura do node da seguinte forma:
+
+typedef struct {
+    Key * key;
+    int id;
+} node;
+
+ABB de nodes - Ordenados pela key;
+
+int N - número de vértices.
+
+node adj[N][M] - Vetor de adjacências;
+
+adj[node.id][i] indica o iésimo node adjacente ao node.id;
+
+
+
 
 Fazer uma class Node com as seguintes propridades;
     - key -- Que identifica o id do vértice (Uma substring);
@@ -54,6 +74,10 @@ Como fazer um vetor de visitados?
 Ao invés de manter um vetor, mantém um parâmetro em cada Node;
 Inicia sempre como false;
 (Talvez seja necessário fazer uma função que falsifique-os);
+
+-----------------------------------------------------------------------
+
+
 
 -----------------------------------------------------------------------
 
