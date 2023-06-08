@@ -234,7 +234,7 @@ vector<int> GrafoL::caminho_mais_curto(int u) {
     // Vetor dist para marcar as distâncias de u para todos os outros vérti-
     // ces. Note que não precisamos de um vetor de visitados, pois sabemos 
     // que um vértice u não foi visitado se seu dist[u] = infinito;
-    vector<int> dist(V + 2, infinito);
+    vector<int> dist(V, infinito);
 
     queue<int> fila; // queue -> Estrutura de fila do C++;
     // Dá para usar uma pilha também (stack);
@@ -255,6 +255,59 @@ vector<int> GrafoL::caminho_mais_curto(int u) {
     }
     return dist;
 }
+
+void GrafoL::imprime_caminho_curto(int u, int v) {
+    int infinito = V + 100;
+    vector<int> dist(V, infinito);
+    vector<int> pred(V, -1);
+
+    acha_caminho_curtos(u, dist, pred);
+    cout << pred[u] << endl;
+    cout << pred[v] << endl;
+
+    if(pred[v] == -1) {
+        cout << "Não tem caminho!\n";
+    }
+    else { 
+        for(int w = v; w != u; w = pred[w]) {
+            printf("%d - ", w);
+        }
+        cout << u << '\n';
+    }
+}
+
+void GrafoL::acha_caminho_curtos(int u, vector<int>& dist, vector<int>& pred) { 
+    queue<int> fila;
+    fila.push(u);
+    dist[u] = 0;
+    pred[u] = u;
+
+    while(!fila.empty()) {
+        int w = fila.front();
+        fila.pop();
+        for(int v: adj[w]) {
+            if(dist[v] > dist[w] + 1) {
+                dist[v] = dist[w] + 1;
+                pred[v] = w;
+                fila.push(v);
+            }
+        }
+    }
+}
+
+
+// DIGRAFOS - Grafos Dirigidos //
+
+/* Em um grafo no qual as arestas tem direção, elas recebem o nome de arcos. 
+Cada vértice tem um grau de entrada e um de sáida que indicam quantos arcos
+apontam para ele e quantos saem dele. 
+
+Os algoritmos de busca em largura e profundidade funcionam normalmente em 
+dografos, não é necessário fazer um especial. 
+
+
+*/
+
 
 
 int main() {
@@ -290,15 +343,18 @@ int main() {
 
     cout << "O grafo é bipartido? " << GG.eh_bipartido() << endl;
 
-    cout << "Digite um vértice: ";
-    int vert; cin >> vert;
 
-    cout << "Caminho mínimo de todos os vértices até ele: " << endl;
-    
-    i = 0;
-    for(int x: GG.caminho_mais_curto(vert)) { 
-        cout << i << ": " << x << endl;
-        i++;
+    int v1, v2;
+    v1 = v2 = 1;
+    cout << "Digite dois vértice: ";
+    cin >> v1 >> v2;
+
+    while(v1 != -1) { 
+        cout << "Caminho curto entre eles: " << endl;
+
+        GG.imprime_caminho_curto(v1, v2);
+        cout << "Digite dois vértice: ";
+        cin >> v1 >> v2;
     }
 
     int ok = 1;
@@ -389,7 +445,7 @@ int main() {
     //--------------------------------------------------------------------------
     /* PROBLEMA 6 //
 
-    Dado uum grafo, queremos decidir se ele é bipartido ou não. Um grafo binpar-
+    Dado um grafo, queremos decidir se ele é bipartido ou não. Um grafo binpar-
     tido é aquele em que podemos pintar os vértices de 2 cores de tal forma que
     todos os pares de 2 vértices que tem uma aresta em comum não possuem a mes-
     ma cor. 
@@ -405,6 +461,30 @@ int main() {
     Veja a função: bipR();
     
     */
+
+    //--------------------------------------------------------------------------
+    /* PROBLEMA 7 //
+
+    Já sabemos encontrar o menor caminho, agora queremos imprimir ele. 
+    Basta usar a técnica do vetor de predecessores. 
+
+    //--------------------------------------------------------------------------
+    /* PROBLEMA 8 //
+
+    Já resolvemos o problema de encontrar o menor caminho entre dois vértices. 
+    Vamos para algumas variações. Se é uma árvore, consiguimos achar a maior 
+    distância entre 2 vértices. Basta pegar uma folha e rodar uma bfs para de-
+    terminar o vértice mais distante. Depois, rodar uma nova bfs nesse vértice,
+    a maior distância no novo vetor dist será o maior caminho. 
+
+    >> Problema do Diâmetro da Árvore. 
+
+    Mas esse
+    
+    
+    
+    */
+
 
 
     return 0;

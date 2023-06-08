@@ -38,4 +38,6 @@ class GrafoL {
         bool eh_bipartido();                                  // Devolve se o grafo é bipartido ou não;
         bool bipartidoR(int v, vector<int>& cores, int cor);
         vector<int> caminho_mais_curto(int u); // Devolve os comprimentos do caminho mais curto de u a qualquer outro vértice;
+        void acha_caminho_curtos(int u, vector<int>& dist, vector<int>& pred);
+        void imprime_caminho_curto(int u, int v);
 };
