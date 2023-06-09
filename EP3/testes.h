@@ -6,7 +6,10 @@ using namespace std;
 struct node {
     string key;
     int id;
-    node(string chave, int i);
+    node(string chave, int i) {
+        key.assign(chave);
+        id = i;
+    }
 };
 
 typedef struct vector<node> vertices;

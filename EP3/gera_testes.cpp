@@ -3,7 +3,7 @@
 #include <string>
 #include <algorithm>
 #include <fstream>
-#include "EP.h"
+#include "testes.h"
 using namespace std;
 
 // Este programa tem como objetivo gerar os arquivos para realizar os testes do EP;
@@ -44,12 +44,6 @@ void gera_k_strings(int k, int MIN, int MAX, string& dna) {
         cout << i << ": " << a << " | tam: " << tam << " | tam_real: " << a.size() << endl;
     }
 }
-
-node::node(string chave, int i) {
-    key.assign(chave);
-    id = i;
-}
-
 
 
 int main() {
@@ -129,7 +123,7 @@ int main() {
 
     cout << "\nDados gerados, agora vamos organizar e estruturar esses dados!\n\n";
 
-    cout << " \n-------/// PARTE 2 - ESTRUTURAÇÃO DOS DADOS ///-------\n\n";
+    cout << " \n---------/// PARTE 2 - ORGANIZAÇÃO DOS DADOS ///---------\n\n";
 
     cout << "2.1) Vamos ordenar o vetor de substrings por ordem alfabética. Isso vai facilitar a criação do grafo. \n\n";
 
@@ -167,7 +161,7 @@ int main() {
         cout << "Arquivo " << file_name << " gerado!\n";
     }
     else {
-        cout << "Não foi gerar o arquivo!\n";
+        cout << "Não foi possível gerar o arquivo!\n";
     }
     return 0;
 }
