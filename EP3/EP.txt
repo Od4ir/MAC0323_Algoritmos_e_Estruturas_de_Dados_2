@@ -20,60 +20,71 @@ do valor, fazer um append da letra que der;
 
 ------------------------------------------------------------------------
 
-Como eu posso cortar? 
-Queremos ter dois parâmetros para o tamanho máximo e mínimo em quantidade
-de letras;
-E depois, realizar o recorte... Mas como?
+Como eu posso recortar as substrings a partir das cópias?
 
-Vamos supor que temos 100 letras. Queremos variar o tamanho entre 10 e 20
-letras. 
+Vou ter dois parâmetros salvos - MIN e MAX, que vão indicar o intervalo
+em que irei cortar a string. 
 
-Podemos sortear o tamanho - que será t (com 10 <= t <= 20);
-Sorteamos um índice de 0 até 100 - t;
-Cortamos a substring;
+Então, para cada cópia, eu sorteio um valor entre MIN e MAX e tento divi-
+dir a string DNA o número máximo de vezes.
 
------------------------------------------------------------------------
+Algumas regras: Não poderão ser geradas strings com menos de k caracteres.
+Sendo esse k o parâmetro que vou usar para construir as arestas. 
 
-Como fazer um grafo com vértices que tem como id strings?
-Preciso de uma estrutura que tenha salvo as chaves ordenadas para faci-
-litar sua busca. 
+int tam_total = dna.size();
+int tam = rand() % (MAX - MIN) + MIN;
 
-Eu posso ter a estrutura do node da seguinte forma:
+int c = tam_total / tam;
+if(c == 0) {
+    // Tem que gerar de novo;
+}
+if(tam_total % tam < k) {
+    // Tem que gerar de novo;
+}
+if(tam_total % tam > k) {
+    corta c vezes e o que sobrar vira mais uma. 
+}
 
-typedef struct {
-    Key * key;
-    int id;
-} node;
+int copy = 0;
+while(copy < n) { 
+    int tam_total = dna.size();
+    int tam = (rand() % (MAX - MIN)) + MIN;
+    int c = tam_total / tam;
 
-ABB de nodes - Ordenados pela key;
+    if(tam_total - tam * c < k && c > 1 && tam_total % tam != 0) {
+        for(int i = c; i > 0; i--) {
+            if(tam_total - tam * c >= k) {
+                c = i;
+                break;
+            }
+        }
+    }
 
-int N - número de vértices.
-
-node adj[N][M] - Vetor de adjacências;
-
-adj[node.id][i] indica o iésimo node adjacente ao node.id;
-
-
-
-
-Fazer uma class Node com as seguintes propridades;
-    - key -- Que identifica o id do vértice (Uma substring);
-    - vector<Node> adj -- Vetores de adjagência do vértice;
-    - bool vis;
-
-Para uma função que varia pelo Node, para acessar o vetor de
-adjagências basta:
-
-for(Node v: atual.adj) {
-    if(!v.vis) {
-        dfs(v);
+    if(c != 0 && (tam_total - tam * c >= k || tam_total % tam == 0)) {
+        for(int i = c, ind = 0; i > 0; i--) {
+            a = dna.substr(ind, tam);
+            node no(a, 0);
+            v.push_back(no);
+            ind = ind + tam;
+        }
+        int aux = tam_total - tam * c;
+        if(aux != 0) {
+            node no(dna.substr(ind, aux), 0);
+            v.push_back(no);
+        }
+        copy++;
     }
 }
 
-Como fazer um vetor de visitados?
-Ao invés de manter um vetor, mantém um parâmetro em cada Node;
-Inicia sempre como false;
-(Talvez seja necessário fazer uma função que falsifique-os);
+
+-----------------------------------------------------------------------
+
+Já temos uma estrutura para guardar os nodes, que são os vértices e temos
+um id númerico para cada um deles. 
+
+A ideia vai ser achar a primeira aparição de um dado conjunto de caracte-
+res e a última aparição. Após isso, teremos os índices, é só iterar por 
+eles adicionando arestas. 
 
 -----------------------------------------------------------------------
 
