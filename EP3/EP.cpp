@@ -9,13 +9,73 @@ using namespace std;
 // Devolve o índice da primeira aparição da sequência aux
 // no vetor v;
 int pri(const vector<node>& v, const string aux) {
+    int start = 0, end = v.size() + 1, meio;
+    int resp = end;
 
+    while(start < end) {
+        meio = (start + end)/2;
+        //cout << meio << ": " << v[meio].key << endl;
+
+        int ind = v[meio].key.find(aux);
+        //cout << " índice: " << ind << endl;
+        
+        if(ind == 0) {
+            resp = min(meio, resp);
+            //cout << "ind\n";
+            end = meio;
+        }
+        else if(aux == v[meio].key) {
+            //cout << "==\n";
+            end = meio;
+            // Não sei o que fazer se forem iguais...
+        } 
+        else if(aux > v[meio].key) {
+            //cout << ">\n";
+            start = meio + 1;
+        }
+        else {
+            //cout << "<\n";
+            end = meio;
+        }
+    }
+    return resp;
 }
 
 // Devolve o índice da última aparição da sequência aux
 // no vetor v;
 int ult(const vector<node>& v, const string aux) {
+    int start = 0, end = v.size() + 1, meio;
+    int resp = 0;
 
+    while(start < end) {
+        meio = (start + end)/2;
+        //cout << meio << ": " << v[meio].key << endl;
+
+
+        int ind = v[meio].key.find(aux);
+        //cout << " >> índice: " << ind << endl;
+        
+        if(ind == 0) {
+            resp = max(meio, resp);
+            //cout << "ind\n";
+            start = meio + 1;
+        }
+        else if(aux == v[meio].key) {
+            start = meio + 1;
+            //cout << "==\n";
+            // Não sei o que fazer se forem iguais...
+        } 
+        else if(aux > v[meio].key) {
+            //cout << ">\n";
+            start = meio + 1;
+        }
+        else {
+            //cout << "<\n";
+            end = meio;
+        }
+    }
+
+    return resp;
 }
 
 void add_arco(int u, int ini, int ult) {
@@ -66,6 +126,13 @@ int main() {
 
         cout << "\n\n---------/// PARTE 2 - MONTAGEM DOS ARCOS ///----------\n\n";
 
+        int ok = 1;
+        while(ok) { 
+            string teste; cin >> teste;
+            cout << pri(v, teste) << endl;
+            cout << ult(v, teste) << endl;
+            cin >> ok;
+        }
     }
     else {
         cout << "Não foi possível abrir o arquivo. Tente novamente. \n";
