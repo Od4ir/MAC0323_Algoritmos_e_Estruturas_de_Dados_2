@@ -6,6 +6,7 @@
 #include "testes.h"
 using namespace std;
 
+
 // Devolve o índice da primeira aparição da sequência aux
 // no vetor v;
 int pri(const vector<node>& v, const string aux) {
@@ -126,12 +127,20 @@ int main() {
 
         cout << "\n\n---------/// PARTE 2 - MONTAGEM DOS ARCOS ///----------\n\n";
 
-        int ok = 1;
-        while(ok) { 
-            string teste; cin >> teste;
-            cout << pri(v, teste) << endl;
-            cout << ult(v, teste) << endl;
-            cin >> ok;
+        cout << "Escolha o parâmetro k: (Valor mínimo " << k << ") \n >> ";
+        int K; cin >> K;
+        for(node no: v) {
+            // Em um loop para cada nó, iremos achar aqueles que irão ter aresta;
+            int tam = no.key.size();
+            cout << "Nó atual: " << no.key << endl;
+            string aux = no.key.substr(tam - K, K);
+            cout << "Sub final: " << aux << endl;
+            int p = pri(v, aux);
+            int u = ult(v, aux);
+
+            for(int i = p; i <= u; i++) {
+                cout << "  " << i << ": " << v[i].key << endl;
+            }
         }
     }
     else {

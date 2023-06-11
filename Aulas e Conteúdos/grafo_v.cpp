@@ -309,6 +309,24 @@ Vamos ver a seguir alguns algoritmos para grafos dirigidos.
 
 */
 
+// Guardamos em pre[i] o instante em que o vértice começou a 
+// ser visitado.
+// Em pos[i], o instante que terminamos de visitar i;
+// Em pred[i] o vértice predecessor do vértice i;
+// Comparando os tempos de pre e pos podemos determinar o tipo
+// de arco.
+/*
+    >> De arborescência - Visitando um vértice que ainda não
+    começou a ser visitado;
+    >> De retorno - Visitando um vértice que já começou a ser
+    visitado mas essa visita ainda não foi encerrada;
+    >> Descendente - Visitando um vértice que já foi visita-
+    do e foi visitado antes do atual;
+    >> Cruzado - Visitando um vértice que já foi visitado e 
+    foi visitado depois do ínicio do atual;
+
+*/
+
 void GrafoL::dfsR2(int u, int * pre, int * pos, int * pred, int& tempo) {
     pre[u] = tempo++;
 
@@ -329,23 +347,6 @@ void GrafoL::dfsR2(int u, int * pre, int * pos, int * pred, int& tempo) {
 
 }
 
-// Guardamos em pre[i] o instante em que o vértice começou a 
-// ser visitado.
-// Em pos[i], o instante que terminamos de visitar i;
-// Em pred[i] o vértice predecessor do vértice i;
-// Comparando os tempos de pre e pos podemos determinar o tipo
-// de arco.
-/*
-    >> De arborescência - Visitando um vértice que ainda não
-    começou a ser visitado;
-    >> De retorno - Visitando um vértice que já começou a ser
-    visitado mas essa visita ainda não foi encerrada;
-    >> Descendente - Visitando um vértice que já foi visita-
-    do e foi visitado antes do atual;
-    >> Cruzado - Visitando um vértice que já foi visitado e 
-    foi visitado depois do ínicio do atual;
-
-*/
 void GrafoL::dfs2() {
     int * pre = new int[V + 2];
     int * pos = new int[V + 2];
@@ -365,7 +366,6 @@ void GrafoL::dfs2() {
 }
 
 // Vamos verificar se um digrafo tem ciclos ou não:
-
 bool GrafoL::circ_r(int u, int * pre, int * pos, int * pred, int& tempo) {
     pre[u] = tempo++;
     for(int w: adj[u]) {
@@ -394,7 +394,8 @@ bool GrafoL::tem_circuito() {
         pre[i] = pos[i] = pred[i] = -1;
     }
 
-    for(int i = 0; i < V; i++) {
+    for(int i = 0; i < V; i++) { // A gnt itera por todas os vértices pois
+        // não tem certeza se o grafo tem mais de uma comp. conexa;
         if(pred[i] == -1) {
             pred[i] = -1;
             if(circ_r(i, pre, pos, pred, tempo)) return true;
@@ -403,6 +404,60 @@ bool GrafoL::tem_circuito() {
     return false;
 }
 
+/*
+Vamos determinar de um grafo tem componentes fortemente conexas, 
+isto é, se existe um caminho entre todos os pares de vértices;
+*/
+
+int * GrafoL::comp_fortemente_conexas() {
+    int * sc = new int[V + 1];
+    int * pre = new int[V + 1];
+    int * low = new int[V + 1];
+    int cont = 0, k = 0;
+
+    for(int i = 0; i < V; i++) {
+        sc[i] = pre[i] = low[i] = -1;
+    }
+
+    for(int v = 0; v < V; v++) {
+        if(pre[v] == -1) {
+            dfsCFCR(v, pre, sc, low, cont, k);
+        }
+    }
+    delete[] pre;
+    delete[] low;
+    return sc;
+    // cont - Tempo; (Marcado no pre);
+    // k - Número de componentes fortemente conexas;
+}
+
+
+void GrafoL::dfsCFCR(int v, int * pre, int * sc, int * low, int& cont, int& k) {
+    pre[v] = cont++;
+    low[v] = pre[v];
+
+    stack<int> pilha;
+    pilha.push(v);
+
+    for(int w: adj[v]) { 
+        if(pre[w] == -1) {
+            dfsCFCR(w, pre, sc, low, cont, k);
+            if(low[w] < low[v]) low[v] = low[w];
+        }
+        else if(pre[w] < pre[v] && sc[w] == -1) {
+            low[v] = min(low[v], pre[w]);
+        }
+    }
+    if(low[v] == pre[v]) {
+        int u;
+        do {
+            u = pilha.top();
+            pilha.pop();
+            sc[u] = k;
+        } while(u != v);
+        k++;
+    }
+}
 
 int main() {
     // Adição das arestas e vértices;
@@ -565,9 +620,10 @@ int main() {
 
     Já sabemos encontrar o menor caminho, agora queremos imprimir ele. 
     Basta usar a técnica do vetor de predecessores. 
+    */
 
     //--------------------------------------------------------------------------
-    /* PROBLEMA 8 //
+    /* PROBLEMA 9 //
 
     Já resolvemos o problema de encontrar o menor caminho entre dois vértices. 
     Vamos para algumas variações. Se é uma árvore, consiguimos achar a maior 
@@ -579,14 +635,38 @@ int main() {
     */
 
     //--------------------------------------------------------------------------
-    /* PROBLEMA 8 //
+    /* PROBLEMA 10 //
 
     Dado um digrafo, queremos saber se ele é acíclico ou não.
+    A ideia é ir visitando os vértices e marcando o tempo em que começamos a vi-
+    sita. Quando formos visitar um adjacente ao vértice, verificamos se ele não 
+    foi visitado completamente antes. Se ele já foi, está tudo bem. Agora, se a vi-
+    sita dele não foi terminada ainda, isso é (pos[v] == -1), então temos um arco
+    de retorno e isso significa que temos um ciclo. 
 
+    Todo grafo não direcionado com pelo menos um aresta entre dois vértices dife-
+    rentes tem ciclo. De u -> v e de v -> u, é um ciclo. Por isso, perguntar se tem
+    ciclo faz mais sentido quando os grafos são direcionados. 
+
+    (?) - Arco de retorno indica que o grafo tem ciclo? Basta isso?
+    Acho que sim.
     */
 
+    //--------------------------------------------------------------------------
+    /* PROBLEMA 11 //
+
+    Queremos saber se um grafo é fortemente conexo. Ou, se apresenta componentes
+    fortemente conexas. Isto é, verificar se a partir de todo vértice do grafo, é
+    possível chegar em qualquer outro (dentro da mesma componente).
+
+    Outra forma de dizer isso é: Dado um par de vértices u e v, um grafo é forte-
+    mente conexo se para todo u e todo v, existe um caminho de u para v;
+
+    Para resolver o problema, dá para rodar uma dfs em cada vértice e verificar 
+    se algum deles não foi visitado. 
 
 
+    */
 
 
     return 0;
