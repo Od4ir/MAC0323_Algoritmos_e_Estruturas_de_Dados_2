@@ -305,9 +305,103 @@ apontam para ele e quantos saem dele.
 Os algoritmos de busca em largura e profundidade funcionam normalmente em 
 dografos, não é necessário fazer um especial. 
 
+Vamos ver a seguir alguns algoritmos para grafos dirigidos. 
 
 */
 
+void GrafoL::dfsR2(int u, int * pre, int * pos, int * pred, int& tempo) {
+    pre[u] = tempo++;
+
+
+    for(int w: adj[u]) {
+        if(pre[w] == -1) {
+            pred[w] = u;
+            dfsR2(w, pre, pos, pred, tempo);
+        }
+    }
+    /*for(int w = 0; w < V; w++) {
+        if(find(adj[u].begin(), adj[u].end(), w) != adj[u].end() && pre[w] == -1) {
+            pred[w] = u;
+            dfsR2(w, pre, pos, pred, tempo);
+        }
+    }*/
+    pos[u] = tempo++;
+
+}
+
+// Guardamos em pre[i] o instante em que o vértice começou a 
+// ser visitado.
+// Em pos[i], o instante que terminamos de visitar i;
+// Em pred[i] o vértice predecessor do vértice i;
+// Comparando os tempos de pre e pos podemos determinar o tipo
+// de arco.
+/*
+    >> De arborescência - Visitando um vértice que ainda não
+    começou a ser visitado;
+    >> De retorno - Visitando um vértice que já começou a ser
+    visitado mas essa visita ainda não foi encerrada;
+    >> Descendente - Visitando um vértice que já foi visita-
+    do e foi visitado antes do atual;
+    >> Cruzado - Visitando um vértice que já foi visitado e 
+    foi visitado depois do ínicio do atual;
+
+*/
+void GrafoL::dfs2() {
+    int * pre = new int[V + 2];
+    int * pos = new int[V + 2];
+    int * pred = new int[V + 2];
+    int tempo = 0;
+
+    for(int v = 0; v < V; v++) { // Inicia todos os vetores com -1; 
+        pre[v] = pos[v] = pred[v] = -1;
+    }
+
+    for(int v = 0; v < V; v++) {
+        if(pre[v] == -1) {
+            pred[v] = v;
+            dfsR2(v, pre, pos, pred, tempo);
+        }
+    }
+}
+
+// Vamos verificar se um digrafo tem ciclos ou não:
+
+bool GrafoL::circ_r(int u, int * pre, int * pos, int * pred, int& tempo) {
+    pre[u] = tempo++;
+    for(int w: adj[u]) {
+        if(pre[w] == -1) {
+            pred[w] = u;
+            if(circ_r(w, pre, pos, pred, tempo)) return true;
+        }
+        if(pos[w] == -1) {
+            // Se em algum mommento a gente retornar para algum vértice
+            // que já teve sua visita iniciada, mas não foi concluída, sa-
+            // bemos que esse grafo tem ciclos. 
+            return true;
+        }
+    }
+    pos[u] = tempo++;
+    return false;
+}
+
+bool GrafoL::tem_circuito() {
+    int * pre = new int[V + 1];
+    int * pos = new int[V + 1];
+    int * pred = new int[V + 1];
+    int tempo = 0;
+
+    for(int i = 0; i < V; i++) {
+        pre[i] = pos[i] = pred[i] = -1;
+    }
+
+    for(int i = 0; i < V; i++) {
+        if(pred[i] == -1) {
+            pred[i] = -1;
+            if(circ_r(i, pre, pos, pred, tempo)) return true;
+        }
+    }
+    return false;
+}
 
 
 int main() {
@@ -324,7 +418,7 @@ int main() {
     for(int i = 0; i < A; i++) {
         int a, b;
         cin >> a >> b;
-        GG.add(a, b);
+        GG.add_d(a, b);
     }
     GG.print();
 
@@ -358,6 +452,9 @@ int main() {
     }
 
     int ok = 1;
+
+    cout << "O grafo tem ciclos? \n";
+    cout << GG.tem_circuito() << endl;
 
     //--------------------------------------------------------------------------
     /* PROBLEMA 1 //
@@ -404,7 +501,8 @@ int main() {
             comp++;
         }
     }
-    cout << "Componentes conexas: " << comp << endl; */
+    cout << "Componentes conexas: " << comp << endl;
+    */
 
     //--------------------------------------------------------------------------
     /* PROBLEMA 4 //
@@ -477,13 +575,17 @@ int main() {
     terminar o vértice mais distante. Depois, rodar uma nova bfs nesse vértice,
     a maior distância no novo vetor dist será o maior caminho. 
 
-    >> Problema do Diâmetro da Árvore. 
-
-    Mas esse
-    
-    
-    
+    >> Problema do Diâmetro da Árvore.     
     */
+
+    //--------------------------------------------------------------------------
+    /* PROBLEMA 8 //
+
+    Dado um digrafo, queremos saber se ele é acíclico ou não.
+
+    */
+
+
 
 
 

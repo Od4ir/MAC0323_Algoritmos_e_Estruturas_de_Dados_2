@@ -40,4 +40,8 @@ class GrafoL {
         vector<int> caminho_mais_curto(int u); // Devolve os comprimentos do caminho mais curto de u a qualquer outro vértice;
         void acha_caminho_curtos(int u, vector<int>& dist, vector<int>& pred);
         void imprime_caminho_curto(int u, int v);
+        void dfs2();
+        void dfsR2(int u, int * pre, int * pos, int * pred, int& tempo);
+        bool tem_circuito();
+        bool circ_r(int u, int * pre, int * pos, int * pred, int& tempo);
 };
