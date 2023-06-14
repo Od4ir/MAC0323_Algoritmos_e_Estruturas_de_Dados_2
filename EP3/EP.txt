@@ -116,8 +116,64 @@ Vamos adicionar as arestas entre os vértices.
 Deseja visualizar as arestas para cada vértice?
 >> S/N;
 
+-----------------------------------------------------------------------
+
+Para cada string, tenta começar com o k máximo;
+Cria um vetor com os índices das arestas para marcar as que foram visi-
+tadas;
+
+    Acha o pri e o ult;
+
+    if(pri <= ult) {
+        Preenche entre o pri e o ult;
+        Coloca arestas entre o pri e o ult - Para todas que não foram
+        visitadas ainda (Isso garante que elas vão ter a intersecção 
+        máxima);
+    }
 
 
+Qual vai ser a estrutura?
+
+vector<int> adj[N]
+
+
+
+Maneira Complicada:
+
+for(int k = aux.tam; k > k_min; k++) {
+    Acha o pri e o ult para o k em questão;
+
+    if(pri >= pri_vis && ult_vis <= ult) {
+        Não fazemos nada, pois já foram marcados com um k maior;
+    }
+
+    if(ult == pri_vis) { 
+        Visitamos e marcamos arestas de peso k para todos os nodes de
+        pri a ult - 1;
+        pri_vis = pri;
+    }    
+    else if(ult < pri_vis) { 
+        Visitamos e marcamos arestas de peso k para todos os nodes de
+        pri a ult;
+        pri_vis = pri;
+    }
+    else if(pri == ult_vis) {
+        Visitamos e marcamos arestas de peso k para todos os nodes de
+        pri + 1 a ult;
+        ult_vis = ult;
+    }
+    else if(pri > ult)
+
+
+
+
+    if(pri != ult) // Ou seja, se existem nodes para o k em questão;
+        Marcamos que esse intervalo já foi inteiro visitado;
+        pri_vis = pri, ult_vis = ult;
+        Marcamos arestas de peso k para todos esses nodes;
+        Voltamos ao loop com um k menor;
+
+}
 
 
 

@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <fstream>
 #include "testes.h"
+#include "grafo.h"
 using namespace std;
 
 
@@ -79,9 +80,11 @@ int ult(const vector<node>& v, const string aux) {
     return resp;
 }
 
-void add_arco(int u, int ini, int ult) {
+
+void add_arco(int u, int v, int peso) {
     // Vou precisar de um vetor de adjacências;
 }
+
 
 
 int main() {
