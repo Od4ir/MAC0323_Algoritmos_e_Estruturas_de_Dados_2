@@ -672,9 +672,35 @@ int main() {
     Outra forma de dizer isso é: Dado um par de vértices u e v, um grafo é forte-
     mente conexo se para todo u e todo v, existe um caminho de u para v;
 
-    Para resolver o problema, dá para rodar uma dfs em cada vértice e verificar 
-    se algum deles não foi visitado. 
+    Um grafo fortemente conexo apresenta apenas uma componente fortemente conexa.
+    Se tiver mais de uma, já não é pois se temos duas, sejam A e B, isso significa
+    que tem algum vértice em A do qual não é possível chegar em B. Logo, o grafo 
+    não é fortemente conexo, mas apresenta componentes fortemente conexas;
 
+    Para verificar isso, estamos utilizando o algoritmo de Tarjan (ACHO). A ideia
+    é ir visitando os vértices e marcando em um vetor qual o 'menor' vértice possí-
+    vel de se visitar partindo do vértice atual. Se todos marcarem o mesmo valor no
+    final, então é fortemente conexo. 
+
+    (?) - Todo grafo sem ciclo não é fortemente conexo, correto? SIM
+    (?) - Um grafo fortemente conexo não pode ser ordenado topologicamente? SIM
+        Consequência da resposta anterior;
+
+    */
+
+    //--------------------------------------------------------------------------
+    /* PROBLEMA 12 //
+
+    Ordenação Topológica - Ordenar os vértices de forma todo arco vai para frente,
+    ou seja, não há nenhum arco de retorno. Não há ciclos.
+
+    Para um grafo acíclico, com certeza deve existir um vértice de grau de entrada
+    0, isto é, que não recebe nenhum arco, ou seja, não dá para chegar nele de vér-
+    tice nenhum.
+
+    Usando esse fato, podemos montar uma ordenação topológica excluindo o vértice
+    de entrada 0 e analisando qual é o outro vértice de entrada zero após essa re-
+    moção. 
 
     */
 
