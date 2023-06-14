@@ -413,6 +413,7 @@ int * GrafoL::comp_fortemente_conexas() {
     int * sc = new int[V + 1];
     int * pre = new int[V + 1];
     int * low = new int[V + 1];
+    stack<int> pilha;
     int cont = 0, k = 0;
 
     for(int i = 0; i < V; i++) {
@@ -421,7 +422,7 @@ int * GrafoL::comp_fortemente_conexas() {
 
     for(int v = 0; v < V; v++) {
         if(pre[v] == -1) {
-            dfsCFCR(v, pre, sc, low, cont, k);
+            dfsCFCR(v, pre, sc, low, cont, k, pilha);
         }
     }
     delete[] pre;
@@ -431,18 +432,27 @@ int * GrafoL::comp_fortemente_conexas() {
     // k - Número de componentes fortemente conexas;
 }
 
+/* Como funciona isso na prática?*/
+/*
+O  vetor pre marca o instante em que o vértice foi visitado. O 
+vetor sc (Strong Component) marca o número da componente forte-
+mente conexa a qual o vértice pertencee. E o low marca o 'menor'
+vértice que pode ser acessado a partir daquele vértice. 
 
-void GrafoL::dfsCFCR(int v, int * pre, int * sc, int * low, int& cont, int& k) {
+
+*/
+void GrafoL::dfsCFCR(int v, int * pre, int * sc, int * low, int& cont, int& k, stack<int>& pilha) {
     pre[v] = cont++;
     low[v] = pre[v];
 
-    stack<int> pilha;
     pilha.push(v);
 
     for(int w: adj[v]) { 
         if(pre[w] == -1) {
-            dfsCFCR(w, pre, sc, low, cont, k);
-            if(low[w] < low[v]) low[v] = low[w];
+            dfsCFCR(w, pre, sc, low, cont, k, pilha);
+            if(low[w] < low[v]) { 
+                low[v] = low[w];
+            }
         }
         else if(pre[w] < pre[v] && sc[w] == -1) {
             low[v] = min(low[v], pre[w]);

@@ -45,6 +45,6 @@ class GrafoL {
         bool tem_circuito();
         bool circ_r(int u, int * pre, int * pos, int * pred, int& tempo);
         int * comp_fortemente_conexas();
-        void dfsCFCR(int v, int * pre, int * sc, int * low, int& cont, int& k);
+        void dfsCFCR(int v, int * pre, int * sc, int * low, int& cont, int& k, stack<int>& pilha);
         // CFCR - Componentes Fortemente Conexos Recursivo;
 };
