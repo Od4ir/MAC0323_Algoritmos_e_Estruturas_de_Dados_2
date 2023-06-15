@@ -12,6 +12,12 @@ struct node {
         info.assign(informacao);
         id = i;
     }
+    node() { }
+
+    bool operator==(const node& b) const {
+        return (id == b.id);
+    }
+
 };
 
 // Vetor de vértices, nós:
@@ -21,6 +27,13 @@ typedef struct vector<node> vertices;
 struct aresta {
     node vertice;
     ll peso;
+    aresta(node no, ll p) {
+        peso = p;
+        vertice = no;
+    }
+    bool operator==(const aresta& a) const {
+        return (vertice.id == a.vertice.id && peso == a.peso);
+    }
 };
 
 // Vetor de arestas:

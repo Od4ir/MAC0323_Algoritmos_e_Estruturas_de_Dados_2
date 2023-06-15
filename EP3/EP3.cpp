@@ -80,6 +80,33 @@ int ult(const vector<node>& v, const string aux) {
     return resp;
 }
 
+void add_aresta(arestas& are, node u, node v, int k) {
+
+    // Primeiro vamos ver se já existe uma aresta entre v e u;
+    // Se já existir, vamos ver se o k dela é menor que o k da atual;
+    //  Se for menor, destruimos ela e colocamos a nova;
+    //  Se for maior, não adicionamos a nova;
+
+    for(aresta a: are[v.id]) {
+        if(a.vertice.info == u.info) {
+            // Já tem uma aresta entre os dois;
+            if(a.peso < k) {
+                are[v.id].erase(remove(are[v.id].begin(), are[v.id].end(), a), are[v.id].end());
+                are[u.id].push_back(aresta(v, k));
+                return;
+            }
+            // Se for maior, não adiciona;
+            return;
+        }
+    }
+    // Se sair do loop sem dar return, significa que ainda não há uma 
+    // aresta entre eles;
+
+    // Adiciona uma aresta entre u e v se forem nodes diferentes;
+    if(!(u == v)) are[u.id].push_back(aresta(v, k));
+}
+
+
 int main() {
     cout << " \n-----------/// BEM VINDX AO EP3 - Od4ir ///-----------\n\n";
 
@@ -125,42 +152,46 @@ int main() {
 
         cout << "Escolha o parâmetro k: (Valor mínimo " << k << ") \n >> ";
         int K; cin >> K;
+        vector<int> vis(k + 1, 0);
+
+        arestas adj = vector<vector<aresta>>(k);
 
         for(node no: verts) {
-            int k_max = no.info.size();
+            ll k_max = no.info.size();
+            fill(vis.begin(), vis.end(), 0);
+
+            for(ll i = 0; i < k; i++) {
+                cout << i + 1 << ": " << vis[i] << endl;
+            }
 
             cout << "Nó atual " << no.id << ": " << no.info << endl;
-            int tam = no.info.size();
+            ll tam = no.info.size();
 
-            while(k_max <= K) {
+            while(k_max >= K) {
                 string aux = no.info.substr(tam - k_max, k_max);
 
-                cout << " Sub FInal: " << aux << endl;
+                cout << " Sub Final: " << aux <<  " k atual: " << k_max <<endl;
                 ll p = pri(verts, aux);
                 ll u = ult(verts, aux);
 
-                for(int i = p; i <= u; i++) {
-                    cout << " " << i << ": " << verts[i].info << endl;
+                for(ll i = p; i <= u; i++) {
+                    if(vis[i] == 0) { 
+                        cout << " " << i << ": " << verts[i].info << endl;
+
+                        add_aresta(adj, no, verts[i], k_max);
+                        vis[i] = 1;
+                    }
                 }
-
-
-
+                k_max--;
             }
         }
 
-        /*for(string x: v) {
-            // Em um loop para cada nó, iremos achar aqueles que irão ter aresta;
-            int tam = x.size();
-            cout << "Nó atual: " << no.info << endl;
-            string aux = no.info.substr(tam - K, K);
-            cout << "Sub final: " << aux << endl;
-            int p = pri(v, aux);
-            int u = ult(v, aux);
-
-            for(int i = p; i <= u; i++) {
-                cout << "  " << i << ": " << v[i].info << endl;
+        for(int i = 0; i < k; i++) {
+            cout << verts[i].info << endl;
+            for(aresta a: adj[i]) {
+                cout << "  >" << a.vertice.id << ": " << a.vertice.info << "(" << a.peso << ")\n";
             }
-        }*/
+        }
     }
 
     
