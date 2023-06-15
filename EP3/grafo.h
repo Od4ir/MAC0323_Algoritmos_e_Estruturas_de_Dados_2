@@ -4,14 +4,12 @@
 using namespace std;
 using ll = long long int;
 
-typedef string Info;
-
 // Estrutura de cada vértice/nó:
 struct node {
-    Info info;
+    string info;
     ll id;
-    node(Info info, int i) {
-        info.assign(info);
+    node(string informacao, ll i) {
+        info.assign(informacao);
         id = i;
     }
 };

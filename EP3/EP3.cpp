@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <fstream>
 #include "grafo.h"
+#include "operacoes.h"
 using namespace std;
 
 
@@ -15,9 +16,9 @@ int pri(const vector<node>& v, const string aux) {
 
     while(start < end) {
         meio = (start + end)/2;
-        //cout << meio << ": " << v[meio].key << endl;
+        //cout << meio << ": " << v[meio].info << endl;
 
-        int ind = v[meio].key.find(aux);
+        int ind = v[meio].info.find(aux);
         //cout << " índice: " << ind << endl;
         
         if(ind == 0) {
@@ -25,12 +26,12 @@ int pri(const vector<node>& v, const string aux) {
             //cout << "ind\n";
             end = meio;
         }
-        else if(aux == v[meio].key) {
+        else if(aux == v[meio].info) {
             //cout << "==\n";
             end = meio;
             // Não sei o que fazer se forem iguais...
         } 
-        else if(aux > v[meio].key) {
+        else if(aux > v[meio].info) {
             //cout << ">\n";
             start = meio + 1;
         }
@@ -50,10 +51,10 @@ int ult(const vector<node>& v, const string aux) {
 
     while(start < end) {
         meio = (start + end)/2;
-        //cout << meio << ": " << v[meio].key << endl;
+        //cout << meio << ": " << v[meio].info << endl;
 
 
-        int ind = v[meio].key.find(aux);
+        int ind = v[meio].info.find(aux);
         //cout << " >> índice: " << ind << endl;
         
         if(ind == 0) {
@@ -61,12 +62,12 @@ int ult(const vector<node>& v, const string aux) {
             //cout << "ind\n";
             start = meio + 1;
         }
-        else if(aux == v[meio].key) {
+        else if(aux == v[meio].info) {
             start = meio + 1;
             //cout << "==\n";
             // Não sei o que fazer se forem iguais...
         } 
-        else if(aux > v[meio].key) {
+        else if(aux > v[meio].info) {
             //cout << ">\n";
             start = meio + 1;
         }
@@ -79,24 +80,15 @@ int ult(const vector<node>& v, const string aux) {
     return resp;
 }
 
-
-void add_arco(int u, int v, int peso) {
-    // Vou precisar de um vetor de adjacências;
-}
-
-
-
 int main() {
     cout << " \n-----------/// BEM VINDX AO EP3 - Od4ir ///-----------\n\n";
 
-    cout << " \n---------/// PARTE 1 - OBTENÇÃO DOS DADOS ///----------\n\n";
 
-    cout << " Vamos pegar um arquivo de teste para realizar as operações.\n \n Digite o nome do arquivo: \n >> ";
+    cout << "\nOlá biologx, digite o nome do arquivo com os pedaços de DNA: >> \n";
     string file_name;
     cin >> file_name;
 
     ifstream arquivo(file_name);
-    vertices v;
 
     if(arquivo.is_open()) {
         string dna, aux;
@@ -108,11 +100,12 @@ int main() {
         k = stoi(aux);
 
         string linha;
+        vertices verts;
         int i = 0;
         while(getline(arquivo, linha)) {
             // Em linha está a substring;
             node no(linha, i++);
-            v.push_back(no);
+            verts.push_back(no);
         }
 
         cout << "\n Deseja imprimir os dados? S/N: \n >> ";
@@ -123,31 +116,52 @@ int main() {
             cout << " Número de cópias.............." << copy << endl;
             cout << " Número de substrings.........." << k << endl;
             cout << " Substrings: " << endl;
-            for(node n: v)
-                cout << "  " << n.id << ": " << n.key << endl;
+            for(node no: verts) { 
+                cout << "  " << no.id << ": " << no.info << endl;
+            }
         }
 
         cout << "\n\n---------/// PARTE 2 - MONTAGEM DOS ARCOS ///----------\n\n";
-        
+
         cout << "Escolha o parâmetro k: (Valor mínimo " << k << ") \n >> ";
         int K; cin >> K;
-        for(node no: v) {
+
+        for(node no: verts) {
+            int k_max = no.info.size();
+
+            cout << "Nó atual " << no.id << ": " << no.info << endl;
+            int tam = no.info.size();
+
+            while(k_max <= K) {
+                string aux = no.info.substr(tam - k_max, k_max);
+
+                cout << " Sub FInal: " << aux << endl;
+                ll p = pri(verts, aux);
+                ll u = ult(verts, aux);
+
+                for(int i = p; i <= u; i++) {
+                    cout << " " << i << ": " << verts[i].info << endl;
+                }
+
+
+
+            }
+        }
+
+        /*for(string x: v) {
             // Em um loop para cada nó, iremos achar aqueles que irão ter aresta;
-            int tam = no.key.size();
-            cout << "Nó atual: " << no.key << endl;
-            string aux = no.key.substr(tam - K, K);
+            int tam = x.size();
+            cout << "Nó atual: " << no.info << endl;
+            string aux = no.info.substr(tam - K, K);
             cout << "Sub final: " << aux << endl;
             int p = pri(v, aux);
             int u = ult(v, aux);
 
             for(int i = p; i <= u; i++) {
-                cout << "  " << i << ": " << v[i].key << endl;
+                cout << "  " << i << ": " << v[i].info << endl;
             }
-        }
-    }
-    else {
-        cout << "Não foi possível abrir o arquivo. Tente novamente. \n";
+        }*/
     }
 
-    return 0;
+    
 }

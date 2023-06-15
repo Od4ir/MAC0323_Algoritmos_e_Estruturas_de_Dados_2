@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <fstream>
 #include "grafo.h"
-#include "make_testes.h"
+#include "operacoes.h"
 using namespace std;
 
 bool compara_string(string& a, string& b) {
