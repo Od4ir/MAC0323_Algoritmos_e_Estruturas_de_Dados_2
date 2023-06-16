@@ -80,7 +80,14 @@ int ult(const vector<node>& v, const string aux) {
     return resp;
 }
 
-void add_aresta(arestas& are, node u, node v, int k) {
+void add_aresta_simples(arestas &are, node &u, node &v, ll k) {
+    // Vamos adicionar uma aresta que sai de u para v;
+    v.g_in++;
+    are[u.id].push_back(aresta(v.id, k));
+    u.g_out = (ll)are[u.id].size();
+}
+
+void add_aresta(arestas& are, node& u, node& v, ll k) {
 
     // Primeiro vamos ver se já existe uma aresta entre v e u;
     // Se já existir, vamos ver se o k dela é menor que o k da atual;
@@ -88,11 +95,14 @@ void add_aresta(arestas& are, node u, node v, int k) {
     //  Se for maior, não adicionamos a nova;
 
     for(aresta a: are[v.id]) {
-        if(a.vertice.info == u.info) {
-            // Já tem uma aresta entre os dois;
+        if(a.vertice == u.id) {
+            // Já tem uma aresta entre os dois e o peso é menor;
             if(a.peso < k) {
                 are[v.id].erase(remove(are[v.id].begin(), are[v.id].end(), a), are[v.id].end());
-                are[u.id].push_back(aresta(v, k));
+                // Vamos remover a aresta que sai de v para u:
+                v.g_out = are[v.id].size();
+                u.g_in--;
+                add_aresta_simples(are, u, v, k);
                 return;
             }
             // Se for maior, não adiciona;
@@ -103,7 +113,7 @@ void add_aresta(arestas& are, node u, node v, int k) {
     // aresta entre eles;
 
     // Adiciona uma aresta entre u e v se forem nodes diferentes;
-    if(!(u == v)) are[u.id].push_back(aresta(v, k));
+    if(!(u == v)) add_aresta_simples(are, u, v, k);
 }
 
 
@@ -111,7 +121,7 @@ int main() {
     cout << " \n-----------/// BEM VINDX AO EP3 - Od4ir ///-----------\n\n";
 
 
-    cout << "\nOlá biologx, digite o nome do arquivo com os pedaços de DNA: >> \n";
+    cout << "\nOlá biologx, digite o nome do arquivo com os pedaços de DNA:\n >> ";
     string file_name;
     cin >> file_name;
 
@@ -160,25 +170,15 @@ int main() {
             ll k_max = no.info.size();
             fill(vis.begin(), vis.end(), 0);
 
-            for(ll i = 0; i < k; i++) {
-                cout << i + 1 << ": " << vis[i] << endl;
-            }
-
-            cout << "Nó atual " << no.id << ": " << no.info << endl;
             ll tam = no.info.size();
 
             while(k_max >= K) {
                 string aux = no.info.substr(tam - k_max, k_max);
-
-                cout << " Sub Final: " << aux <<  " k atual: " << k_max <<endl;
                 ll p = pri(verts, aux);
                 ll u = ult(verts, aux);
-
                 for(ll i = p; i <= u; i++) {
                     if(vis[i] == 0) { 
-                        cout << " " << i << ": " << verts[i].info << endl;
-
-                        add_aresta(adj, no, verts[i], k_max);
+                        add_aresta(adj, verts[no.id], verts[i], k_max);
                         vis[i] = 1;
                     }
                 }
@@ -186,12 +186,23 @@ int main() {
             }
         }
 
-        for(int i = 0; i < k; i++) {
-            cout << verts[i].info << endl;
-            for(aresta a: adj[i]) {
-                cout << "  >" << a.vertice.id << ": " << a.vertice.info << "(" << a.peso << ")\n";
+        cout << "\n Deseja imprimir as arestas e seus pesos? S/N: \n >> ";
+        cin >> op;
+
+        if(op == 'S') { 
+            for(int i = 0; i < k; i++) {
+                cout << i << ": " << verts[i].info << endl;
+                cout << "Grau de saída: " << adj[i].size() << " " << verts[i].g_out << endl;
+                cout << "Grau de entrada: " << verts[i].g_in << endl;
+                for(aresta a: adj[i]) {
+                    cout << "  >" << a.vertice << ": " << verts[a.vertice].info << "(" << a.peso << ")\n";
+                }
             }
         }
+
+        cout << tem_circuito(k, adj) << endl;
+
+
     }
 
     
