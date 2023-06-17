@@ -396,8 +396,8 @@ bool GrafoL::tem_circuito() {
 
     for(int i = 0; i < V; i++) { // A gnt itera por todas os vértices pois
         // não tem certeza se o grafo tem mais de uma comp. conexa;
-        if(pred[i] == -1) {
-            pred[i] = -1;
+        if(pre[i] == -1) {
+            pred[i] = i;
             if(circ_r(i, pre, pos, pred, tempo)) return true;
         }
     }
@@ -469,6 +469,15 @@ void GrafoL::dfsCFCR(int v, int * pre, int * sc, int * low, int& cont, int& k, s
     }
 }
 
+bool GrafoL::aresta_em_circ(int u, int v) {
+    bool * vis = new bool[V + 1];
+    for(int i = 0; i < V; i++) vis[i] = false;
+
+    dfsR(v, vis);
+    if(vis[u]) return true;
+    return false;
+}
+
 int main() {
     // Adição das arestas e vértices;
     cout << "Digite o número de vértices: \n";
@@ -520,6 +529,15 @@ int main() {
 
     cout << "O grafo tem ciclos? \n";
     cout << GG.tem_circuito() << endl;
+
+    cout << "Digite uma aresta: \n";
+    cin >> v1 >> v2;
+
+    while(v1 != -1) { 
+        cout << GG.aresta_em_circ(v1, v2) << endl;
+        cout << "Digite uma aresta: \n";
+        cin >> v1 >> v2;
+    }
 
     //--------------------------------------------------------------------------
     /* PROBLEMA 1 //
@@ -701,6 +719,14 @@ int main() {
     Usando esse fato, podemos montar uma ordenação topológica excluindo o vértice
     de entrada 0 e analisando qual é o outro vértice de entrada zero após essa re-
     moção. 
+
+    */
+       //--------------------------------------------------------------------------
+    /* PROBLEMA 13 //
+
+    Como decidir de uma aresta entre dois vértices está em um ciclo ou não?
+    Roda uma dfs naquele para a qual a aresta aponta e vê se você chega no outro vér-
+    tice. Se chegar, então está num ciclo, se não chegar, então não esta. 
 
     */
 

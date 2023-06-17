@@ -47,4 +47,5 @@ class GrafoL {
         int * comp_fortemente_conexas();
         void dfsCFCR(int v, int * pre, int * sc, int * low, int& cont, int& k, stack<int>& pilha);
         // CFCR - Componentes Fortemente Conexos Recursivo;
+        bool aresta_em_circ(int u, int v);
 };
