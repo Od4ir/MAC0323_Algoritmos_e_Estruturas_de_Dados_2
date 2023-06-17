@@ -58,13 +58,54 @@ typedef struct vector<vector<aresta>> arestas;
 // arestas[i][j].vertice =  node ao qual o node de id i está conectado;
 // arestas[i][j].peso = um valor inteiro que indica o peso da aresta;
 
-bool circ_r(ll u, ll * pre, ll * pos, ll * pred, ll& tempo, const arestas& adj) {
+
+// Adiciona uma aresta entre os nodes u e v;
+void add_aresta_simples(arestas &are, node &u, node &v, ll k) {
+    // Vamos adicionar uma aresta que sai de u para v;
+    v.g_in++;
+    are[u.id].push_back(aresta(v.id, k));
+    u.g_out = (ll)are[u.id].size();
+}
+
+// Adiciona uma aresta entre os nodes u e v se já não existe uma aresta entre eles;
+// Se existir, verifica se o peso da nova é maior do que a da antiga;
+// Se for, substitui, se não, não adiciona a nova aresta;
+void add_aresta(arestas& are, node& u, node& v, ll k) {
+
+    // Primeiro vamos ver se já existe uma aresta entre v e u;
+    // Se já existir, vamos ver se o k dela é menor que o k da atual;
+    //  Se for menor, destruimos ela e colocamos a nova;
+    //  Se for maior, não adicionamos a nova;
+
+    for(aresta a: are[v.id]) {
+        if(a.vertice == u.id) {
+            // Já tem uma aresta entre os dois e o peso é menor;
+            if(a.peso < k) {
+                are[v.id].erase(remove(are[v.id].begin(), are[v.id].end(), a), are[v.id].end());
+                // Vamos remover a aresta que sai de v para u:
+                v.g_out = are[v.id].size();
+                u.g_in--;
+                add_aresta_simples(are, u, v, k);
+                return;
+            }
+            // Se for maior, não adiciona;
+            return;
+        }
+    }
+    // Se sair do loop sem dar return, significa que ainda não há uma 
+    // aresta entre eles;
+
+    // Adiciona uma aresta entre u e v se forem nodes diferentes;
+    if(!(u == v)) add_aresta_simples(are, u, v, k);
+}
+
+// Avalia se existem circuitos na aresta ou não;
+bool circ_r(ll u, ll * pre, ll * pos, ll& tempo, const arestas& adj) {
     pre[u] = tempo++;
 
     for(aresta w: adj[u]) {
         if(pre[w.vertice] == -1) {
-            pred[w.vertice] = u;
-            if(circ_r(w.vertice, pre, pos, pred, tempo, adj)) return true;
+            if(circ_r(w.vertice, pre, pos, tempo, adj)) return true;
         }
         if(pos[w.vertice] == -1) {
             // Se em algum mommento a gente retornar para algum vértice
@@ -78,24 +119,56 @@ bool circ_r(ll u, ll * pre, ll * pos, ll * pred, ll& tempo, const arestas& adj) 
 }
 
 
+// Retorna se o grafo tem circuitos ou não;
 bool tem_circuito(ll V, const arestas& are) {
     ll * pre = new ll[V + 1];
     ll * pos = new ll[V + 1];
-    ll * pred = new ll[V + 1];
     ll tempo = 0;
 
     for(ll i = 0; i < V; i++) {
-        pre[i] = pos[i] = pred[i] = -1;
+        pre[i] = pos[i] = -1;
     }
 
     for(ll i = 0; i < V; i++) { // A gnt itera por todas os vértices pois
         // não tem certeza se o grafo tem mais de uma comp. conexa;
-        if(pred[i] == -1) {
-            pred[i] = -1;
-            if(circ_r(i, pre, pos, pred, tempo, are)) return true;
+        if(pre[i] == -1) {
+            if(circ_r(i, pre, pos, tempo, are)) {
+                delete[] pre;
+                delete[] pos;
+                return true;
+            }
         }
     }
+    delete[] pre;
+    delete[] pos;
     return false;
 }
+
+void dfs(ll u, const arestas& are, bool * vis) {
+    vis[u] = true;
+
+    for(aresta a: are[u]) {
+        if(!vis[a.vertice]) {
+            dfs(a.vertice, are, vis);
+        }
+    }
+}
+
+// Dado dois nós, retorna se a aresta entre eles está em um circuito ou não;
+// É garantido que só chamarei essa função caso exista uma aresta u -> v;
+bool aresta_em_circuito(ll V, const arestas& are, const node &u, const node &v) {
+    bool * vis = new bool[V + 1];
+    for(int i = 0; i < V; i++) vis[i] = false;
+
+    dfs(v.id, are, vis);
+    if(vis[u.id]) {
+        delete[] vis;
+        return true; 
+    }
+
+    delete[] vis;
+    return false;
+}
+
 
 

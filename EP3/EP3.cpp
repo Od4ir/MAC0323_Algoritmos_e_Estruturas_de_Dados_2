@@ -80,42 +80,6 @@ int ult(const vector<node>& v, const string aux) {
     return resp;
 }
 
-void add_aresta_simples(arestas &are, node &u, node &v, ll k) {
-    // Vamos adicionar uma aresta que sai de u para v;
-    v.g_in++;
-    are[u.id].push_back(aresta(v.id, k));
-    u.g_out = (ll)are[u.id].size();
-}
-
-void add_aresta(arestas& are, node& u, node& v, ll k) {
-
-    // Primeiro vamos ver se já existe uma aresta entre v e u;
-    // Se já existir, vamos ver se o k dela é menor que o k da atual;
-    //  Se for menor, destruimos ela e colocamos a nova;
-    //  Se for maior, não adicionamos a nova;
-
-    for(aresta a: are[v.id]) {
-        if(a.vertice == u.id) {
-            // Já tem uma aresta entre os dois e o peso é menor;
-            if(a.peso < k) {
-                are[v.id].erase(remove(are[v.id].begin(), are[v.id].end(), a), are[v.id].end());
-                // Vamos remover a aresta que sai de v para u:
-                v.g_out = are[v.id].size();
-                u.g_in--;
-                add_aresta_simples(are, u, v, k);
-                return;
-            }
-            // Se for maior, não adiciona;
-            return;
-        }
-    }
-    // Se sair do loop sem dar return, significa que ainda não há uma 
-    // aresta entre eles;
-
-    // Adiciona uma aresta entre u e v se forem nodes diferentes;
-    if(!(u == v)) add_aresta_simples(are, u, v, k);
-}
-
 
 int main() {
     cout << " \n-----------/// BEM VINDX AO EP3 - Od4ir ///-----------\n\n";
@@ -130,11 +94,11 @@ int main() {
     if(arquivo.is_open()) {
         string dna, aux;
         getline(arquivo, dna);
-        int copy, k;
+        int copy, V;
         getline(arquivo, aux);
         copy = stoi(aux);
         getline(arquivo, aux);
-        k = stoi(aux);
+        V = stoi(aux);
 
         string linha;
         vertices verts;
@@ -151,7 +115,7 @@ int main() {
         if(op == 'S') {
             cout << "\n DNA Original: " << dna << endl;
             cout << " Número de cópias.............." << copy << endl;
-            cout << " Número de substrings.........." << k << endl;
+            cout << " Número de substrings.........." << V << endl;
             cout << " Substrings: " << endl;
             for(node no: verts) { 
                 cout << "  " << no.id << ": " << no.info << endl;
@@ -160,11 +124,11 @@ int main() {
 
         cout << "\n\n---------/// PARTE 2 - MONTAGEM DOS ARCOS ///----------\n\n";
 
-        cout << "Escolha o parâmetro k: (Valor mínimo " << k << ") \n >> ";
+        cout << "Escolha o parâmetro V: (Valor mínimo " << V << ") \n >> ";
         int K; cin >> K;
-        vector<int> vis(k + 1, 0);
+        vector<int> vis(V + 1, 0);
 
-        arestas adj = vector<vector<aresta>>(k);
+        arestas adj = vector<vector<aresta>>(V);
 
         for(node no: verts) {
             ll k_max = no.info.size();
@@ -190,7 +154,7 @@ int main() {
         cin >> op;
 
         if(op == 'S') { 
-            for(int i = 0; i < k; i++) {
+            for(int i = 0; i < V; i++) {
                 cout << i << ": " << verts[i].info << endl;
                 cout << "Grau de saída: " << adj[i].size() << " " << verts[i].g_out << endl;
                 cout << "Grau de entrada: " << verts[i].g_in << endl;
@@ -200,7 +164,39 @@ int main() {
             }
         }
 
-        cout << tem_circuito(k, adj) << endl;
+
+
+        cout << "Lista de arcos de circuito: \n";
+
+        //are[v.id].erase(remove(are[v.id].begin(), are[v.id].end(), a), are[v.id].end());
+
+
+
+        for(int i = 0; i < V; i++) {
+            cout << " >> "<< i << ": " << verts[i].info << endl << endl;
+            for(aresta a: adj[i]) {
+                if(aresta_em_circuito(V, adj, verts[i], verts[a.vertice])) {
+                    if(i == 6) {
+                        cout << "Removendo\n";
+                    }
+                    cout << "   " << a.vertice << ": " << verts[a.vertice].info << "(" << a.peso << ")" << endl;
+                    //adj[6].erase(remove(adj[6].begin(), adj[6].end(), a), adj[6].end());
+                }
+                //else cout << " NOT in circuito\n";
+            }
+            cout << endl;
+        }
+
+        if(tem_circuito(V, adj)) {
+            cout << "Grafo tem circuito!\n";
+        }
+        else {
+            cout << "Grafo não tem circuitos!\n";
+        }
+
+
+
+
 
 
     }
