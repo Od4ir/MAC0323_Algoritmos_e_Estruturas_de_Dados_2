@@ -48,7 +48,7 @@ struct aresta {
     // vértice e mesmo peso;
     // Como eu só chamo essa função 
     bool operator==(const aresta& a) const {
-        return (vertice == a.vertice && peso == a.peso);
+        return (vertice == a.vertice);
     }
 };
 
@@ -170,5 +170,11 @@ bool aresta_em_circuito(ll V, const arestas& are, const node &u, const node &v) 
     return false;
 }
 
-
+void remove_aresta(arestas& are, node &u, node&v) {
+    // Remove aresta entre u -> v e atualiza os valores de g_in e g_out;
+    aresta aux(v.id, 0);
+    are[u.id].erase(remove(are[u.id].begin(), are[u.id].end(), aux), are[u.id].end());
+    u.g_out--;
+    v.g_in--;
+}
 
