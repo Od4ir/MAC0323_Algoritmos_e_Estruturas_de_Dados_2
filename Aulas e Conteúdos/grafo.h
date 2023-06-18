@@ -50,4 +50,5 @@ class GrafoL {
         bool aresta_em_circ(int u, int v);
         vector<int> ordem_topologica();
         void dfs_ordem_topologica(int u, bool * vis, stack<int>& order);
+        vector<int> caminho_longo();
 };

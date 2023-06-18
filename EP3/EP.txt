@@ -241,3 +241,30 @@ eu tenho essa informação?
 
 
 */
+
+
+        cout << "Lista de arcos de circuito: \n";
+
+        //are[v.id].erase(remove(are[v.id].begin(), are[v.id].end(), a), are[v.id].end());
+
+
+        for(int i = 0; i < V; i++) {
+            cout << " >> "<< i << ": " << verts[i].info << endl << endl;
+            for(aresta a: adj[i]) {
+                if(aresta_em_circuito(V, adj, verts[i], verts[a.vertice])) {
+                    if(i == 7889) {
+                        cout << "Removendo\n";
+                    }
+                    cout << "   " << a.vertice << ": " << verts[a.vertice].info << "(" << a.peso << ")" << endl;
+                    //adj[6].erase(remove(adj[6].begin(), adj[6].end(), a), adj[6].end());
+                    cout << verts[i].g_out << endl;
+                    cout << verts[a.vertice].g_in << endl;
+                    remove_aresta(adj, verts[i], verts[a.vertice]);
+                    cout << verts[i].g_out << endl;
+                    cout << adj[i].size() << endl;
+                    cout << verts[a.vertice].g_in << endl;
+                }
+                //else cout << " NOT in circuito\n";
+            }
+            cout << endl;
+        }

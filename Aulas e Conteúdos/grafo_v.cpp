@@ -497,7 +497,11 @@ vector<int> GrafoL::ordem_topologica() {
     stack<int> order;
     vector<int> ordem_topologica;
 
-    dfs_ordem_topologica(0, vis, order);
+    for(int i = 0; i < V; i++) {
+        if(!vis[i]) {
+            dfs_ordem_topologica(i, vis, order);
+        }
+    }
 
     while(!order.empty()) {
         ordem_topologica.push_back(order.top());
@@ -505,6 +509,42 @@ vector<int> GrafoL::ordem_topologica() {
     }
 
     return ordem_topologica;
+}
+
+vector<int> GrafoL::caminho_longo() {
+    vector<int> order = ordem_topologica();
+
+    vector<int> pred(V);
+    vector<int> passos(V, 0);
+    vector<int> caminho;
+    int MAX = -1, ini;
+
+    for(int i = 0; i < V; i++) {
+        pred[i] = i;
+    }
+
+    for(int i = 0; i < V; i++) {
+        for(int v: adj[order[i]]) {
+            if(passos[v] < passos[order[i]] + 1) {
+                passos[v] = passos[order[i]] + 1;
+                pred[v] = order[i];
+                MAX = max(MAX, passos[v]);
+                if(MAX == passos[v]) {
+                    ini = v;
+                }
+            }
+        }
+    }
+
+    int i;
+    cout << ini << endl;
+
+    for(i = ini; i != pred[i]; i = pred[i]) {
+        caminho.push_back(i);
+    }
+    caminho.push_back(i);
+
+    return caminho;
 }
 
 
@@ -528,7 +568,7 @@ int main() {
     }
     GG.print();
 
-    cout << "Número de componentes conexas: " << GG.comp_conexa() << endl;
+    /*cout << "Número de componentes conexas: " << GG.comp_conexa() << endl;
 
     cout << "Vetor de componentes conexas: " << endl;
 
@@ -571,12 +611,24 @@ int main() {
         cin >> v1 >> v2;
     }
 
+    */
+
     cout << "Vamos ver a ordem topológica: \n";
 
     vector<int> o_top = GG.ordem_topologica();
 
     for(int i: o_top) {
         cout << i << " - ";
+    }
+    cout << endl;
+
+    cout << "Caminho mais longo: \n";
+
+    vector<int> caminho_longo = GG.caminho_longo();
+    cout << caminho_longo.size() << endl;
+
+    for(int i = (int)caminho_longo.size(); i > 0; i--) {
+        cout << caminho_longo[i - 1] << " - ";
     }
     cout << endl;
 
@@ -779,6 +831,33 @@ int main() {
     Mas também dá para fazer considerando os graus de entrada e saída de todos os
     vértices e ir 'removendo' aqueles com grau de entrada 0.
     */
+
+    //--------------------------------------------------------------------------
+    /* PROBLEMA 15 //
+
+    Primeiro, eu ordeno topologicamente os vértices. Para cada vértice, na ordem 
+    topológica eu faço o seguinte:  
+
+    tam[order[0]] = 0; // O primeiro da ord. recebe o valor 0;
+    Preenchi todo mundo com zero;
+    int cont;
+
+    for(int i = 0; i < V; i++) { 
+        for(int v: adj[order[i]]) {
+            if(tam[v] < tam[order[i]] + 1) {
+                tam[v] = tam[order[i]] + 1;
+                pred[v] = u;
+                MAX = max(MAX, tam[v]);
+                if(MAX == tam[v]) {
+                    ini = v;
+                }
+            }
+        }
+    }
+
+
+    */
+
 
 
     return 0;

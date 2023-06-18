@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <stack>
 using namespace std;
 using ll = long long int;
 
@@ -178,3 +179,120 @@ void remove_aresta(arestas& are, node &u, node&v) {
     v.g_in--;
 }
 
+void dfs_ordem_topologica(ll u, bool * vis, stack<ll>& order, const arestas& adj) {
+    vis[u] = true;
+
+    for(aresta v: adj[u]) {
+        if(!vis[v.vertice]) {
+            dfs_ordem_topologica(v.vertice, vis, order, adj);
+        }
+    }
+
+    order.push(u);
+}
+
+vector<ll> ordenacao_topologica(ll V, const arestas& adj) {
+    bool * vis = new bool[V + 1];
+    for(ll i = 0; i < V; i++) vis[i] = false;
+
+    stack<ll> order;
+    vector<ll> ordem_topologica;
+
+    for(ll i = 0; i < V; i++) {
+        if(!vis[i]) {
+            dfs_ordem_topologica(i, vis, order, adj);
+        }
+    }
+
+    while(!order.empty()) {
+        ordem_topologica.push_back(order.top());
+        order.pop();
+    }
+
+    return ordem_topologica;
+}
+
+vector<ll> caminho_maximo(const arestas& adj, ll source, ll V, ll& dest) {
+    vector<ll> dist(V, -1);
+    vector<ll> pred(V, -1);
+    dist[source] = 0;
+    pred[source] = source;
+    ll MAX = -1;
+
+    vector<ll> order = ordenacao_topologica(V, adj);
+
+    for(ll i = 0; i < V; i++) {
+        ll u = order[i];
+
+        if(dist[u] != -1) {
+            for(aresta a: adj[u]) {
+                if(dist[a.vertice] < dist[u] + a.peso) {
+                    dist[a.vertice] = dist[u] + a.peso;
+                    pred[a.vertice] = u;
+                    MAX = max(MAX, dist[a.vertice]);
+                    if(MAX == dist[a.vertice]) {
+                        dest = a.vertice;
+                    }
+
+                }
+            }
+        }
+    }
+
+    return pred;
+}
+
+vector<ll> o_caminho_maximo(vector<ll>& pred, ll dest) {
+    stack<ll> caminho;
+
+    while(pred[dest] != dest) {
+        caminho.push(dest);
+        dest = pred[dest];
+    }
+    caminho.push(dest);
+    vector<ll> biggest_way;
+
+    cout << "Caminho máximo: \n";
+
+    while(!caminho.empty()) {
+        biggest_way.push_back(caminho.top());
+        caminho.pop();
+    }
+    return biggest_way;
+}
+
+void printa_biggest_way(vector<ll>& big, vertices& verts, arestas& adj) {
+    ll fim = (ll)big.size();
+    cout << verts[big[0]].info;
+
+    for(ll i = 1; i < fim; i++) {
+        for(aresta a: adj[big[i - 1]]) {
+            if(a.vertice == big[i]) {
+                ll tam = verts[a.vertice].info.size();
+                if(tam != a.peso) {
+                    cout << verts[a.vertice].info.substr(a.peso, tam - a.peso);
+                }
+                break;
+            }
+        }
+    }
+    cout << endl;
+}
+
+void printa_caminho_maximo(vector<ll>& pred, ll dest) {
+    stack<ll> caminho;
+
+    while(pred[dest] != dest) {
+        caminho.push(dest);
+        dest = pred[dest];
+    }
+    caminho.push(dest);
+
+    cout << "Caminho máximo: \n";
+
+    while(!caminho.empty()) {
+        cout << caminho.top() << " ";
+        caminho.pop();
+    }
+    cout << endl;
+}

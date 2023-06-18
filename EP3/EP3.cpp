@@ -11,7 +11,7 @@ using namespace std;
 // Devolve o índice da primeira aparição da sequência aux
 // no vetor v;
 int pri(const vector<node>& v, const string aux) {
-    int start = 0, end = v.size() + 1, meio;
+    int start = 0, end = v.size(), meio;
     int resp = end;
 
     while(start < end) {
@@ -46,7 +46,7 @@ int pri(const vector<node>& v, const string aux) {
 // Devolve o índice da última aparição da sequência aux
 // no vetor v;
 int ult(const vector<node>& v, const string aux) {
-    int start = 0, end = v.size() + 1, meio;
+    int start = 0, end = v.size(), meio;
     int resp = 0;
 
     while(start < end) {
@@ -149,7 +149,6 @@ int main() {
                 k_max--;
             }
         }
-
         cout << "\n Deseja imprimir as arestas e seus pesos? S/N: \n >> ";
         cin >> op;
 
@@ -165,46 +164,36 @@ int main() {
         }
 
 
-
-        cout << "Lista de arcos de circuito: \n";
-
-        //are[v.id].erase(remove(are[v.id].begin(), are[v.id].end(), a), are[v.id].end());
-
-
-        for(int i = 0; i < V; i++) {
-            cout << " >> "<< i << ": " << verts[i].info << endl << endl;
-            for(aresta a: adj[i]) {
-                if(aresta_em_circuito(V, adj, verts[i], verts[a.vertice])) {
-                    if(i == 7889) {
-                        cout << "Removendo\n";
-                    }
-                    cout << "   " << a.vertice << ": " << verts[a.vertice].info << "(" << a.peso << ")" << endl;
-                    //adj[6].erase(remove(adj[6].begin(), adj[6].end(), a), adj[6].end());
-                    cout << verts[i].g_out << endl;
-                    cout << verts[a.vertice].g_in << endl;
-                    remove_aresta(adj, verts[i], verts[a.vertice]);
-                    cout << verts[i].g_out << endl;
-                    cout << adj[i].size() << endl;
-                    cout << verts[a.vertice].g_in << endl;
-                }
-                //else cout << " NOT in circuito\n";
-            }
-            cout << endl;
-        }
-
         if(tem_circuito(V, adj)) {
             cout << "Grafo tem circuito!\n";
         }
         else {
             cout << "Grafo não tem circuitos!\n";
+            cout << "Ordenação Topológica: \n";
+            vector<ll> order = ordenacao_topologica(V, adj);
+
+            for(ll i = 0; i < (ll)order.size(); i++) {
+                cout << order[i] << " - ";
+            }
+
+            ll dest;
+
+            for(ll i = 0; i < V; i++) {
+                if(verts[i].g_in == 0) {
+                    cout << "Caminho máximo saindo de " << i << ": " << verts[i].info << endl;
+                    vector<ll> pred = caminho_maximo(adj, i, V, dest);
+                    vector<ll> big = o_caminho_maximo(pred, dest);
+                    //printa_caminho_maximo(pred, dest);
+                    printa_biggest_way(big, verts, adj);
+
+                }
+            }
         }
 
-
-
-
-
-
     }
-
+    else {
+        cout << "Não foi possível abrir o arquivo, tente novamente!\n";
+    }
+    return 0;
     
 }
