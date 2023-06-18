@@ -48,4 +48,6 @@ class GrafoL {
         void dfsCFCR(int v, int * pre, int * sc, int * low, int& cont, int& k, stack<int>& pilha);
         // CFCR - Componentes Fortemente Conexos Recursivo;
         bool aresta_em_circ(int u, int v);
+        vector<int> ordem_topologica();
+        void dfs_ordem_topologica(int u, bool * vis, stack<int>& order);
 };

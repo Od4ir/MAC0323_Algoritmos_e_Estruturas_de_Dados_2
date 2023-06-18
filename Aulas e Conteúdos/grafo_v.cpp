@@ -478,6 +478,38 @@ bool GrafoL::aresta_em_circ(int u, int v) {
     return false;
 }
 
+void GrafoL::dfs_ordem_topologica(int u, bool * vis, stack<int>& order) {
+    vis[u] = true;
+
+    for(int v: adj[u]) {
+        if(!vis[v]) {
+            dfs_ordem_topologica(v, vis, order);
+        }
+    }
+
+    order.push(u);
+}
+
+vector<int> GrafoL::ordem_topologica() {
+    bool * vis = new bool[V + 1];
+    for(int i = 0; i < V; i++) vis[i] = false;
+
+    stack<int> order;
+    vector<int> ordem_topologica;
+
+    dfs_ordem_topologica(0, vis, order);
+
+    while(!order.empty()) {
+        ordem_topologica.push_back(order.top());
+        order.pop();
+    }
+
+    return ordem_topologica;
+}
+
+
+
+
 int main() {
     // Adição das arestas e vértices;
     cout << "Digite o número de vértices: \n";
@@ -538,6 +570,15 @@ int main() {
         cout << "Digite uma aresta: \n";
         cin >> v1 >> v2;
     }
+
+    cout << "Vamos ver a ordem topológica: \n";
+
+    vector<int> o_top = GG.ordem_topologica();
+
+    for(int i: o_top) {
+        cout << i << " - ";
+    }
+    cout << endl;
 
     //--------------------------------------------------------------------------
     /* PROBLEMA 1 //
@@ -721,13 +762,22 @@ int main() {
     moção. 
 
     */
-       //--------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------
     /* PROBLEMA 13 //
 
     Como decidir de uma aresta entre dois vértices está em um ciclo ou não?
     Roda uma dfs naquele para a qual a aresta aponta e vê se você chega no outro vér-
     tice. Se chegar, então está num ciclo, se não chegar, então não esta. 
 
+    */
+
+   //--------------------------------------------------------------------------
+    /* PROBLEMA 14 //
+
+    Ordenação topológica - Dá para fazer com dfs... Veremos. 
+    Mas também dá para fazer considerando os graus de entrada e saída de todos os
+    vértices e ir 'removendo' aqueles com grau de entrada 0.
     */
 
 
