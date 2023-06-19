@@ -268,3 +268,29 @@ eu tenho essa informação?
             }
             cout << endl;
         }
+
+
+                cout << "Lista de arcos de circuito: \n";
+
+        //are[v.id].erase(remove(are[v.id].begin(), are[v.id].end(), a), are[v.id].end());
+
+
+        for(int i = 0; i < V; i++) {
+            cout << " >> "<< i << ": " << verts[i].info << endl << endl;
+            for(aresta a: adj[i]) {
+                if(aresta_em_circuito(V, adj, verts[i], verts[a.vertice])) {
+                    cout << "   " << a.vertice << ": " << verts[a.vertice].info << "(" << a.peso << ")" << endl;
+                    //adj[6].erase(remove(adj[6].begin(), adj[6].end(), a), adj[6].end());
+                }
+                //else cout << " NOT in circuito\n";
+            }
+            cout << endl;
+        }
+
+
+
+
+Original  --> TGCTCTGACCGTGTTGAGAATATCGGGTTTCGGGCTCATGCCCTACGATGCGTAACGGACCCATACGCCCATGCGTGATGTAAGAATTGTAAAATAGGGT
+Resposta  --> TGCTCTGACCGTGTTGAGAATATCGGGTTTCGGGCTCATGCCCTACGATGCGTAACGGACCCATACGCCCATACGCCCATGCGTGATGTAAGAATTGTAAAATAGGGT
+Tamanho final...................108
+Tamanho original................100

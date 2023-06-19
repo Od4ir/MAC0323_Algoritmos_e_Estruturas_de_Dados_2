@@ -10,15 +10,15 @@ using namespace std;
 
 // Devolve o índice da primeira aparição da sequência aux
 // no vetor v;
-int pri(const vector<node>& v, const string aux) {
-    int start = 0, end = v.size(), meio;
-    int resp = end;
+ll pri(const vector<node>& v, const string aux) {
+    ll start = 0, end = v.size(), meio;
+    ll resp = end;
 
     while(start < end) {
         meio = (start + end)/2;
         //cout << meio << ": " << v[meio].info << endl;
 
-        int ind = v[meio].info.find(aux);
+        ll ind = v[meio].info.find(aux);
         //cout << " índice: " << ind << endl;
         
         if(ind == 0) {
@@ -45,16 +45,16 @@ int pri(const vector<node>& v, const string aux) {
 
 // Devolve o índice da última aparição da sequência aux
 // no vetor v;
-int ult(const vector<node>& v, const string aux) {
-    int start = 0, end = v.size(), meio;
-    int resp = 0;
+ll ult(const vector<node>& v, const string aux) {
+    ll start = 0, end = v.size(), meio;
+    ll resp = 0;
 
     while(start < end) {
         meio = (start + end)/2;
         //cout << meio << ": " << v[meio].info << endl;
 
 
-        int ind = v[meio].info.find(aux);
+        ll ind = v[meio].info.find(aux);
         //cout << " >> índice: " << ind << endl;
         
         if(ind == 0) {
@@ -102,7 +102,7 @@ int main() {
 
         string linha;
         vertices verts;
-        int i = 0;
+        ll i = 0;
         while(getline(arquivo, linha)) {
             // Em linha está a substring;
             node no(linha, i++);
@@ -129,6 +129,7 @@ int main() {
         vector<int> vis(V + 1, 0);
 
         arestas adj = vector<vector<aresta>>(V);
+        arcos arc;
 
         for(node no: verts) {
             ll k_max = no.info.size();
@@ -142,53 +143,121 @@ int main() {
                 ll u = ult(verts, aux);
                 for(ll i = p; i <= u; i++) {
                     if(vis[i] == 0) { 
-                        add_aresta(adj, verts[no.id], verts[i], k_max);
+                        add_aresta(arc, adj, verts[no.id], verts[i], k_max);
                         vis[i] = 1;
                     }
                 }
                 k_max--;
             }
         }
-        cout << "\n Deseja imprimir as arestas e seus pesos? S/N: \n >> ";
+        cout << "\nDeseja imprimir as arestas e seus pesos? S/N: \n >> ";
         cin >> op;
 
+
+        sort(arc.begin(), arc.end(), compara_arco);
+
         if(op == 'S') { 
-            for(int i = 0; i < V; i++) {
-                cout << i << ": " << verts[i].info << endl;
-                cout << "Grau de saída: " << adj[i].size() << " " << verts[i].g_out << endl;
-                cout << "Grau de entrada: " << verts[i].g_in << endl;
-                for(aresta a: adj[i]) {
-                    cout << "  >" << a.vertice << ": " << verts[a.vertice].info << "(" << a.peso << ")\n";
+            cout << " [1] - Por vértice; \n [2] - Ordenadas por peso\n >> ";
+            int opt;
+            cin >> opt;
+
+            cout << "\n\n------------------/// IMPRESSÃO ///-------------------\n\n";
+
+            if(opt == 1) { 
+                for(int i = 0; i < V; i++) {
+                    cout << " " << i << ": " << verts[i].info << endl;
+                    cout << "  Grau de saída: " << verts[i].g_out << endl;
+                    cout << "  Grau de entrada: " << verts[i].g_in << endl;
+                    for(aresta a: adj[i]) {
+                        cout << "  >" << a.vertice << ": " << verts[a.vertice].info << "(" << a.peso << ")\n";
+                    }
+                }
+            }
+            else { 
+                for(int i = 0; i < arc.size(); i++) {
+                    cout << arc[i].a.peso << ": (" << arc[i].v << " -> " << arc[i].a.vertice << ")\n";
                 }
             }
         }
+
+        cout << "\n---------------/// FIM IMPRESSÃO /// -----------------\n\n";
 
 
         if(tem_circuito(V, adj)) {
-            cout << "Grafo tem circuito!\n";
-        }
-        else {
-            cout << "Grafo não tem circuitos!\n";
-            cout << "Ordenação Topológica: \n";
-            vector<ll> order = ordenacao_topologica(V, adj);
+            cout << "\nGrafo tem circuito...\n";
+            cout << "Vamos eliminar os arcos de menor peso até não mais ciclo!\n\n";
+            ll minimo = 0;
 
-            for(ll i = 0; i < (ll)order.size(); i++) {
-                cout << order[i] << " - ";
-            }
-
-            ll dest;
-
-            for(ll i = 0; i < V; i++) {
-                if(verts[i].g_in == 0) {
-                    cout << "Caminho máximo saindo de " << i << ": " << verts[i].info << endl;
-                    vector<ll> pred = caminho_maximo(adj, i, V, dest);
-                    vector<ll> big = o_caminho_maximo(pred, dest);
-                    //printa_caminho_maximo(pred, dest);
-                    printa_biggest_way(big, verts, adj);
-
+            while(tem_circuito(V, adj)) { 
+                for(ll i = minimo; i < arc.size(); i++) {
+                    if(aresta_em_circuito(V, adj, verts[arc[i].v], verts[arc[i].a.vertice])) {
+                        printf("(%lld)", arc[i].a.peso);
+                        cout << "  Removendo (" << verts[arc[i].v].id << " -> " << verts[arc[i].a.vertice].id << ")!\n";
+                        remove_aresta(adj, verts[arc[i].v], verts[arc[i].a.vertice]);
+                        minimo = i + 1;
+                        break;
+                    }
                 }
             }
+            cout << "\nGrafo não (mais) tem circuitos!\n\n";
         }
+
+
+        cout << "\n\n-------------/// PARTE 3 - RESPOSTAS ///---------------\n\n";
+        cout << "Ordenação Topológica: \n";
+        vector<ll> order = ordenacao_topologica(V, adj);
+
+        for(ll i = 0; i < (ll)order.size(); i++) {
+            cout << order[i] << " - ";
+        }
+
+        ll dest;
+        ll tam_max = 0;
+        string resp;
+        string auxx;
+
+
+        cout << "Are you ready for the answer? \n";
+        cin >> resp;
+
+        for(ll i = 0; i < V; i++) {
+            if(verts[i].g_in == 0) {
+                cout << "\n\nCaminho máximo saindo de " << i << ": " << verts[i].info << endl;
+                vector<ll> pred = caminho_maximo(adj, i, V, dest);
+                vector<ll> big = o_caminho_maximo(pred, dest);
+                //printa_caminho_maximo(pred, dest);
+                auxx = resp_final(big, verts, adj);
+                if((ll)auxx.size() > tam_max) {
+                    tam_max = auxx.size();
+                    resp.resize(auxx.size());
+                    auxx.copy(&resp[0], auxx.size());
+                }
+                printa_biggest_way(big, verts, adj);
+            }
+        }
+
+        cout << "\n---------------/// RESPOSTA FINAL /// ----------------\n\n";
+        i = 0;
+
+        for(ll k = resp.size(); k > 0; k--) {
+            ll ind = dna.find(resp.substr(i, k));
+
+            if(ind == 0 && k == dna.size()) {
+                cout << "100% IGUAL\n";
+                break;
+            }
+            else if(ind != dna.npos) {
+                double aux = (double)k / (double)dna.size();
+                cout << aux * 100 << "% IGUAL, mas faltou uma parte\n";
+                break;
+            }
+        }
+
+        cout << "\nOriginal  --> " << dna << endl;
+        cout << "Resposta  --> " << resp << endl;
+
+        cout << "Tamanho final..................." << resp.size() << endl;
+        cout << "Tamanho original................" << dna.size() << endl << endl;
 
     }
     else {

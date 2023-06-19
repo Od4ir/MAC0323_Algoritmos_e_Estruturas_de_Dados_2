@@ -45,15 +45,37 @@ struct aresta {
         peso = p;
         vertice = no;
     }
+    aresta() {}
     // Eu considero que arestas são diferentes de elas tem mesmo id de 
     // vértice e mesmo peso;
     // Como eu só chamo essa função 
     bool operator==(const aresta& a) const {
         return (vertice == a.vertice);
     }
+    void operator=(const aresta& aux) {
+        vertice = aux.vertice;
+        peso = aux.peso;
+    }
 };
 
-// Vetor de arestas:
+struct arco {
+    aresta a;
+    ll v;
+    arco(aresta aux,  ll vertice) {
+        a = aux;
+        v = vertice;
+    }
+    bool operator==(const arco& arc) const {
+        return (a == arc.a && v == arc.v);
+    }
+};
+
+typedef struct vector<arco> arcos;
+
+bool compara_arco(const arco& arc1, const arco& arc2) {
+    return arc1.a.peso < arc2.a.peso;
+}
+
 typedef struct vector<vector<aresta>> arestas;
 
 // arestas[i][j].vertice =  node ao qual o node de id i está conectado;
@@ -61,17 +83,20 @@ typedef struct vector<vector<aresta>> arestas;
 
 
 // Adiciona uma aresta entre os nodes u e v;
-void add_aresta_simples(arestas &are, node &u, node &v, ll k) {
+void add_aresta_simples(arcos& arc, arestas &are, node &u, node &v, ll k) {
     // Vamos adicionar uma aresta que sai de u para v;
     v.g_in++;
     are[u.id].push_back(aresta(v.id, k));
+    arco aux(are[u.id][are[u.id].size() - 1], u.id);
+
+    arc.push_back(aux);
     u.g_out = (ll)are[u.id].size();
 }
 
 // Adiciona uma aresta entre os nodes u e v se já não existe uma aresta entre eles;
 // Se existir, verifica se o peso da nova é maior do que a da antiga;
 // Se for, substitui, se não, não adiciona a nova aresta;
-void add_aresta(arestas& are, node& u, node& v, ll k) {
+void add_aresta(arcos& arc, arestas& are, node& u, node& v, ll k) {
 
     // Primeiro vamos ver se já existe uma aresta entre v e u;
     // Se já existir, vamos ver se o k dela é menor que o k da atual;
@@ -83,10 +108,12 @@ void add_aresta(arestas& are, node& u, node& v, ll k) {
             // Já tem uma aresta entre os dois e o peso é menor;
             if(a.peso < k) {
                 are[v.id].erase(remove(are[v.id].begin(), are[v.id].end(), a), are[v.id].end());
+                arco aux(a, v.id);
+                arc.erase(remove(arc.begin(), arc.end(), aux), arc.end());
                 // Vamos remover a aresta que sai de v para u:
                 v.g_out = are[v.id].size();
                 u.g_in--;
-                add_aresta_simples(are, u, v, k);
+                add_aresta_simples(arc, are, u, v, k);
                 return;
             }
             // Se for maior, não adiciona;
@@ -97,7 +124,7 @@ void add_aresta(arestas& are, node& u, node& v, ll k) {
     // aresta entre eles;
 
     // Adiciona uma aresta entre u e v se forem nodes diferentes;
-    if(!(u == v)) add_aresta_simples(are, u, v, k);
+    if(!(u == v)) add_aresta_simples(arc, are, u, v, k);
 }
 
 // Avalia se existem circuitos na aresta ou não;
@@ -155,19 +182,28 @@ void dfs(ll u, const arestas& are, bool * vis) {
     }
 }
 
+bool dfs_ciclo(ll u, ll v, const arestas& are, bool * vis) {
+    vis[u] = true;
+
+    for(aresta a: are[u]) {
+        if(a.vertice == v) return true;
+        if(!vis[a.vertice]) {
+            return dfs_ciclo(a.vertice, v, are, vis);
+        }
+    }
+
+    return false;
+}
+
 // Dado dois nós, retorna se a aresta entre eles está em um circuito ou não;
 // É garantido que só chamarei essa função caso exista uma aresta u -> v;
 bool aresta_em_circuito(ll V, const arestas& are, const node &u, const node &v) {
     bool * vis = new bool[V + 1];
     for(int i = 0; i < V; i++) vis[i] = false;
 
+    //return dfs_ciclo(v.id, u.id, are, vis);
     dfs(v.id, are, vis);
-    if(vis[u.id]) {
-        delete[] vis;
-        return true; 
-    }
-
-    delete[] vis;
+    if(vis[u.id]) return true;
     return false;
 }
 
@@ -245,7 +281,7 @@ vector<ll> caminho_maximo(const arestas& adj, ll source, ll V, ll& dest) {
 vector<ll> o_caminho_maximo(vector<ll>& pred, ll dest) {
     stack<ll> caminho;
 
-    while(pred[dest] != dest) {
+    while(dest != -1 && pred[dest] != dest) {
         caminho.push(dest);
         dest = pred[dest];
     }
@@ -263,20 +299,44 @@ vector<ll> o_caminho_maximo(vector<ll>& pred, ll dest) {
 
 void printa_biggest_way(vector<ll>& big, vertices& verts, arestas& adj) {
     ll fim = (ll)big.size();
-    cout << verts[big[0]].info;
+    if(big[0] != -1) { 
+        cout << verts[big[0]].info;
 
-    for(ll i = 1; i < fim; i++) {
-        for(aresta a: adj[big[i - 1]]) {
-            if(a.vertice == big[i]) {
-                ll tam = verts[a.vertice].info.size();
-                if(tam != a.peso) {
-                    cout << verts[a.vertice].info.substr(a.peso, tam - a.peso);
+        for(ll i = 1; i < fim; i++) {
+            for(aresta a: adj[big[i - 1]]) {
+                if(a.vertice == big[i]) {
+                    ll tam = verts[a.vertice].info.size();
+                    if(tam != a.peso) {
+                        cout << verts[a.vertice].info.substr(a.peso, tam - a.peso);
+                    }
+                    break;
                 }
-                break;
             }
         }
     }
     cout << endl;
+}
+
+
+string resp_final(vector<ll>& big, vertices& verts, arestas& adj) {
+    ll fim = (ll)big.size();
+    string dna_resp;
+    if(big[0] != -1) { 
+        dna_resp.append(verts[big[0]].info);
+        
+        for(ll i = 1; i < fim; i++) {
+            for(aresta a: adj[big[i - 1]]) {
+                if(a.vertice == big[i]) {
+                    ll tam = verts[a.vertice].info.size();
+                    if(tam != a.peso) {
+                        dna_resp.append(verts[a.vertice].info.substr(a.peso, tam - a.peso));
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    return dna_resp;
 }
 
 void printa_caminho_maximo(vector<ll>& pred, ll dest) {
