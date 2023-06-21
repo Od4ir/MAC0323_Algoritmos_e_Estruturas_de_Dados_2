@@ -5,6 +5,9 @@
 using namespace std;
 using ll = long long int;
 
+
+// ---------------------- /// ESTRUTURAS /// ---------------------- // 
+
 // Estrutura de cada vértice/nó:
 struct node {
     string info;
@@ -58,6 +61,12 @@ struct aresta {
     }
 };
 
+// Vetor de arestas;
+// arestas[i][j].vertice =  node ao qual o node de id i está conectado;
+// arestas[i][j].peso = um valor inteiro que indica o peso da aresta;
+typedef struct vector<vector<aresta>> arestas;
+
+// Estrutura auxiliar de arcos;
 struct arco {
     aresta a;
     ll v;
@@ -70,19 +79,24 @@ struct arco {
     }
 };
 
+// Vetor de arcos;
 typedef struct vector<arco> arcos;
 
+
+
+// ---------------------- ///  FUNÇÕES   /// ---------------------- // 
+
+// Função que compara dois arcos - serve para ordenação do vetor de 
+// arcos. 
 bool compara_arco(const arco& arc1, const arco& arc2) {
     return arc1.a.peso < arc2.a.peso;
 }
 
-typedef struct vector<vector<aresta>> arestas;
 
-// arestas[i][j].vertice =  node ao qual o node de id i está conectado;
-// arestas[i][j].peso = um valor inteiro que indica o peso da aresta;
-
-
-// Adiciona uma aresta entre os nodes u e v;
+// Recebe o vetor de arcos, o de arestas, dois nodes u e v, e o peso re-
+// sentado por k e adiciona uma aresta entre u e v com peso k caso não 
+// já exista uma aresta entre v e u com peso maior que k. 
+// Se está aresta for criada, coloca ela nos vetores arc e are;
 void add_aresta_simples(arcos& arc, arestas &are, node &u, node &v, ll k) {
     // Vamos adicionar uma aresta que sai de u para v;
     v.g_in++;
@@ -146,7 +160,6 @@ bool circ_r(ll u, ll * pre, ll * pos, ll& tempo, const arestas& adj) {
     return false;
 }
 
-
 // Retorna se o grafo tem circuitos ou não;
 bool tem_circuito(ll V, const arestas& are) {
     ll * pre = new ll[V + 1];
@@ -172,6 +185,7 @@ bool tem_circuito(ll V, const arestas& are) {
     return false;
 }
 
+// Realiza uma dfs no grafo;
 void dfs(ll u, const arestas& are, bool * vis) {
     vis[u] = true;
 
@@ -182,6 +196,9 @@ void dfs(ll u, const arestas& are, bool * vis) {
     }
 }
 
+// É uma dfs alterada para verificar se uma aresta está em ciclo ou não. 
+// Retorna true se o vértice v for acessado em algum momento e false se
+// v nunca for acessado. 
 bool dfs_ciclo(ll u, ll v, const arestas& are, bool * vis) {
     vis[u] = true;
 
@@ -207,6 +224,7 @@ bool aresta_em_circuito(ll V, const arestas& are, const node &u, const node &v) 
     return false;
 }
 
+// Utilizando as funções de remoação do vector, remove a aresta entre u e v;
 void remove_aresta(arestas& are, node &u, node&v) {
     // Remove aresta entre u -> v e atualiza os valores de g_in e g_out;
     aresta aux(v.id, 0);
@@ -215,6 +233,8 @@ void remove_aresta(arestas& are, node &u, node&v) {
     v.g_in--;
 }
 
+// DFS alterada para gerar uma ordenação topológica dos vértices do grafo, colo-
+// cando-os na pilha order;
 void dfs_ordem_topologica(ll u, bool * vis, stack<ll>& order, const arestas& adj) {
     vis[u] = true;
 
@@ -227,6 +247,7 @@ void dfs_ordem_topologica(ll u, bool * vis, stack<ll>& order, const arestas& adj
     order.push(u);
 }
 
+// FUnção que devolve um vetor com a ordenação topológica;
 vector<ll> ordenacao_topologica(ll V, const arestas& adj) {
     bool * vis = new bool[V + 1];
     for(ll i = 0; i < V; i++) vis[i] = false;
@@ -248,6 +269,8 @@ vector<ll> ordenacao_topologica(ll V, const arestas& adj) {
     return ordem_topologica;
 }
 
+// Função que devolve um vetor com predecessores dos vértices e salva em 
+// dest o vértice para o qual percorremos a maior distância;
 vector<ll> caminho_maximo(const arestas& adj, ll source, ll V, ll& dest) {
     vector<ll> dist(V, -1);
     vector<ll> pred(V, -1);
@@ -278,6 +301,7 @@ vector<ll> caminho_maximo(const arestas& adj, ll source, ll V, ll& dest) {
     return pred;
 }
 
+// Devolve um vetor com os vértices em ordem do caminho máximo;
 vector<ll> o_caminho_maximo(vector<ll>& pred, ll dest) {
     stack<ll> caminho;
 
@@ -297,6 +321,7 @@ vector<ll> o_caminho_maximo(vector<ll>& pred, ll dest) {
     return biggest_way;
 }
 
+// Printa o caminho máximo:
 void printa_biggest_way(vector<ll>& big, vertices& verts, arestas& adj) {
     ll fim = (ll)big.size();
     if(big[0] != -1) { 
@@ -317,7 +342,7 @@ void printa_biggest_way(vector<ll>& big, vertices& verts, arestas& adj) {
     cout << endl;
 }
 
-
+// Gera a string final de resposta:
 string resp_final(vector<ll>& big, vertices& verts, arestas& adj) {
     ll fim = (ll)big.size();
     string dna_resp;
@@ -339,6 +364,7 @@ string resp_final(vector<ll>& big, vertices& verts, arestas& adj) {
     return dna_resp;
 }
 
+// Printa o caminho máximo em número de vértices; 
 void printa_caminho_maximo(vector<ll>& pred, ll dest) {
     stack<ll> caminho;
 

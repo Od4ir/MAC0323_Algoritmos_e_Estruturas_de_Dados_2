@@ -7,32 +7,6 @@
 #include "operacoes.h"
 using namespace std;
 
-bool compara_string(string& a, string& b) {
-    return a < b;
-}
-
-string gera_string(int k) {  
-    string base, dna;
-
-    for(int i = 0; i < k; i++) { 
-        int aux = rand() % 4;
-        if(aux == 0) base = "A";
-        else if(aux == 1) base = "C";
-        else if(aux == 2) base = "G";
-        else base = "T";
-        dna.append(base);
-    }
-    return dna;
-}
-
-string gera_substring(int tam, const string& dna) {
-    int tam_dna = dna.size();
-    // Tenho que determinar o índice de ínicio sem que passe do tamanho
-    // da string dna e que dê o tamanho que desejo;
-
-    int ind = rand() % (tam_dna - tam);
-    return dna.substr(ind, tam);
-}
 
 int main() {
     ll n;

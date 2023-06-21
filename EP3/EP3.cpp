@@ -7,83 +7,8 @@
 #include "operacoes.h"
 using namespace std;
 
-
-// Devolve o índice da primeira aparição da sequência aux
-// no vetor v;
-ll pri(const vector<node>& v, const string aux) {
-    ll start = 0, end = v.size(), meio;
-    ll resp = end;
-
-    while(start < end) {
-        meio = (start + end)/2;
-        //cout << meio << ": " << v[meio].info << endl;
-
-        ll ind = v[meio].info.find(aux);
-        //cout << " índice: " << ind << endl;
-        
-        if(ind == 0) {
-            resp = min(meio, resp);
-            //cout << "ind\n";
-            end = meio;
-        }
-        else if(aux == v[meio].info) {
-            //cout << "==\n";
-            end = meio;
-            // Não sei o que fazer se forem iguais...
-        } 
-        else if(aux > v[meio].info) {
-            //cout << ">\n";
-            start = meio + 1;
-        }
-        else {
-            //cout << "<\n";
-            end = meio;
-        }
-    }
-    return resp;
-}
-
-// Devolve o índice da última aparição da sequência aux
-// no vetor v;
-ll ult(const vector<node>& v, const string aux) {
-    ll start = 0, end = v.size(), meio;
-    ll resp = 0;
-
-    while(start < end) {
-        meio = (start + end)/2;
-        //cout << meio << ": " << v[meio].info << endl;
-
-
-        ll ind = v[meio].info.find(aux);
-        //cout << " >> índice: " << ind << endl;
-        
-        if(ind == 0) {
-            resp = max(meio, resp);
-            //cout << "ind\n";
-            start = meio + 1;
-        }
-        else if(aux == v[meio].info) {
-            start = meio + 1;
-            //cout << "==\n";
-            // Não sei o que fazer se forem iguais...
-        } 
-        else if(aux > v[meio].info) {
-            //cout << ">\n";
-            start = meio + 1;
-        }
-        else {
-            //cout << "<\n";
-            end = meio;
-        }
-    }
-
-    return resp;
-}
-
-
 int main() {
     cout << " \n-----------/// BEM VINDX AO EP3 - Od4ir ///-----------\n\n";
-
 
     cout << "\nOlá biologx, digite o nome do arquivo com os pedaços de DNA:\n >> ";
     string file_name;
@@ -124,7 +49,7 @@ int main() {
 
         cout << "\n\n---------/// PARTE 2 - MONTAGEM DOS ARCOS ///----------\n\n";
 
-        cout << "Escolha o parâmetro V: (Valor mínimo " << V << ") \n >> ";
+        cout << "Escolha o parâmetro K: \n";//(Valor mínimo " <<  << ") \n >> ";
         int K; cin >> K;
         vector<int> vis(V + 1, 0);
 
@@ -217,12 +142,13 @@ int main() {
         string auxx;
 
 
-        cout << "Are you ready for the answer? \n";
+        cout << "\n\nAre you ready for the answer? \n";
         cin >> resp;
 
         for(ll i = 0; i < V; i++) {
             if(verts[i].g_in == 0) {
                 cout << "\n\nCaminho máximo saindo de " << i << ": " << verts[i].info << endl;
+                dest = i;
                 vector<ll> pred = caminho_maximo(adj, i, V, dest);
                 vector<ll> big = o_caminho_maximo(pred, dest);
                 //printa_caminho_maximo(pred, dest);
