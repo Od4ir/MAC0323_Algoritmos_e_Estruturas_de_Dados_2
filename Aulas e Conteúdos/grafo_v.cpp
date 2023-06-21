@@ -469,13 +469,23 @@ void GrafoL::dfsCFCR(int v, int * pre, int * sc, int * low, int& cont, int& k, s
     }
 }
 
+bool GrafoL::dfs_circ(int u, int v, bool * vis) {
+    vis[u] = true;
+
+    for(int x: adj[u]) {
+        if(x == v) return true;
+        if(!vis[x]) {
+            return dfs_circ(x, v, vis);
+        }
+    }
+    return false;
+}
+
 bool GrafoL::aresta_em_circ(int u, int v) {
     bool * vis = new bool[V + 1];
     for(int i = 0; i < V; i++) vis[i] = false;
 
-    dfsR(v, vis);
-    if(vis[u]) return true;
-    return false;
+    return dfs_circ(v, u, vis);
 }
 
 void GrafoL::dfs_ordem_topologica(int u, bool * vis, stack<int>& order) {
@@ -597,7 +607,9 @@ int main() {
         cin >> v1 >> v2;
     }
 
-    int ok = 1;
+    */
+
+    int ok = 1, v1, v2;
 
     cout << "O grafo tem ciclos? \n";
     cout << GG.tem_circuito() << endl;
@@ -611,7 +623,7 @@ int main() {
         cin >> v1 >> v2;
     }
 
-    */
+
 
     cout << "Vamos ver a ordem topológica: \n";
 
