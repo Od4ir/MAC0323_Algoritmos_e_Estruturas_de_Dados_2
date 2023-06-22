@@ -147,9 +147,7 @@ vector<int> GrafoL::vetor_comp_conexas() {
     vector<int> comp_conexa(V + 2, -1);
 
     int comp = 0;
-    for(int i = 0; i < V; i++) {  
-        vis[i] = false;
-    }
+
     for(int i = 0; i < V; i++) vis[i] = false;
     for(int i = 0; i < V; i++) {
         if(vis[i] == false) {
