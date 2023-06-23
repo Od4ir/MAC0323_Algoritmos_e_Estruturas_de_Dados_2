@@ -24,6 +24,8 @@ int main() {
         copy = stoi(aux);
         getline(arquivo, aux);
         V = stoi(aux);
+        ll tamanho_previsto = 0;
+        ll MAX = -1, MIN = dna.size();
 
         string linha;
         vertices verts;
@@ -32,6 +34,9 @@ int main() {
             // Em linha está a substring;
             node no(linha, i++);
             verts.push_back(no);
+            tamanho_previsto += no.info.size();
+            MAX = max(MAX, (ll)no.info.size());
+            MIN = min(MIN, (ll)no.info.size());
         }
 
         cout << "\n Deseja imprimir os dados? S/N: \n >> ";
@@ -49,6 +54,9 @@ int main() {
 
         cout << "\n\n---------/// PARTE 2 - MONTAGEM DOS ARCOS ///----------\n\n";
 
+        cout << "Maior fita: " << MAX << endl;
+        cout << "Menor fita: " << MIN << endl;
+
         cout << "Escolha o parâmetro K: \n";//(Valor mínimo " <<  << ") \n >> ";
         int K; cin >> K;
         vector<int> vis(V + 1, 0);
@@ -62,6 +70,17 @@ int main() {
 
             ll tam = no.info.size();
 
+            if(tam < K) {
+                string aux = no.info.substr(tam - k_max, k_max);
+                ll p = pri(verts, aux);
+                ll u = ult(verts, aux);
+                for(ll i = p; i <= u; i++) {
+                    if(vis[i] == 0) { 
+                        add_aresta(arc, adj, verts[no.id], verts[i], k_max);
+                        vis[i] = 1;
+                    }
+                }    
+            }
             while(k_max >= K) {
                 string aux = no.info.substr(tam - k_max, k_max);
                 ll p = pri(verts, aux);
@@ -99,18 +118,25 @@ int main() {
                 }
             }
             else { 
-                for(int i = 0; i < arc.size(); i++) {
+                for(ll i = 0; i < arc.size(); i++) {
                     cout << arc[i].a.peso << ": (" << arc[i].v << " -> " << arc[i].a.vertice << ")\n";
                 }
             }
+            cout << "\n---------------/// FIM IMPRESSÃO /// -----------------\n\n";
         }
 
-        cout << "\n---------------/// FIM IMPRESSÃO /// -----------------\n\n";
+
+
+        vector<ll> grau_zero;
 
 
         if(tem_circuito(V, adj)) {
+            char qlqcoisa; 
+            scanf("%c", &qlqcoisa);
             cout << "\nGrafo tem circuito...\n";
             cout << "Vamos eliminar os arcos de menor peso até não mais ciclo!\n\n";
+            cout << "Pressione enter para continuar (Isso pode demorar)\n";
+            scanf("%c", &qlqcoisa);
             ll minimo = 0;
 
             while(tem_circuito(V, adj)) { 
@@ -129,54 +155,76 @@ int main() {
 
 
         cout << "\n\n-------------/// PARTE 3 - RESPOSTAS ///---------------\n\n";
-        cout << "Ordenação Topológica: \n";
+
+        cout << "\nDeseja imprimir a ordenação topológica? S/N \n >> ";
+        cin >> op;
+
         vector<ll> order = ordenacao_topologica(V, adj);
 
-        for(ll i = 0; i < (ll)order.size(); i++) {
-            cout << order[i] << " - ";
+        if(op == 'S') { 
+            cout << "Ordenação Topológica: \n";
+
+            for(ll i = 0; i < (ll)order.size(); i++) {
+                cout << order[i] << " - ";
+                if(verts[i].g_in == 0) {
+                    grau_zero.push_back(i);
+                }
+            }
+        }
+        else {
+            for(ll i = 0; i < V; i++) {
+                if(verts[i].g_in == 0) {
+                    grau_zero.push_back(i);
+                }
+            }
         }
 
+        tamanho_previsto = tamanho_previsto / copy;
+
+        cout << "\n\nTamanho previsto: " << tamanho_previsto;
+        cout << "\nTamanho real: " << dna.size();
+
         ll dest;
-        ll tam_max = 0;
+        ll dif_maxx = tamanho_previsto;
         string resp;
         string auxx;
 
 
-        cout << "\n\nAre you ready for the answer? \n";
+        cout << "\n\nPRONTO PARA A RESPOSTA? (Digite qualquer coisa)\n";
         cin >> resp;
 
-        for(ll i = 0; i < V; i++) {
-            if(verts[i].g_in == 0) {
-                cout << "\n\nCaminho máximo saindo de " << i << ": " << verts[i].info << endl;
-                dest = i;
-                vector<ll> pred = caminho_maximo(adj, i, V, dest);
-                vector<ll> big = o_caminho_maximo(pred, dest);
-                //printa_caminho_maximo(pred, dest);
-                auxx = resp_final(big, verts, adj);
-                if((ll)auxx.size() > tam_max) {
-                    tam_max = auxx.size();
-                    resp.resize(auxx.size());
-                    auxx.copy(&resp[0], auxx.size());
-                }
-                printa_biggest_way(big, verts, adj);
+        for(ll i: grau_zero) {
+            cout << "\n\nCaminho máximo saindo de " << i << ": " << verts[i].info << endl;
+            dest = i;
+            vector<ll> pred = caminho_maximo(adj, i, V, dest, order);
+            vector<ll> big = o_caminho_maximo(pred, dest);
+            //printa_caminho_maximo(pred, dest);
+            auxx = resp_final(big, verts, adj);
+            cout << "Tamanho: " << auxx.size() << endl;
+            cout << "Diferença Mínima: " << abs((ll)auxx.size() - tamanho_previsto) << endl;
+            if((ll)auxx.size() == tamanho_previsto || abs((ll)auxx.size() - tamanho_previsto) <= dif_maxx){
+                dif_maxx = abs((ll)auxx.size() - tamanho_previsto);
+                resp.resize(auxx.size());
+                auxx.copy(&resp[0], auxx.size());
+                if(dif_maxx == 0) break;
             }
+            //printa_biggest_way(big, verts, adj);
         }
 
         cout << "\n---------------/// RESPOSTA FINAL /// ----------------\n\n";
         i = 0;
-
-        for(ll k = resp.size(); k > 0; k--) {
-            ll ind = dna.find(resp.substr(i, k));
-
-            if(ind == 0 && k == dna.size()) {
-                cout << "100% IGUAL\n";
-                break;
+        ll k = resp.size();
+        if(resp == dna) {
+            cout << "100% IGUAL\n";
+        }
+        else {
+            if(k > tamanho_previsto) {
+                cout << "Deu um valor maior que o previsto\n";
             }
-            else if(ind != dna.npos) {
-                double aux = (double)k / (double)dna.size();
-                cout << aux * 100 << "% IGUAL, mas faltou uma parte\n";
-                break;
+            else {
+                cout << "Deu um valor menor que o previsto\n";
             }
+            cout << "Diferença: " << abs(k - tamanho_previsto) << endl;
         }
 
         cout << "\nOriginal  --> " << dna << endl;

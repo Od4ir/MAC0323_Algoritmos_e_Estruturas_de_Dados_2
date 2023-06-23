@@ -6,6 +6,8 @@ using namespace std;
 using ll = long long int;
 
 
+
+
 // ---------------------- /// ESTRUTURAS /// ---------------------- // 
 
 // Estrutura de cada vértice/nó:
@@ -86,12 +88,29 @@ typedef struct vector<arco> arcos;
 
 // ---------------------- ///  FUNÇÕES   /// ---------------------- // 
 
+
+bool compara_arco(const arco& arc1, const arco& arc2);
+void add_aresta_simples(arcos& arc, arestas &are, node &u, node &v, ll k);
+void add_aresta(arcos& arc, arestas& are, node& u, node& v, ll k);
+bool circ_r(ll u, ll * pre, ll * pos, ll& tempo, const arestas& adj);
+bool tem_circuito(ll V, const arestas& are); 
+void dfs(ll u, const arestas& are, bool * vis);
+bool aresta_em_circuito(ll V, const arestas& are, const node &u, const node &v); 
+void remove_aresta(arestas& are, node &u, node&v);
+void dfs_ordem_topologica(ll u, bool * vis, stack<ll>& order, const arestas& adj);
+vector<ll> ordenacao_topologica(ll V, const arestas& adj);
+vector<ll> caminho_maximo(const arestas& adj, ll source, ll V, ll& dest);
+vector<ll> o_caminho_maximo(vector<ll>& pred, ll dest);
+void printa_biggest_way(vector<ll>& big, vertices& verts, arestas& adj);
+string resp_final(vector<ll>& big, vertices& verts, arestas& adj);
+void printa_caminho_maximo(vector<ll>& pred, ll dest);
+
+
 // Função que compara dois arcos - serve para ordenação do vetor de 
 // arcos. 
 bool compara_arco(const arco& arc1, const arco& arc2) {
     return arc1.a.peso < arc2.a.peso;
 }
-
 
 // Recebe o vetor de arcos, o de arestas, dois nodes u e v, e o peso re-
 // sentado por k e adiciona uma aresta entre u e v com peso k caso não 
@@ -200,6 +219,7 @@ void dfs(ll u, const arestas& are, bool * vis) {
 // Retorna true se o vértice v for acessado em algum momento e false se
 // v nunca for acessado. 
 bool dfs_ciclo(ll u, ll v, const arestas& are, bool * vis) {
+    if(u == v) return true;
     vis[u] = true;
 
     for(aresta a: are[u]) {
@@ -271,14 +291,12 @@ vector<ll> ordenacao_topologica(ll V, const arestas& adj) {
 
 // Função que devolve um vetor com predecessores dos vértices e salva em 
 // dest o vértice para o qual percorremos a maior distância;
-vector<ll> caminho_maximo(const arestas& adj, ll source, ll V, ll& dest) {
+vector<ll> caminho_maximo(const arestas& adj, ll source, ll V, ll& dest, const vector<ll>& order) {
     vector<ll> dist(V, -1);
     vector<ll> pred(V, -1);
     dist[source] = 0;
     pred[source] = source;
     ll MAX = -1;
-
-    vector<ll> order = ordenacao_topologica(V, adj);
 
     for(ll i = 0; i < V; i++) {
         ll u = order[i];
@@ -311,8 +329,6 @@ vector<ll> o_caminho_maximo(vector<ll>& pred, ll dest) {
     }
     caminho.push(dest);
     vector<ll> biggest_way;
-
-    cout << "Caminho máximo: \n";
 
     while(!caminho.empty()) {
         biggest_way.push_back(caminho.top());
