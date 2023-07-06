@@ -5,8 +5,8 @@ conter:
     >> *        // OK
     >> .        // OK
     >> +        // OK
-    >> [ ]      
-    >> [ - ]
+    >> [ ]      // OK
+    >> [ - ]   
     >> [^ ]
 
 E dado palavras de entrada, informa se a exp. reg. reconhece

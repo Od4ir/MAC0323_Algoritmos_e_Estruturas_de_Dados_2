@@ -11,11 +11,19 @@ bool igual_simbolos(char aux) {
     return false;
 }
 
+bool verifica_intervalo(char x, char y, char atual) {
+    //cout << atual << endl;
+    //cout << x << " e " << y << endl;
+    //cout << (int)x << " e " << (int)y << " e " << (int)atual << endl;
+    if((int)x <= (int)atual && (int)y >= (int)atual) return true;
+    return false;
+}
+
 string modifica_exp_reg(string &exp_reg) {
     string exp_final;
     int i, j;
     for(i = 0; i < (int)exp_reg.size(); i++) {
-        if(exp_reg[i] == '[') {
+        if(exp_reg[i] == '[' && exp_reg[i + 2] != '-') {
             exp_final += '(';
             for(j = i + 1; j < (int)exp_reg.size(); j++) {
                 if(exp_reg[j] == ']') {
@@ -41,15 +49,22 @@ string modifica_exp_reg(string &exp_reg) {
 void constroi_grafo(Grafo& G, const string& exp_reg) {
     stack<int> pilha;
 
-    int i;
+    int i, k, ant;
 
     for(i = 0; i < (int)exp_reg.size(); i++) {
         //cout << i << " atual: " << exp_reg[i] << endl;
+        ant = i;
         if(exp_reg[i] != ' ') { 
             if(exp_reg[i] == '[') {
-
+                for(k = i; k < (int)exp_reg.size(); k++) {
+                    G.add_aresta(k, k + 1);
+                    if(exp_reg[k] == ']') {
+                        break;
+                    }
+                }
+                i = k;
             }
-            int ant = i;
+
             if(exp_reg[i] == '(' || exp_reg[i] == '|') {
                 pilha.push(i);
                 if(exp_reg[i] == '(') {
@@ -64,7 +79,6 @@ void constroi_grafo(Grafo& G, const string& exp_reg) {
                     if(exp_reg[topo] == '|') {
                         // Vou desempilhando até encontrar um '(' e salvo eles em um vector;
                         // Se for um '|' eu conecto diretamente com o '(' + 1;
-
                         vector<int> ous;
                         ous.push_back(topo);
                         while(!pilha.empty()) {
@@ -77,7 +91,6 @@ void constroi_grafo(Grafo& G, const string& exp_reg) {
                             }
                         }
                         // Preciso adicionar uma aresta entre todos os 'ous' do vector 'ous' com o ant + 1;
-
                         for(int ou: ous) {
                             if(exp_reg[ou] == '|') {
                                 G.add_aresta(ant, ou + 1);
@@ -128,6 +141,14 @@ bool reconhece(Grafo& G, string palavra, string exp) {
             if(atingidos[j] && (exp[j] == palavra[i] || exp[j] == '.')) {
                 prox[j + 1] = true;
             }
+            if(atingidos[j]) {
+                if(exp[j] == '[') {
+                    if(verifica_intervalo(exp[j + 1], exp[j + 3], palavra[i])) {
+                        prox[j + 5] = true;
+                    }
+                }
+                j = j + 4;
+            }
         }
         bool * marc = new bool[G.V];
         for(int j = 0; j < G.V; j++) atingidos[j] = false;
@@ -161,6 +182,7 @@ int main() {
     getline(cin, exp_reg);
 
     exp_reg =  modifica_exp_reg(exp_reg);
+    cout << "Nova expressão: " << exp_reg << endl;
 
     Grafo G((int)exp_reg.size() + 1);
     constroi_grafo(G, exp_reg);
