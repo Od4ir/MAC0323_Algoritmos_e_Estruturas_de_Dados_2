@@ -91,7 +91,7 @@ bool reconhece(Grafo& G, string palavra, string exp) {
     for(int i = 0; i < (int)palavra.size(); i++) {
         for(int k = 0; k < G.V; k++) prox[k] = false;
         for(int j = 0; j < G.V; j++) {
-            if(atingidos[j] && exp[j] == palavra[i]) {
+            if(atingidos[j] && (exp[j] == palavra[i] || exp[j] == '.')) {
                 prox[j + 1] = true;
             }
         }
@@ -100,13 +100,13 @@ bool reconhece(Grafo& G, string palavra, string exp) {
         for(int k = 0; k < G.V; k++) marc[k] = false;
         for(int j = 0; j < G.V; j++) {
             if(prox[j]) {
-                //cout << j << " está no prox\n";
+                cout << j << " está no prox\n";
                 G.dfsR(j, marc);
-                /*for(int y = 0; y < G.V; y++) {
+                for(int y = 0; y < G.V; y++) {
                     if(marc[y]) {
                         cout << y << " alcançado!\n";
                     }
-                }*/
+                }
             }
         }
         for(int k = 0; k < G.V; k++) {
