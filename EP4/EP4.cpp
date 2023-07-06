@@ -11,6 +11,33 @@ bool igual_simbolos(char aux) {
     return false;
 }
 
+string modifica_exp_reg(string &exp_reg) {
+    string exp_final;
+    int i, j;
+    for(i = 0; i < (int)exp_reg.size(); i++) {
+        if(exp_reg[i] == '[') {
+            exp_final += '(';
+            for(j = i + 1; j < (int)exp_reg.size(); j++) {
+                if(exp_reg[j] == ']') {
+                    exp_final.pop_back();
+                    exp_final += ')';
+                    break;
+                }
+                else {
+                    exp_final += exp_reg[j];
+                    exp_final += '|';
+                }
+            }
+            i = j;
+        }
+        else {
+            exp_final += exp_reg[i];
+        }
+    }
+    return exp_final;
+
+}
+
 void constroi_grafo(Grafo& G, const string& exp_reg) {
     stack<int> pilha;
 
@@ -19,6 +46,9 @@ void constroi_grafo(Grafo& G, const string& exp_reg) {
     for(i = 0; i < (int)exp_reg.size(); i++) {
         //cout << i << " atual: " << exp_reg[i] << endl;
         if(exp_reg[i] != ' ') { 
+            if(exp_reg[i] == '[') {
+
+            }
             int ant = i;
             if(exp_reg[i] == '(' || exp_reg[i] == '|') {
                 pilha.push(i);
@@ -129,6 +159,8 @@ int main() {
     cout << "Digite a expressão regular: \n > ";
     string exp_reg; 
     getline(cin, exp_reg);
+
+    exp_reg =  modifica_exp_reg(exp_reg);
 
     Grafo G((int)exp_reg.size() + 1);
     constroi_grafo(G, exp_reg);
