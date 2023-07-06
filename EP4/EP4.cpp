@@ -7,6 +7,7 @@ bool igual_simbolos(char aux) {
     if(aux == '*') return true;
     if(aux == '(') return true;
     if(aux == ')') return true;
+    if(aux == '+') return true;
     return false;
 }
 
@@ -62,6 +63,9 @@ void constroi_grafo(Grafo& G, const string& exp_reg) {
                     G.add_aresta(ant, i + 1);
                     G.add_aresta(i + 1, ant);
                 }
+                if(i < (int)exp_reg.size() - 1 && exp_reg[i + 1] == '+') {
+                    G.add_aresta(i + 1, ant);
+                }
                 if(i < (int)exp_reg.size() - 1 && igual_simbolos(exp_reg[i])) {
                     //cout << "Here\n";
                     G.add_aresta(i, i + 1);
@@ -100,13 +104,13 @@ bool reconhece(Grafo& G, string palavra, string exp) {
         for(int k = 0; k < G.V; k++) marc[k] = false;
         for(int j = 0; j < G.V; j++) {
             if(prox[j]) {
-                cout << j << " está no prox\n";
+                //cout << j << " está no prox\n";
                 G.dfsR(j, marc);
-                for(int y = 0; y < G.V; y++) {
+                /*for(int y = 0; y < G.V; y++) {
                     if(marc[y]) {
                         cout << y << " alcançado!\n";
                     }
-                }
+                }*/
             }
         }
         for(int k = 0; k < G.V; k++) {
