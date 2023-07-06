@@ -16,7 +16,7 @@ class Grafo {
     }
 
     void add_aresta(int u, int v) {   // Adiciona uma aresta de u -> v;
-        cout << "Adicionando entre " << u << " e " << v << endl;
+        //cout << "Adicionando entre " << u << " e " << v << endl;
         adj[u].push_back(v);
         E++;
     }

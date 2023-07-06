@@ -16,7 +16,7 @@ void constroi_grafo(Grafo& G, const string& exp_reg) {
     int i;
 
     for(i = 0; i < (int)exp_reg.size(); i++) {
-        cout << i << " atual: " << exp_reg[i] << endl;
+        //cout << i << " atual: " << exp_reg[i] << endl;
         if(exp_reg[i] != ' ') { 
             int ant = i;
             if(exp_reg[i] == '(' || exp_reg[i] == '|') {
@@ -31,10 +31,28 @@ void constroi_grafo(Grafo& G, const string& exp_reg) {
                     int topo = pilha.top();
                     pilha.pop();
                     if(exp_reg[topo] == '|') {
-                        ant = pilha.top();
-                        pilha.pop();
-                        G.add_aresta(ant, topo + 1);
-                        G.add_aresta(topo, i + 1);
+                        // Vou desempilhando até encontrar um '(' e salvo eles em um vector;
+                        // Se for um '|' eu conecto diretamente com o '(' + 1;
+
+                        vector<int> ous;
+                        ous.push_back(topo);
+                        while(!pilha.empty()) {
+                            ant = pilha.top();
+                            pilha.pop();
+                            ous.push_back(ant);
+                            if(exp_reg[ant] == ')') {
+                                // O ant salva o ')';
+                                break;
+                            }
+                        }
+                        // Preciso adicionar uma aresta entre todos os 'ous' do vector 'ous' com o ant + 1;
+
+                        for(int ou: ous) {
+                            if(exp_reg[ou] == '|') {
+                                G.add_aresta(ant, ou + 1);
+                                G.add_aresta(ou, i + 1);
+                            }
+                        }
                     }
                     else {
                         ant = topo;
@@ -45,9 +63,8 @@ void constroi_grafo(Grafo& G, const string& exp_reg) {
                     G.add_aresta(i + 1, ant);
                 }
                 if(i < (int)exp_reg.size() - 1 && igual_simbolos(exp_reg[i])) {
-                    cout << "Here\n";
+                    //cout << "Here\n";
                     G.add_aresta(i, i + 1);
-                    if(exp_reg[i] == '*') pilha.push(i);
                 }
             }
         }
@@ -65,8 +82,14 @@ bool reconhece(Grafo& G, string palavra, string exp) {
 
     G.dfsR(0, atingidos);
 
+    /*for(int i = 0; i < G.V; i++) {
+        if(atingidos[i]) {
+            cout << i << " atingido!\n" << " " << exp[i] << endl;
+        }
+    }*/
+
     for(int i = 0; i < (int)palavra.size(); i++) {
-        for(int k = 0; k < G.V; k++) prox[i] = false;
+        for(int k = 0; k < G.V; k++) prox[k] = false;
         for(int j = 0; j < G.V; j++) {
             if(atingidos[j] && exp[j] == palavra[i]) {
                 prox[j + 1] = true;
@@ -77,7 +100,13 @@ bool reconhece(Grafo& G, string palavra, string exp) {
         for(int k = 0; k < G.V; k++) marc[k] = false;
         for(int j = 0; j < G.V; j++) {
             if(prox[j]) {
+                //cout << j << " está no prox\n";
                 G.dfsR(j, marc);
+                /*for(int y = 0; y < G.V; y++) {
+                    if(marc[y]) {
+                        cout << y << " alcançado!\n";
+                    }
+                }*/
             }
         }
         for(int k = 0; k < G.V; k++) {
@@ -110,17 +139,19 @@ int main() {
         }
     }
 
-    cout << "Digite quantas palavras deseja testar: \n > ";
+    cout << "\nDigite quantas palavras deseja testar: \n > ";
     int n; cin >> n;
 
-    cout << "Digite as palavras: \n";
+    cout << "\nDigite as palavras: \n";
     for(int i = 0; i < n; i++) {
+        cout << " > ";
         string aux; cin >> aux;
 
         if(reconhece(G, aux, exp_reg)) {
-            cout << "Reconhece!\n";
+            cout << "  > Reconhece!\n";
         }
-        else cout << "Não reconhece\n";
+        else cout << "  > Não reconhece\n";
+        cout << endl;
     }
 
     return 0;

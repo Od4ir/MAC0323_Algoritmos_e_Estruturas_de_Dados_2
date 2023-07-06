@@ -1,8 +1,8 @@
 Queremos criar um programa que recebe uma exp. reg que pode
 conter:
 
-    >> | 
-    >> *
+    >> |        // OK
+    >> *        // OK
     >> .
     >> +
     >> [ ]
@@ -54,3 +54,15 @@ Código para criação do grafo:
 
 
     }
+
+
+
+TESTES:
+
+((A*B)|C)*
+
+((A*B)|(BC)*)
+
+
+(A*CG|A*TA|AAG*T)*
+
