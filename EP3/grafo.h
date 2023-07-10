@@ -5,9 +5,6 @@
 using namespace std;
 using ll = long long int;
 
-
-
-
 // ---------------------- /// ESTRUTURAS /// ---------------------- // 
 
 // Estrutura de cada vértice/nó:
