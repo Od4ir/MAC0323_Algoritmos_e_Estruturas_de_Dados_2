@@ -200,7 +200,7 @@ int main() {
     char op;
     cout << "\nDeseja ver as arestas por vértice? (S/N)\n > ";
     cin >> op;
-    if(op == 'S', 's') {
+    if(op == 'S' || op == 's') {
         int p = 0;
         for(auto aux: G.adj) {
             cout << "Vértice " << p << ": " << exp_reg[p] << endl;
