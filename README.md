@@ -16,7 +16,7 @@ git clone https://github.com/Od4ir/MAC0323_Algoritmos_e_Estruturas_de_Dados_2.gi
 ```
 
 ## 📝 Trabalhos Realizados:
-- [EP1](#https://github.com/Od4ir/MAC0323_Algoritmos_e_Estruturas_de_Dados_2/tree/main/EP1) - Simulador de Gerenciamento de um Aeroporto;
+- [EP1](https://github.com/Od4ir/MAC0323_Algoritmos_e_Estruturas_de_Dados_2/tree/main/EP1) - Simulador de Gerenciamento de um Aeroporto;
 - [EP2](#) - Implementação de 5 Estruturas de Dados;
 - [EP3](#) - Algoritmo Eurístico de Montagem de Fita de DNA;
 - [EP4](#) - Grafo e Expressões Regulares;

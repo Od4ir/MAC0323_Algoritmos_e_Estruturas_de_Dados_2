@@ -17,8 +17,8 @@ O algoritmo é um simulador de um sistema de gerenciamento de pousos e decolagen
 
 
 Para entender o melhor o projeto, considere ler:
-- [Enunciado do EP1](#https://github.com/Od4ir/MAC0323_Algoritmos_e_Estruturas_de_Dados_2/blob/main/EP1/EP1_Enunciado.pdf);
-- [Relatório do EP1](#https://github.com/Od4ir/MAC0323_Algoritmos_e_Estruturas_de_Dados_2/blob/main/EP1/EP1_Relatorio.pdf);
+- [Enunciado do EP1](https://github.com/Od4ir/MAC0323_Algoritmos_e_Estruturas_de_Dados_2/blob/main/EP1/EP1_Enunciado.pdf);
+- [Relatório do EP1](https://github.com/Od4ir/MAC0323_Algoritmos_e_Estruturas_de_Dados_2/blob/main/EP1/EP1_Relatorio.pdf);
 
 
 ## 🔗 Dependências:
