@@ -25,8 +25,9 @@ Para testar essas difererentes estruturas, foram implementados dois modos de exe
 
 
 Para entender o melhor o projeto, considere ler:
-- [Enunciado do EP2](#link);
-- [Relatório do EP2](#link);
+- [Enunciado do EP2](https://github.com/Od4ir/MAC0323_Algoritmos_e_Estruturas_de_Dados_2/blob/main/EP2/EP2_Enunciado.pdf);
+- [Relatório do EP2](https://github.com/Od4ir/MAC0323_Algoritmos_e_Estruturas_de_Dados_2/blob/main/EP2/EP2_Relatorio.pdf);
+- [Resultados Testes EP2](https://github.com/Od4ir/MAC0323_Algoritmos_e_Estruturas_de_Dados_2/blob/main/EP2/EP2_Resultados_Testes.pdf);
 
 
 ## 🔗 Dependências:
@@ -83,7 +84,7 @@ Digite o número de consultas que deseja fazer:
    >> <Digite um número>
 ```
 
-Digite o código da consulta e pressione 'enter' para digitar a próxima até dar a quantidade de consultas que deseja realizar. Note que para a consulta "O" é necessário digitar um termo junto, que será buscado na estrutura de dados. Caso ainda tenha dúvidas, considere ler o [Enunciado do EP2](#link) para maior esclarecimentos sobre esse modo.
+Digite o código da consulta e pressione 'enter' para digitar a próxima até dar a quantidade de consultas que deseja realizar. Note que para a consulta "O" é necessário digitar um termo junto, que será buscado na estrutura de dados. Caso ainda tenha dúvidas, considere ler o [Enunciado do EP2](https://github.com/Od4ir/MAC0323_Algoritmos_e_Estruturas_de_Dados_2/blob/main/EP2/EP2_Enunciado.pdf) para maior esclarecimentos sobre esse modo.
 
 ### Modo 2 - Versão Testes:
 
@@ -145,4 +146,4 @@ Altura...............................8
 Número de Quebras....................982
 ```
 
-Para explorar mais resultados e entender melhor os testes realizados, considere ler o [Relatório do EP2](#link). 
+Para explorar mais resultados e entender melhor os testes realizados, considere ler o [Relatório do EP2](https://github.com/Od4ir/MAC0323_Algoritmos_e_Estruturas_de_Dados_2/blob/main/EP2/EP2_Relatorio.pdf) e verificar os valores dos testes já realizados no arquivo [Resultados Testes EP2](https://github.com/Od4ir/MAC0323_Algoritmos_e_Estruturas_de_Dados_2/blob/main/EP2/EP2_Resultados_Testes.pdf). 
