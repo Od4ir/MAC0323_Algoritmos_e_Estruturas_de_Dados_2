@@ -8,6 +8,8 @@
 - [🔗 Dependências:](#-dependências)
 - [▶️ Executando o código:](#️-executando-o-código)
 - [🧪 Como Testar:](#-como-testar)
+  - [Modo 1 - Versão Enunciado:](#modo-1---versão-enunciado)
+  - [Modo 2 - Versão Testes:](#modo-2---versão-testes)
 
 
 
@@ -19,7 +21,7 @@ O objetivo do EP2 foi fazer uma análise comparativa de diferentes estruturas de
 - Árvores 2-3 (A23);
 - Árvores Rubro-Negras (ARN);
 
-Para testar essas difererentes estruturas, foi implementado dois modos de execução do programa de testes. Mais detalhes a seguir. 
+Para testar essas difererentes estruturas, foram implementados dois modos de execução do programa de testes. Mais detalhes a seguir. 
 
 
 Para entender o melhor o projeto, considere ler:
@@ -35,98 +37,112 @@ Todos os testes foram feitos em um computador com **arquitetura x86_64** com sis
 ## ▶️ Executando o código:
 Para compilar o código, basta digitar no terminal:
 ```bash
-g++ EP1.cpp -o EP1
+g++ estruturas.cpp EP2.cpp -o EP2
 ```
 Para executar:
 ```bash
-./EP1
+./EP2
 ```
 
 ## 🧪 Como Testar:
 
-Ao executar o código, basta ler as instruções iniciais e colocar os valores dos parâmetros solicitados. Veja o exemplo abaixo:
+Ao executar o código, você será capaz de optar por dois modos:
+- Modo 1 - Versão Enunciado;
+- Modo 2 - Versão Testes;
+Basta digitar o número do modo desejado e seguir com as instruções.
+
+### Modo 1 - Versão Enunciado:
+
+Ao escolher o **Modo 1 - Versão Enunciado** basta escolher a estrutura que deseja testar, o número de palavras a serem testadas e, por fim, as palavras separadas por espaço que deseja inserir na estrutura.
 
 ```
-///------------------------------------------------------///
-///                     Olá Usuárix!                     ///
-///   Bem vindx ao Gerenciador de Aeroportos do Od4ir    ///
-///------------------------------------------------------///
+Escolha a estrutura a ser utilizada: 
+  [ VO  ] - Vetor Dinâmico Ordenado
+  [ ABB ] - Árvore de Busca Binária
+  [ TR  ] - Treaps
+  [ A23 ] - Árvores 2-3
+  [ ARN ] - Árvores Rubro-Negras
 
-/// Por favor, insira os dados da simulação: 
-Tempo de Execução da Simulação >>>  10
-Número Máximo de Aviões por unidade de tempo >>>  10
-Número máximo de combustível por avião >>>   10
-Número máximo de horas de voo por avião >>>   10
-Porcentagem de aviões que irão pousar >>>   10
-Porcentagem de aviões especiais >>>   10
+   >> <Digite uma estrutura>
+
+Digite o número de palavras: <Digite um número>
+
+Digite as palavras: <Digite um número>
 ```
-Após isso, basta pressionar *enter* e verificar as informações da simulação a cada instante. Veja abaixo um exemplo das informações exibidas:
+Após isso, basta continuar com a execução e partir para as consultas que deseja fazer:
 
 ```
-/// ------------- INICIO DA SIMULAÇÃO -------------- /// 
+Hora das Consultas: 
+ [ F  ] - Palavras mais frequente; 
+ [ O  ] 'termo' - Quantas vezes 'termo' aparece no texto;
+ [ L  ]- Palavras mais longas;
+ [ SR ] - Maiores palavras sem repetição;
+ [ VD ] - Menores palavras com mais vogais sem repetição;
 
-/// -------------- INSTANTE ATUAL: 0 --------------- /// 
-
- >>> 6 Aviões entraram em contato!
-
-!!! ATENÇÃO !!! - Avião TA802 não foi colocado nas filas!
-Inserindo na fila de emergência!
-!!! ATENÇÃO !!! - Avião ET282 não foi colocado nas filas!
-Inserindo na fila de emergência!
- ------------------ STATUS DAS FILAS: ------------------- 
-
- /// ----- PISTA 1: ----- /// 
- Há 2 aviões na fila!
- Interdição: 0!
-
- Avião: DQ023  Comb Atual: 2  Instante: 0 Tipo: Normal
- Avião: FR621  Comb Atual: 4  Instante: 0 Tipo: Normal
-
- /// ----- PISTA 2: ----- /// 
- Há 2 aviões na fila!
- Interdição: 0!
-
- Avião: HO786  Comb Atual: 1  Instante: 0 Tipo: Normal
- Avião: KV064  Comb Atual: 6  Instante: 0 Tipo: Normal
-
- /// ----- PISTA 3: ----- /// 
- Há 0 aviões na fila!
- Interdição: 0!
-
-
- ----------------- POUSOS E DECOLAGENS: -----------------  
-
-Avião DQ023 pousando na pista 1!
-    Tempo de Espera total p/ Pouso: 0
-    Combustível restante no Pouso: 2
-    Combustível inicial: 2
-
-Avião HO786 pousando na pista 2!
-    Tempo de Espera total p/ Pouso: 0
-    Combustível restante no Pouso: 1
-    Combustível inicial: 1
-
-Aviões Pousados: 2
-Aviões Decolados: 0
-
- ------------------------ MÉDIAS: -----------------------  
-
- >> Média de Combustível dos Aviões Esperando:............. 5
- >> Média de Combustível Restante nos Aviões Pousados:..... 1
- >> Média Tempo de Espera para Pouso....................... 0
- >> Média Tempo de Espera para Decolagem................... 0
-
- ----------------- !!! EMERGÊNCIAS !!! ------------------  
-
-1 Avião: TA802  Comb Atual: 1  Instante: 0 Tipo: Normal
-2 Avião: ET282  Comb Atual: 2  Instante: 0 Tipo: Normal
-Situações críticas: 
- Avião TA802 em situação crítica!
-Coloquei na pista vazia 3
-Removi!
- Avião ET282 em situação crítica!
-Removi!
-Coloquei na pista 2
-
-/// ------------ FIM INSTANTE ATUAL: 0 ------------- /// 
+Digite o número de consultas que deseja fazer: 
+   >> <Digite um número>
 ```
+
+Digite o código da consulta e pressione 'enter' para digitar a próxima até dar a quantidade de consultas que deseja realizar. Note que para a consulta "O" é necessário digitar um termo junto, que será buscado na estrutura de dados. Caso ainda tenha dúvidas, considere ler o [Enunciado do EP2](#link) para maior esclarecimentos sobre esse modo.
+
+### Modo 2 - Versão Testes:
+
+Para o modo de testes, verifique que os arquivos '.txt' que se iniciam com "teste_" estão todos na mesma pasta do executável gerado na compilação. 
+
+Após escolher o modo 2, você poderá escolher com qual lista de palavras deseja executar o teste (Lmebrando que essas listas de palavras são os arquivos '.txt' mencionados anteriormente). 
+
+```
+ >> Digite o tipo de teste que deseja realizar: 
+
+ 1 - Lista de palavras em ordem crescente;
+ 2 - Lista de palavras em ordem decrescente;
+ 3 - Lista de palavras em ordem aleatória;
+ >> <Digite uma das opções>
+
+ >> Digite o número de palavras que deseja testar: [TAM_MAX = 87k]
+ >> <Digite um número>
+
+Digite os códigos para impressão dos dados da estrutura: 
+
+ 1 - Vetor Ordenado - Palavras Ordenadas
+ 2 - Árvore de Busca Binária - In Order
+ 3 - Árvore de Busca Binária - Pre Order
+ 4 - Treap - In Order
+ 5 - Treap - Pre Order
+ 6 - Árvores Rubro Negras - In Order
+ 7 - Árvores Rubro Negras - Pre Order
+ 8 - Árvores 2-3 - In Order
+ 9 - Árvores 2-3 - Pre Order
+ 0 - Sair
+
+ >> <Digite uma das opções>
+```
+
+Após digitar 0 para sair, é possível ver os resultados das operações realizadas em cada uma das estruturas na montagem e organização da tabela de símbolos, como desmontra o exemplo abaixo:
+
+```
+1 - VETOR ORDENADO: 
+Número de Comparações Inserção.......8965
+Número de Trocas.....................496506
+
+ 2 - ÁRVORE DE BUSCA BINÁRIA: 
+Número de Comparações Inserção.......496800
+Altura...............................996
+
+ 3 - TREAPS: 
+Número de Comparações Inserção.......5878
+Altura...............................20
+Número de Rotações...................988
+
+ 4 - ÁRVORES RUBRO NEGRAS: 
+Número de Comparações Inserção.......11905
+Altura...............................14
+Número de Rotações...................982
+
+ 5 - ÁRVORE 2-3: 
+Número de Comparações Inserção.......11907
+Altura...............................8
+Número de Quebras....................982
+```
+
+Para explorar mais resultados e entender melhor os testes realizados, considere ler o [Relatório do EP2](#link). 
