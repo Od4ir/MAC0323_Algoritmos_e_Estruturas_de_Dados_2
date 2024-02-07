@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "grafo.h"
 using namespace std;
 
 // Devolve o índice da primeira aparição da sequência aux
