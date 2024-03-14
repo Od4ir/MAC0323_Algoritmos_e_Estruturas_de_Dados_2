@@ -3,6 +3,8 @@
 #include <stack>
 #include "grafo.h"
 
+// Verifica se o char aux é igual a algum dos caracteres do seguinte conjunto:
+// {*, (, ), +};
 bool igual_simbolos(char aux) {
     if(aux == '*') return true;
     if(aux == '(') return true;
@@ -11,14 +13,13 @@ bool igual_simbolos(char aux) {
     return false;
 }
 
+// Verifica se o char atual está no intervalo de x e y;
 bool verifica_intervalo(char x, char y, char atual) {
-    //cout << atual << endl;
-    //cout << x << " e " << y << endl;
-    //cout << (int)x << " e " << (int)y << " e " << (int)atual << endl;
     if((int)x <= (int)atual && (int)y >= (int)atual) return true;
     return false;
 }
 
+// Modifica a expressão regular transformando [ABC..] em (A|B|C|...);
 string modifica_exp_reg(string &exp_reg) {
     string exp_final;
     int i, j;
@@ -43,20 +44,14 @@ string modifica_exp_reg(string &exp_reg) {
         }
     }
     return exp_final;
-
 }
 
-bool verifica_complemento(Grafo& G, string& palavra, string& exp_reg) {
-    return true;
-}
-
+// Constroi um grafo de transições baseado na string exp_reg;
 void constroi_grafo(Grafo& G, const string& exp_reg) {
     stack<int> pilha;
-
     int i, k, ant;
 
     for(i = 0; i < (int)exp_reg.size(); i++) {
-        //cout << i << " atual: " << exp_reg[i] << endl;
         ant = i;
         if(exp_reg[i] != ' ') { 
             if(exp_reg[i] == '[') {
@@ -114,7 +109,6 @@ void constroi_grafo(Grafo& G, const string& exp_reg) {
                     G.add_aresta(i + 1, ant);
                 }
                 if(i < (int)exp_reg.size() - 1 && igual_simbolos(exp_reg[i])) {
-                    //cout << "Here\n";
                     G.add_aresta(i, i + 1);
                 }
             }
@@ -123,33 +117,23 @@ void constroi_grafo(Grafo& G, const string& exp_reg) {
     if(igual_simbolos(exp_reg[(int)exp_reg.size() - 1])) G.add_aresta((int)exp_reg.size() - 1, (int)exp_reg.size());
 }
 
+// Verifica, a partir do grafo G de transições se uma string palavra
+// é aceita pela expressão regular;
 bool reconhece(Grafo& G, string palavra, string exp) {
     bool * atingidos = new bool[G.V];
     bool * prox = new bool[G.V];
     bool * marc = new bool[G.V];
-    for(int i = 0; i < G.V; i++) {
-        atingidos[i] = false;
-    }
+    for(int i = 0; i < G.V; i++) atingidos[i] = false;
 
     G.dfsR(0, atingidos);
 
-    /*for(int i = 0; i < G.V; i++) {
-        if(atingidos[i]) {
-            cout << i << " atingido!\n" << " " << exp[i] << endl;
-        }
-    }*/
-
     for(int i = 0; i < (int)palavra.size(); i++) {
-        cout << i << ": " << palavra[i] << endl;
-
         for(int k = 0; k < G.V; k++) prox[k] = false;
 
         for(int j = 0; j < G.V; j++) {
             if(atingidos[j]) {
                 if(exp[j] == '\\') {
-                    cout << j << " >>> " << exp[j + 1] << endl;
                     if(exp[++j] == palavra[i]) {
-                        cout << "Entrou\n";
                         prox[j + 1] = true;
                     }
                 }
@@ -168,13 +152,9 @@ bool reconhece(Grafo& G, string palavra, string exp) {
                     j = j + 4;
                 }
                 else if(exp[j] == '[') {
-                    //cout << "Oiiii\n";
                     for(int l = j + 2; l < exp.size(); l++) {
-                        //cout << exp[l] << endl;
                         if(exp[l] == ']') {
                             prox[l + 1] = true;
-                            //cout << prox[l = 1] << endl;
-                            //cout << l + 1 << " no prox!\n";
                             j = l + 1;
                             break;
                         }
@@ -184,25 +164,19 @@ bool reconhece(Grafo& G, string palavra, string exp) {
             }
         }
         bool * marc = new bool[G.V];
-        for(int j = 0; j < G.V; j++) atingidos[j] = false;
-        for(int k = 0; k < G.V; k++) marc[k] = false;
+        for(int j = 0; j < G.V; j++) { 
+            atingidos[j] = false;
+            marc[j] = false;
+        }
         for(int j = 0; j < G.V; j++) {
-            //cout << j << " prox: " << prox[j] << endl;
             if(prox[j]) {
-                //cout << j << " está no prox\n";
                 G.dfsR(j, marc);
-                /*for(int y = 0; y < G.V; y++) {
-                    if(marc[y]) {
-                        cout << y << " alcançado!\n";
-                    }
-                }*/
             }
         }
         for(int k = 0; k < G.V; k++) {
             if(marc[k]) atingidos[k] = true;
         }
     }
-    //cout << G.V << - 1 << endl;
     bool resp = atingidos[G.V - 1];
     delete[] prox;
     delete[] atingidos;
@@ -212,23 +186,27 @@ bool reconhece(Grafo& G, string palavra, string exp) {
 int main() {
     cout << " \n-----------/// BEM VINDX AO EP4 - Od4ir ///-----------\n\n";
 
-    cout << "Digite a expressão regular: \n > ";
+    cout << "Digite a expressão regular: (Sem espaço entre os caracteres)\n > ";
     string exp_reg; 
     getline(cin, exp_reg);
 
+    // Adapta a expressão para montagem do grafo se necessário;
     exp_reg =  modifica_exp_reg(exp_reg);
-    cout << "Nova expressão: " << exp_reg << endl;
 
     Grafo G((int)exp_reg.size() + 1);
     constroi_grafo(G, exp_reg);
 
-    int p = 0;
-
-    for(auto aux: G.adj) {
-        cout << "Vértice " << p << ": " << exp_reg[p] << endl;
-        p++;
-        for(int x: aux) {
-            cout << " > " << x << ": " << exp_reg[x] << endl;
+    char op;
+    cout << "\nDeseja ver as arestas por vértice? (S/N)\n > ";
+    cin >> op;
+    if(op == 'S' || op == 's') {
+        int p = 0;
+        for(auto aux: G.adj) {
+            cout << "Vértice " << p << ": " << exp_reg[p] << endl;
+            p++;
+            for(int x: aux) {
+                cout << " > " << x << ": " << exp_reg[x] << endl;
+            }
         }
     }
 
@@ -241,11 +219,10 @@ int main() {
         string aux; cin >> aux;
 
         if(reconhece(G, aux, exp_reg)) {
-            cout << "  > Reconhece!\n";
+            cout << "  > SIM!\n";
         }
-        else cout << "  > Não reconhece\n";
+        else cout << "  > NÃO!\n";
         cout << endl;
     }
-
     return 0;
 }
