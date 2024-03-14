@@ -14,11 +14,11 @@
 
 ## 📄 Descrição:
 
-O objetivo do EP4 foi implementar um programa que recebe uma expressão regular contendo diferentes símbolos diferentes (Veja mais no [Enunciado do EP4](#)) e um conjunto de palavras e verifica se a expressão é reconhecida ou não pela expressão passada. Para isso, a implementação contou com o uso da estrutura de um grafo para representar um autômato finito não determinístico para verificar se, dada uma palavra, existe nesse grafo um caminho que leva a aceitação da palavra. 
+O objetivo do EP4 foi implementar um programa que recebe uma expressão regular contendo diferentes símbolos diferentes (Veja mais no [Enunciado do EP4](https://github.com/Od4ir/MAC0323_Algoritmos_e_Estruturas_de_Dados_2/blob/main/EP4/EP4_Enunciado.pdf)) e um conjunto de palavras e verifica se a expressão é reconhecida ou não pela expressão passada. Para isso, a implementação contou com o uso da estrutura de um grafo para representar um autômato finito não determinístico para verificar se, dada uma palavra, existe nesse grafo um caminho que leva a aceitação da palavra. 
 
 
 Para entender o melhor o projeto, considere ler:
-- [Enunciado do EP4](#link);
+- [Enunciado do EP4](https://github.com/Od4ir/MAC0323_Algoritmos_e_Estruturas_de_Dados_2/blob/main/EP4/EP4_Enunciado.pdf);
 
 
 
